@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Register</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <section>
+        <div class="box" id="register">
+            <h2 <font color="#0375e7">Registration</font>
+            </h2>
+            <hr>
+            <br>
+            <div class="contentbox">
+                <form class="form" action="/register" method="POST">
+                    <div class='form-inline'>
+                        <input type='text' placeholder='First Name' name="fname">
+                        <input type='text' placeholder='Last Name' name="lname">
+                    </div>
+
+                    <div class="inputbox">
+                        <input type='text' placeholder='Phone Number' name="number">
+                    </div>
+                    <br>
+                    <div class="inputbox">
+                        <input type='text' placeholder='Email' name="email">
+                    </div>
+                    <br>
+                    <div class='inputbox'>
+                        <input type="password" placeholder="Password" name="psw" minlength="8">
+                    </div>
+                    <br>
+                    <div class='inputbox'>
+                        <input type="password" placeholder="Confirm Password" name="cpsw" minlength="8">
+                    </div>
+                    <br>
+                    <div class='options'>
+                        <span class='spn'>Gender</span>
+                        <input type='radio' id='Male' name='gender' value='Male'
+                            style="margin-left:35px;"><label>Male</label>
+                        <input type='radio' id='Female' name='gender' value='Female'
+                            style="margin-left:55px;"><label>Female</label>
+                    </div>
+                    <div class='inputbox'>
+                        <input type='text' placeholder='Date of Birth' name="dob">
+                    </div>
+                    <br>
+                    <div class='inputbox'>
+                        <input type='text' placeholder='Status' name="status">
+                    </div>
+                    <br>
+
+                    <br>
+
+                    <div class='remember'>
+                        <label>
+                            <input type='checkbox'>
+                            <span>I agree to the terms of service</span>
+                        </label>
+                    </div>
+
+                    <div class='reg'>
+                        <input type='submit' value='Register'>
+                    </div>
+
+                    <div class='text'>
+                        <p>
+                            Already have an account?
+                            <a href="/" style="text-decoration: none">Login</a>
+                        </p>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
