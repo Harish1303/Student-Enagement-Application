@@ -196,11 +196,7 @@ app.get("/adminlogin", function (req, res) {
         res.redirect("/");
     }
 })
-app.get("/tp", function (req, res) {
-    var newid = new mongoose.mongo.ObjectId();
-    console.log(newid)
-    res.render("index")
-})
+
 app.get("/studentlogin", function (req, res) {
     console.log(req.session.uniqueid)
 
