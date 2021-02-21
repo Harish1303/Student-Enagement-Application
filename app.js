@@ -209,6 +209,10 @@ app.get("/teacherlogin", function (req, res) {
         res.redirect("/");
     }
 })
+app.get("/exp", function (req, res) {
+    lauda = [{ _id: 60, firstname: 'Harish' }]
+    res.render("exp", { students: lauda })
+})
 app.listen(3000, function () {
     console.log("Server is running")
 })
