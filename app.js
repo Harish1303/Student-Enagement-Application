@@ -96,9 +96,11 @@ app.get("/register", function (req, res) {
 })
 
 app.post("/register", function (req, res) {
+    var newid = new mongoose.mongo.ObjectId();
     User.register({
         username: req.body.email,
-        status: Number(req.body.status)
+        status: Number(req.body.status),
+        _id: newid
     }, req.body.psw,
         function (err) {
             if (err) {
@@ -108,7 +110,7 @@ app.post("/register", function (req, res) {
             }
             else {
                 if (Number(req.body.status == 1)) {
-                    Admin.create({ firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                    Admin.create({ _id: newid, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                         function (err, ctd) {
                             if (err) {
                                 console.log(err)
@@ -119,7 +121,7 @@ app.post("/register", function (req, res) {
                         })
                 }
                 else if (Number(req.body.status == 2)) {
-                    Student.create({ firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                    Student.create({ _id: newid, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                         function (err, ctd) {
                             if (err) {
                                 console.log(err)
@@ -130,7 +132,7 @@ app.post("/register", function (req, res) {
                         })
                 }
                 else if (Number(req.body.status == 3)) {
-                    Teacher.create({ firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                    Teacher.create({ _id: newid, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                         function (err, ctd) {
                             if (err) {
                                 console.log(err)
@@ -156,6 +158,7 @@ app.post("/login", function (req, res) {
         else {
             passport.authenticate("local")(req, res, function () {
                 User.findOne({ username: req.body.username }).then((users) => {
+                    req.session.uniqueid = users._id
                     if (Number(users.status) == 1) {
                         res.redirect("/adminlogin")
                     }
@@ -175,6 +178,7 @@ app.post("/login", function (req, res) {
 })
 app.get("/adminlogin", function (req, res) {
     if (req.isAuthenticated()) {
+        console.log(req.session.uniqueid)
         Teacher.find({}, { "firstname": 1 }).exec().then(tlist => {
             teacherlist = tlist
         })
@@ -192,8 +196,14 @@ app.get("/adminlogin", function (req, res) {
         res.redirect("/");
     }
 })
-
+app.get("/tp", function (req, res) {
+    var newid = new mongoose.mongo.ObjectId();
+    console.log(newid)
+    res.render("index")
+})
 app.get("/studentlogin", function (req, res) {
+    console.log(req.session.uniqueid)
+
     if (req.isAuthenticated()) {
         res.send("Ssuccess")
     }
@@ -212,6 +222,10 @@ app.get("/teacherlogin", function (req, res) {
 app.get("/exp", function (req, res) {
     lauda = [{ _id: 60, firstname: 'Harish' }]
     res.render("exp", { students: lauda })
+})
+app.get("/admin", function (req, res) {
+    lauda = [{ _id: 60, firstname: 'Harish' }]
+    res.render("admin", { students: lauda })
 })
 app.listen(3000, function () {
     console.log("Server is running")
