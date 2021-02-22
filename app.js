@@ -58,6 +58,7 @@ const student = new mongoose.Schema({
     username: String,
     password: String,
     gender: String,
+    studentid: Number,
     dob: String,
 });
 const subject = new mongoose.Schema({
@@ -73,63 +74,80 @@ const teacher = new mongoose.Schema({
     username: String,
     password: String,
     gender: String,
+    teacherid: Number,
     dob: String,
 });
 const admincounter = new mongoose.Schema({
     _id: String,
     sequence_value: Number
 })
-const counter = new mongoose.Schema({
+const studentcounter = new mongoose.Schema({
+    _id: String,
+    sequence_value: Number
+})
+const teachercounter = new mongoose.Schema({
     _id: String,
     sequence_value: Number
 })
 
-const product = new mongoose.Schema({
-    _id: Number,
-    name: String
-});
+
 userschema.plugin(passportLocalMongoose);
 const User = new mongoose.model("User", userschema);
 const Admin = new mongoose.model("Admin", administrator);
 const Admincounter = new mongoose.model("Admincounter", admincounter);
+const Teachercounter = new mongoose.model("Teachercounter", teachercounter);
+const Studentcounter = new mongoose.model("Studentcounter", studentcounter);
 const Teacher = new mongoose.model("Teacher", teacher);
 const Student = new mongoose.model("Student", student);
-const Counter = new mongoose.model("Counter", counter);
-const Product = new mongoose.model("Product", product);
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 function getNextSequenceValues(sequenceName) {
-    return AdminCounter.findOneAndUpdate(
+    return Admincounter.findOneAndUpdate(
         { _id: sequenceName },
         { $inc: { sequence_value: 1 } },
         { new: true }
     ).exec()
 }
-function ans() {
-    h = getNextSequenceValues("productid").then((p) => {
-        h = p.sequence_value
-        //console.log(h)
-        return h
-    })
-    return h
+function getNextSequenceValuesforstudents(sequenceName) {
+    return Studentcounter.findOneAndUpdate(
+        { _id: sequenceName },
+        { $inc: { sequence_value: 1 } },
+        { new: true }
+    ).exec()
+}
+function getNextSequenceValuesforteachers(sequenceName) {
+    return Teachercounter.findOneAndUpdate(
+        { _id: sequenceName },
+        { $inc: { sequence_value: 1 } },
+        { new: true }
+    ).exec()
 }
 function createadminid() {
     h = getNextSequenceValues("adminid").then((p) => {
         h = p.sequence_value
-        //console.log(h)
         return h
     })
     return h
 }
-/*
-ans().then((a) => {
-    console.log(a)
-})
-*/
-//Admincounter.create({ _id: "adminid", sequence_value: 0 })
+function createteacherid() {
+    h = getNextSequenceValuesforteachers("teacherid").then((p) => {
+        h = p.sequence_value
+        return h
+    })
+    return h
+}
+function createstudentid() {
+    h = getNextSequenceValuesforstudents("studentid").then((p) => {
+        h = p.sequence_value
+        return h
+    })
+    return h
+}
+
+//Studentcounter.create({ _id: "studentid", sequence_value: 0 })
 
 
 app.get("/", function (req, res) {
@@ -154,47 +172,44 @@ app.post("/register", function (req, res) {
             }
             else {
                 if (Number(req.body.status == 1)) {
-                    ans().then((a) => {
-                        Product.create({
-                            _id: a,
-                            name: "Apple"
-                        }, function (err, no) {
-                            if (err) {
-                                console.log(err)
-                            }
-                        })
+                    createadminid().then((a) => {
+                        Admin.create({ _id: newid, adminid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                            function (err, ctd) {
+                                if (err) {
+                                    console.log(err)
+                                }
+                                else {
+                                    res.redirect("/")
+                                }
+                            })
                     })
-                    Admin.create({ _id: newid, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
-                        function (err, ctd) {
-                            if (err) {
-                                console.log(err)
-                            }
-                            else {
-                                res.redirect("/")
-                            }
-                        })
+
                 }
                 else if (Number(req.body.status == 2)) {
-                    Student.create({ _id: newid, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
-                        function (err, ctd) {
-                            if (err) {
-                                console.log(err)
-                            }
-                            else {
-                                res.redirect("/")
-                            }
-                        })
+                    createteacherid().then((a) => {
+                        Teacher.create({ _id: newid, teacherid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                            function (err, ctd) {
+                                if (err) {
+                                    console.log(err)
+                                }
+                                else {
+                                    res.redirect("/")
+                                }
+                            })
+                    })
                 }
                 else if (Number(req.body.status == 3)) {
-                    Teacher.create({ _id: newid, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
-                        function (err, ctd) {
-                            if (err) {
-                                console.log(err)
-                            }
-                            else {
-                                res.redirect("/")
-                            }
-                        })
+                    createstudentid().then((a) => {
+                        Student.create({ _id: newid, studentid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                            function (err, ctd) {
+                                if (err) {
+                                    console.log(err)
+                                }
+                                else {
+                                    res.redirect("/")
+                                }
+                            })
+                    })
                 }
             }
         })
@@ -232,17 +247,13 @@ app.post("/login", function (req, res) {
 })
 app.get("/adminlogin", function (req, res) {
     if (req.isAuthenticated()) {
-        console.log(req.session.uniqueid)
         Teacher.find({}, { "firstname": 1 }).exec().then(tlist => {
             teacherlist = tlist
         })
         Student.find({}, { "firstname": 1 }).exec().then(slist => {
             studentlist = slist
-            console.log(studentlist, teacherlist)
             res.render("adminpage", { students: studentlist, teachers: teacherlist })
         })
-        //setTimeout(function () {  }, 3000);
-
 
         //res.render("adminpage")
     }
@@ -270,16 +281,6 @@ app.get("/teacherlogin", function (req, res) {
     }
 })
 app.get("/exp", function (req, res) {
-    generator = ans().then((a) => {
-        Product.create({
-            _id: a,
-            name: "Apple"
-        }, function (err, no) {
-            if (err) {
-                console.log(err)
-            }
-        })
-    })
     lauda = [{ _id: 60, firstname: 'Harish' }]
     res.render("exp", { students: lauda })
 })
