@@ -47,6 +47,7 @@ const administrator = new mongoose.Schema({
     username: String,
     gender: String,
     dob: String,
+    adminid: Number
 
 });
 
@@ -60,7 +61,6 @@ const student = new mongoose.Schema({
     dob: String,
 });
 const subject = new mongoose.Schema({
-
     subjectcode: String,
     subjectname: String,
 
@@ -75,18 +75,62 @@ const teacher = new mongoose.Schema({
     gender: String,
     dob: String,
 });
+const admincounter = new mongoose.Schema({
+    _id: String,
+    sequence_value: Number
+})
+const counter = new mongoose.Schema({
+    _id: String,
+    sequence_value: Number
+})
 
-
+const product = new mongoose.Schema({
+    _id: Number,
+    name: String
+});
 userschema.plugin(passportLocalMongoose);
 const User = new mongoose.model("User", userschema);
 const Admin = new mongoose.model("Admin", administrator);
+const Admincounter = new mongoose.model("Admincounter", admincounter);
 const Teacher = new mongoose.model("Teacher", teacher);
 const Student = new mongoose.model("Student", student);
-
+const Counter = new mongoose.model("Counter", counter);
+const Product = new mongoose.model("Product", product);
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+function getNextSequenceValues(sequenceName) {
+    return AdminCounter.findOneAndUpdate(
+        { _id: sequenceName },
+        { $inc: { sequence_value: 1 } },
+        { new: true }
+    ).exec()
+}
+function ans() {
+    h = getNextSequenceValues("productid").then((p) => {
+        h = p.sequence_value
+        //console.log(h)
+        return h
+    })
+    return h
+}
+function createadminid() {
+    h = getNextSequenceValues("adminid").then((p) => {
+        h = p.sequence_value
+        //console.log(h)
+        return h
+    })
+    return h
+}
+/*
+ans().then((a) => {
+    console.log(a)
+})
+*/
+//Admincounter.create({ _id: "adminid", sequence_value: 0 })
+
 
 app.get("/", function (req, res) {
     res.render("index")
@@ -110,6 +154,16 @@ app.post("/register", function (req, res) {
             }
             else {
                 if (Number(req.body.status == 1)) {
+                    ans().then((a) => {
+                        Product.create({
+                            _id: a,
+                            name: "Apple"
+                        }, function (err, no) {
+                            if (err) {
+                                console.log(err)
+                            }
+                        })
+                    })
                     Admin.create({ _id: newid, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                         function (err, ctd) {
                             if (err) {
@@ -216,6 +270,16 @@ app.get("/teacherlogin", function (req, res) {
     }
 })
 app.get("/exp", function (req, res) {
+    generator = ans().then((a) => {
+        Product.create({
+            _id: a,
+            name: "Apple"
+        }, function (err, no) {
+            if (err) {
+                console.log(err)
+            }
+        })
+    })
     lauda = [{ _id: 60, firstname: 'Harish' }]
     res.render("exp", { students: lauda })
 })
@@ -226,3 +290,4 @@ app.get("/admin", function (req, res) {
 app.listen(3000, function () {
     console.log("Server is running")
 })
+
