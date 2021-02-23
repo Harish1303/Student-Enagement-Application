@@ -153,6 +153,10 @@ app.get("/", function (req, res) {
 app.get("/register", function (req, res) {
     res.render("register")
 })
+app.get("/xlogin", function (req, res) {
+    res.render("xindex")
+})
+
 
 app.post("/register", function (req, res) {
     var newid = new mongoose.mongo.ObjectId();
@@ -211,6 +215,20 @@ app.post("/register", function (req, res) {
             }
         })
 })
+app.post("/xlogin", function (req, res) {
+    const uname = req.body.username
+    User.findByUsername(uname).then(function (su) {
+        if (su) {
+            su.setPassword(req.body.password, function () {
+                su.save()
+                res.redirect("/register")
+            })
+        }
+    })
+})
+
+
+
 
 app.post("/login", function (req, res) {
     const user = new User({
@@ -224,6 +242,7 @@ app.post("/login", function (req, res) {
         else {
             passport.authenticate("local")(req, res, function () {
                 User.findOne({ username: req.body.username }).then((users) => {
+
                     req.session.uniqueid = users._id
                     if (Number(users.status) == 1) {
                         res.redirect("/adminlogin")
@@ -269,6 +288,7 @@ app.get("/studentlogin", function (req, res) {
     }
 })
 app.get("/teacherlogin", function (req, res) {
+    console.log(req.session.uniqueid)
     if (req.isAuthenticated()) {
         res.send("Tsuccess")
     }
@@ -276,6 +296,14 @@ app.get("/teacherlogin", function (req, res) {
         res.redirect("/");
     }
 })
+app.get("/addsubject", function (req, res) {
+    res.render("registersubjects");
+})
+
+
+
+
+
 app.get("/exp", function (req, res) {
     lauda = [{ _id: 60, firstname: 'Harish' }]
     res.render("exp", { students: lauda })
