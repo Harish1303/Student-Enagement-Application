@@ -35,7 +35,6 @@ mongoose.set('useFindAndModify', false);
 
 
 const userschema = new mongoose.Schema({
-
     username: String,
     password: String,
     status: Number
@@ -48,7 +47,6 @@ const administrator = new mongoose.Schema({
     gender: String,
     dob: String,
     adminid: Number
-
 });
 
 const student = new mongoose.Schema({
@@ -149,7 +147,6 @@ function createstudentid() {
 
 //Studentcounter.create({ _id: "studentid", sequence_value: 0 })
 
-
 app.get("/", function (req, res) {
     res.render("index")
 })
@@ -237,7 +234,6 @@ app.post("/login", function (req, res) {
                     if (Number(users.status) == 3) {
                         res.redirect("/studentlogin")
                     }
-
                 }).catch((e) => {
                     console.log(e)
                 })
@@ -254,17 +250,17 @@ app.get("/adminlogin", function (req, res) {
             studentlist = slist
             res.render("adminpage", { students: studentlist, teachers: teacherlist })
         })
-
         //res.render("adminpage")
     }
     else {
         res.redirect("/");
     }
 })
-
+app.get("/adminlogin/profiles", function (req, res) {
+    res.render("exp")
+})
 app.get("/studentlogin", function (req, res) {
     console.log(req.session.uniqueid)
-
     if (req.isAuthenticated()) {
         res.send("Ssuccess")
     }
