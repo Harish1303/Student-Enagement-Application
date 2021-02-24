@@ -60,14 +60,14 @@ const student = new mongoose.Schema({
     dob: String,
 });
 const subject = new mongoose.Schema({
-    subjectcode: String,
+    _id: String,
     subjectname: String,
-
+    teachers: [Number]
 });
 const teacher = new mongoose.Schema({
     firstname: String,
     lastname: String,
-    subjects: [mongoose.Types.ObjectId],
+    subjects: [Number],
     phonenumber: String,
     username: String,
     password: String,
@@ -97,6 +97,7 @@ const Teachercounter = new mongoose.model("Teachercounter", teachercounter);
 const Studentcounter = new mongoose.model("Studentcounter", studentcounter);
 const Teacher = new mongoose.model("Teacher", teacher);
 const Student = new mongoose.model("Student", student);
+const Subject = new mongoose.model("Subject", subject);
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
@@ -226,7 +227,15 @@ app.post("/xlogin", function (req, res) {
         }
     })
 })
-
+app.post("/subjectregister", function (req, res) {
+    Subject.create({ subjectname: req.body.sname, _id: req.body.scode }).then(function (done) {
+        if (done) {
+            res.redirect("/addsubject")
+        }
+    }).catch(function (err) {
+        res.redirect("/register")
+    })
+})
 
 
 
@@ -260,6 +269,8 @@ app.post("/login", function (req, res) {
         }
     })
 })
+
+
 app.get("/adminlogin", function (req, res) {
     if (req.isAuthenticated()) {
         Teacher.find({}, { "firstname": 1 }).exec().then(tlist => {
@@ -269,7 +280,6 @@ app.get("/adminlogin", function (req, res) {
             studentlist = slist
             res.render("adminpage", { students: studentlist, teachers: teacherlist })
         })
-        //res.render("adminpage")
     }
     else {
         res.redirect("/");
@@ -299,7 +309,9 @@ app.get("/teacherlogin", function (req, res) {
 app.get("/addsubject", function (req, res) {
     res.render("registersubjects");
 })
+app.get("/assignsubjects", function (req, res) {
 
+})
 
 
 
