@@ -58,22 +58,24 @@ const student = new mongoose.Schema({
     gender: String,
     studentid: Number,
     dob: String,
+    subjects_enrolled: [[String]]
 });
 const subject = new mongoose.Schema({
     _id: String,
     subjectname: String,
-    teachers: [Number]
+    department: String,
+    semester: Number,
 });
 const teacher = new mongoose.Schema({
     firstname: String,
     lastname: String,
-    subjects: [Number],
     phonenumber: String,
     username: String,
     password: String,
     gender: String,
     teacherid: Number,
     dob: String,
+    subjects_assigned: [[String]]
 });
 const admincounter = new mongoose.Schema({
     _id: String,
@@ -87,7 +89,16 @@ const teachercounter = new mongoose.Schema({
     _id: String,
     sequence_value: Number
 })
-
+const subject_teacher_mapping = new mongoose.Schema({
+    _id: { teacherid: { type: String }, subjectid: { type: String } },
+    teacherid: String,
+    subjectid: String
+})
+const subject_student_mapping = new mongoose.Schema({
+    _id: { studentid: { type: String }, subjectid: { type: String } },
+    studentid: String,
+    subjectid: String
+})
 
 userschema.plugin(passportLocalMongoose);
 const User = new mongoose.model("User", userschema);
@@ -98,6 +109,9 @@ const Studentcounter = new mongoose.model("Studentcounter", studentcounter);
 const Teacher = new mongoose.model("Teacher", teacher);
 const Student = new mongoose.model("Student", student);
 const Subject = new mongoose.model("Subject", subject);
+const Subject_teacher_mapping = new mongoose.model("Subject_teacher_mapping", subject_teacher_mapping);
+const Subject_student_mapping = new mongoose.model("Subject_student_mapping", subject_student_mapping);
+
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
@@ -110,6 +124,7 @@ function getNextSequenceValues(sequenceName) {
         { new: true }
     ).exec()
 }
+
 function getNextSequenceValuesforstudents(sequenceName) {
     return Studentcounter.findOneAndUpdate(
         { _id: sequenceName },
@@ -151,9 +166,11 @@ function createstudentid() {
 app.get("/", function (req, res) {
     res.render("index")
 })
+
 app.get("/register", function (req, res) {
     res.render("register")
 })
+
 app.get("/xlogin", function (req, res) {
     res.render("xindex")
 })
@@ -216,6 +233,8 @@ app.post("/register", function (req, res) {
             }
         })
 })
+
+
 app.post("/xlogin", function (req, res) {
     const uname = req.body.username
     User.findByUsername(uname).then(function (su) {
@@ -227,6 +246,7 @@ app.post("/xlogin", function (req, res) {
         }
     })
 })
+
 app.post("/subjectregister", function (req, res) {
     Subject.create({ subjectname: req.body.sname, _id: req.body.scode }).then(function (done) {
         if (done) {
@@ -285,9 +305,11 @@ app.get("/adminlogin", function (req, res) {
         res.redirect("/");
     }
 })
+
 app.get("/adminlogin/profiles", function (req, res) {
     res.render("exp")
 })
+
 app.get("/studentlogin", function (req, res) {
     console.log(req.session.uniqueid)
     if (req.isAuthenticated()) {
@@ -297,6 +319,7 @@ app.get("/studentlogin", function (req, res) {
         res.redirect("/");
     }
 })
+
 app.get("/teacherlogin", function (req, res) {
     console.log(req.session.uniqueid)
     if (req.isAuthenticated()) {
@@ -306,25 +329,63 @@ app.get("/teacherlogin", function (req, res) {
         res.redirect("/");
     }
 })
+
 app.get("/addsubject", function (req, res) {
     res.render("registersubjects");
 })
-app.get("/assignsubjects", function (req, res) {
 
+app.get("/assignsubjects", function (req, res) {
+    res.render("assignsubjects")
 })
 
+app.post("/assignsubjects", function (req, res) {
+    Subject_teacher_mapping.create(
+        {
+            _id:
+                { teacherid: req.body.tid, subjectid: req.body.scode },
+            teacherid: req.body.tid, subjectid: req.body.scode
+        }).then(Teacher.findOneAndUpdate(
+            {
+                teacherid: req.body.tid
+            },
+            {
+                $push: { subjects_assigned: [req.body.sub_name, req.body.scode] }
+            })).catch((err) => {
+                console.log(err)
+            })
+})
+app.post("/enrollsubject", function (req, res) {
+    Subject_student_mapping.create(
+        {
+            _id: { studentid: req.body.sid, subjectid: req.body.scode },
+            studentid: req.body.sid, subjectid: req.body.scode
+        }).then(Student.findOneAndUpdate(
+            {
+                studentid: req.body.sid
+            },
+            {
+                $push: { subjects_enrolled: [req.body.sub_name, req.body.scode] }
+            })).catch((err) => {
+                console.log(err)
+            })
+})
 
-
+app.get("/enrollsubject", function (req, res) {
+    res.render("subjectenroll")
+})
 
 app.get("/exp", function (req, res) {
     lauda = [{ _id: 60, firstname: 'Harish' }]
     res.render("exp", { students: lauda })
 })
+
+
 app.get("/admin", function (req, res) {
     lauda = [{ _id: 60, firstname: 'Harish' }]
     res.render("admin", { students: lauda })
 })
+
+
 app.listen(3000, function () {
     console.log("Server is running")
 })
-
