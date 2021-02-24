@@ -5,6 +5,19 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+var fs = require('fs');
+var path = require('path');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now());
+    },
+});
+var upload = multer({ storage: storage });
 
 const app = express();
 
@@ -33,7 +46,15 @@ mongoose.connect("mongodb://localhost:27017/stundentengagementsystem", {
 mongoose.set("useCreateIndex", true);
 mongoose.set('useFindAndModify', false);
 
-
+var imageSchema = new mongoose.Schema({
+    name: String,
+    desc: String,
+    img: {
+        data: Buffer,
+        contentType: String,
+    },
+});
+const imgModel = new mongoose.model('Image', imageSchema);
 const userschema = new mongoose.Schema({
     username: String,
     password: String,
@@ -99,6 +120,15 @@ const subject_student_mapping = new mongoose.Schema({
     studentid: String,
     subjectid: String
 })
+
+var imageSchema = new mongoose.Schema({
+    name: String,
+    desc: String,
+    img: {
+        data: Buffer,
+        contentType: String,
+    },
+});
 
 userschema.plugin(passportLocalMongoose);
 const User = new mongoose.model("User", userschema);
@@ -174,8 +204,37 @@ app.get("/register", function (req, res) {
 app.get("/xlogin", function (req, res) {
     res.render("xindex")
 })
+app.get('/uploadimage', (req, res) => {
 
-
+    imgModel.find({}, (err, items) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('An error occurred', err);
+        } else {
+            res.render('uploadimage', { items: items });
+        }
+    });
+});
+app.post("/uploadimage", upload.single('image'), (req, res) => {
+    var obj = {
+        name: "harish",
+        desc: "harish",
+        img: {
+            data: fs.readFileSync(
+                path.join(__dirname + '/uploads/' + req.file.filename)
+            ),
+            contentType: 'image/png',
+        },
+    };
+    imgModel.create(obj, (err, item) => {
+        if (err) {
+            console.log(err);
+        } else {
+            // item.save();
+            res.redirect('/');
+        }
+    });
+})
 app.post("/register", function (req, res) {
     var newid = new mongoose.mongo.ObjectId();
     User.register({
