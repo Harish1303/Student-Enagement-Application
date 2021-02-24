@@ -191,9 +191,13 @@ function createstudentid() {
     return h
 }
 
-//Studentcounter.create({ _id: "studentid", sequence_value: 0 })
+Studentcounter.create({ _id: "studentid", sequence_value: 0 }).catch((err) => { })
+Admincounter.create({ _id: "adminid", sequence_value: 0 }).catch((err) => { })
+Teachercounter.create({ _id: "teacherid", sequence_value: 0 }).catch((err) => { })
 
 app.get("/", function (req, res) {
+    id = "5"
+    console.log(id.padStart(3, '0'))
     res.render("index")
 })
 
@@ -251,7 +255,7 @@ app.post("/register", function (req, res) {
             else {
                 if (Number(req.body.status == 1)) {
                     createadminid().then((a) => {
-                        Admin.create({ _id: newid, adminid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        Admin.create({ _id: newid, adminid: a.padStart(3, '0'), firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -265,7 +269,7 @@ app.post("/register", function (req, res) {
                 }
                 else if (Number(req.body.status == 2)) {
                     createteacherid().then((a) => {
-                        Teacher.create({ _id: newid, teacherid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        Teacher.create({ _id: newid, teacherid: a.padStart(3, '0'), firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -278,7 +282,8 @@ app.post("/register", function (req, res) {
                 }
                 else if (Number(req.body.status == 3)) {
                     createstudentid().then((a) => {
-                        Student.create({ _id: newid, studentid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        console.log(String(a).padStart(3, '0'))
+                        Student.create({ _id: newid, studentid: String(a).padStart(3, '0'), firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
