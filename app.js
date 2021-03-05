@@ -67,7 +67,7 @@ const administrator = new mongoose.Schema({
     username: String,
     gender: String,
     dob: String,
-    adminid: Number
+    adminid: String
 });
 
 const student = new mongoose.Schema({
@@ -77,8 +77,10 @@ const student = new mongoose.Schema({
     username: String,
     password: String,
     gender: String,
-    studentid: Number,
+    studentid: String,
     dob: String,
+    semester: Number,
+    department: String,
     subjects_enrolled: [[String]]
 });
 const subject = new mongoose.Schema({
@@ -94,8 +96,9 @@ const teacher = new mongoose.Schema({
     username: String,
     password: String,
     gender: String,
-    teacherid: Number,
+    teacherid: String,
     dob: String,
+    department: String,
     subjects_assigned: [[String]]
 });
 const admincounter = new mongoose.Schema({
@@ -196,8 +199,6 @@ Admincounter.create({ _id: "adminid", sequence_value: 0 }).catch((err) => { })
 Teachercounter.create({ _id: "teacherid", sequence_value: 0 }).catch((err) => { })
 
 app.get("/", function (req, res) {
-    id = "5"
-    console.log(id.padStart(3, '0'))
     res.render("index")
 })
 
@@ -240,12 +241,13 @@ app.post("/uploadimage", upload.single('image'), (req, res) => {
     });
 })
 app.post("/register", function (req, res) {
+
     var newid = new mongoose.mongo.ObjectId();
     User.register({
         username: req.body.email,
         status: Number(req.body.status),
         _id: newid
-    }, req.body.psw,
+    }, req.body.psw[0],
         function (err) {
             if (err) {
                 console.log("error")
@@ -255,7 +257,7 @@ app.post("/register", function (req, res) {
             else {
                 if (Number(req.body.status == 1)) {
                     createadminid().then((a) => {
-                        Admin.create({ _id: newid, adminid: a.padStart(3, '0'), firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        Admin.create({ _id: newid, adminid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -269,7 +271,7 @@ app.post("/register", function (req, res) {
                 }
                 else if (Number(req.body.status == 2)) {
                     createteacherid().then((a) => {
-                        Teacher.create({ _id: newid, teacherid: a.padStart(3, '0'), firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        Teacher.create({ _id: newid, teacherid: a, department: req.body.dept, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -283,7 +285,7 @@ app.post("/register", function (req, res) {
                 else if (Number(req.body.status == 3)) {
                     createstudentid().then((a) => {
                         console.log(String(a).padStart(3, '0'))
-                        Student.create({ _id: newid, studentid: String(a).padStart(3, '0'), firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        Student.create({ _id: newid, studentid: String(a).padStart(3, '0'), firstname: req.body.fname, semester: req.body.semester, department: req.body.dept, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -324,6 +326,7 @@ app.post("/subjectregister", function (req, res) {
 
 
 app.post("/login", function (req, res) {
+    console.log(req.body)
     const user = new User({
         username: req.body.username,
         password: req.body.password
@@ -354,15 +357,27 @@ app.post("/login", function (req, res) {
     })
 })
 
-
-app.get("/adminlogin", function (req, res) {
-    if (req.isAuthenticated()) {
-        Teacher.find({}, { "firstname": 1 }).exec().then(tlist => {
+/* 
+Teacher.find({}, { "firstname": 1 }).exec().then(tlist => {
             teacherlist = tlist
         })
         Student.find({}, { "firstname": 1 }).exec().then(slist => {
             studentlist = slist
             res.render("adminpage", { students: studentlist, teachers: teacherlist })
+        })
+*/
+app.get("/adminlogin", function (req, res) {
+    if (req.isAuthenticated()) {
+        counts = []
+        Teacher.estimatedDocumentCount().exec().then(ans => {
+            counts.push(ans)
+            Student.estimatedDocumentCount().exec().then(sc => {
+                counts.push(sc)
+                Subject.estimatedDocumentCount().exec().then(subc => {
+                    counts.push(subc)
+                    res.render("admin", { counts: counts })
+                })
+            })
         })
     }
     else {
@@ -370,10 +385,46 @@ app.get("/adminlogin", function (req, res) {
     }
 })
 
-app.get("/adminlogin/profiles", function (req, res) {
-    res.render("exp")
+app.get("/TeacherProfiles", function (req, res) {
+    if (req.isAuthenticated()) {
+        Teacher.find({}, { "firstname": 1, "lastname": 1, "department": 1, "teacherid": 1 }).exec().then(tlist => {
+            teacherlist = tlist
+            res.render("teacherlist_adminview", { students: tlist })
+        })
+    }
+    else {
+        res.redirect('/')
+    }
+    //res.render("teacherlist_adminview", { students: lauda })
 })
+app.get("/StudentProfiles", function (req, res) {
+    if (req.isAuthenticated()) {
+        Student.find({}, { "firstname": 1, "lastname": 1, "department": 1, "studentid": 1, "semester": 1 }).exec().then(slist => {
+            studentlist = slist
+            res.render("studentlist_adminview", { students: slist })
+        })
+    }
+    else {
+        res.redirect('/')
+    }
+    //res.render("studentlist_adminview", { students: lauda })
+})
+app.get("/assignsubjects", function (req, res) {
+    if (req.isAuthenticated()) {
+        Teacher.find({}, { "firstname": 1, "lastname": 1, "teacherid": 1 }).exec().then(tlist => {
+            teacherlist = tlist
+            Subject.find({}, { "subjectname": 1, "_id": 1 }).exec().then(sublist => {
+                subjectlist = sublist
+                res.render('assignsubjects', {
+                    subject: sublist,
+                    teacher: tlist,
+                });
+                //res.render("teacherlist_adminview", { students: tlist })
+            })
+        })
+    }
 
+})
 app.get("/studentlogin", function (req, res) {
     console.log(req.session.uniqueid)
     if (req.isAuthenticated()) {
@@ -395,13 +446,30 @@ app.get("/teacherlogin", function (req, res) {
 })
 
 app.get("/addsubject", function (req, res) {
-    res.render("registersubjects");
+    subjects = [
+        {
+            _id: '1',
+            subjectname: 'Discrete Mathematics',
+            department: 'Mathematics Department',
+            semester: 1,
+        }
+    ];
+    teachers = [
+        {
+            _id: 1,
+            teacherid: 51,
+        }
+    ];
+    res.render('registersubjects', {
+        subject: subjects,
+        teacher: teachers,
+    });
 })
 
-app.get("/assignsubjects", function (req, res) {
-    res.render("assignsubjects")
-})
 
+app.post("/testroute", function (req, res) {
+    console.log(req.body)
+})
 app.post("/assignsubjects", function (req, res) {
     Subject_teacher_mapping.create(
         {
@@ -435,21 +503,137 @@ app.post("/enrollsubject", function (req, res) {
 })
 
 app.get("/enrollsubject", function (req, res) {
-    res.render("subjectenroll")
+    subjects = [
+        {
+            _id: '1',
+            subjectname: 'Discrete Mathematics',
+            department: 'Mathematics Department',
+            semester: 1,
+        },
+    ];
+    res.render('subjectenroll', {
+        subject: subjects,
+    });
 })
 
-app.get("/exp", function (req, res) {
-    lauda = [{ _id: 60, firstname: 'Harish' }]
-    res.render("exp", { students: lauda })
-})
+
 
 
 app.get("/admin", function (req, res) {
-    lauda = [{ _id: 60, firstname: 'Harish' }]
-    res.render("admin", { students: lauda })
+
+    res.render("admin")
 })
 
+app.get('/studentHomePage', function (req, res) {
+    subjects = [
+        {
+            _id: '1',
+            subjectname: 'Discrete Mathematics',
+            department: 'Mathematics Department',
+            semester: 1,
+        },
+        {
+            _id: '2',
+            subjectname: 'Introduction to embedded systems',
+            department: 'Electronics and Communication',
+            semester: 2,
+        },
+        {
+            _id: 3,
+            subjectname: 'history',
+            department: 'humanities',
+            semester: 2,
+        },
+        {
+            _id: 4,
+            subjectname: 'civics',
+            department: 'humanities',
+            semester: 3,
+        },
+        {
+            _id: 5,
+            subjectname: 'fluids',
+            department: 'physics',
+            semester: 5,
+        },
+        {
+            _id: 6,
+            subjectname: 'thermodynamics',
+            department: 'mechanics',
+            semester: 6,
+        },
+        {
+            _id: 7,
+            subjectname: 'english',
+            department: 'humanities',
+            semester: 3,
+        },
+        {
+            _id: 8,
+            subjectname: 'geography',
+            department: 'humanities',
+            semester: 3,
+        },
+    ];
 
+    colNotifs = [
+        {
+            message:
+                'College fest starts from 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
+        },
+        {
+            message: 'College om 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
+        },
+        {
+            message: 'College fest starts frg with shhf;adjfaldjfha;jdhfajsdfh',
+        },
+        {
+            message:
+                ' fest starts from 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
+        },
+    ];
+    teacherNotifs = [
+        {
+            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
+        },
+        {
+            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
+        },
+        {
+            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
+        },
+        {
+            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
+        },
+    ];
+    res.render('studentHomePage', {
+        subject: subjects,
+        colNotif: colNotifs,
+        teacherNotifs: teacherNotifs,
+    });
+});
+app.get("/exp", function (req, res) {
+    subjects = [
+        {
+            _id: '1',
+            subjectname: 'Discrete Mathematics',
+            department: 'Mathematics Department',
+            semester: 1,
+        }
+    ];
+    teachers = [
+        {
+            _id: 1,
+            teacherid: 51,
+            firstname: 'saketh1',
+
+        }
+    ];
+    res.render('exp', {
+        subject: subjects,
+        teacher: teachers,
+    });
+})
 app.listen(3000, function () {
     console.log("Server is running")
 })
