@@ -255,7 +255,8 @@ app.post("/register", function (req, res) {
             else {
                 if (Number(req.body.status == 1)) {
                     createadminid().then((a) => {
-                        Admin.create({ _id: newid, adminid: a, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        trial = 'ADMIN' + String(a).padStart(3, '0')
+                        Admin.create({ _id: newid, adminid: trial, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -269,7 +270,8 @@ app.post("/register", function (req, res) {
                 }
                 else if (Number(req.body.status == 2)) {
                     createteacherid().then((a) => {
-                        Teacher.create({ _id: newid, teacherid: a, department: req.body.dept, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        trial = 'T' + String(a).padStart(3, '0')
+                        Teacher.create({ _id: newid, teacherid: trial, department: req.body.dept, firstname: req.body.fname, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -283,7 +285,9 @@ app.post("/register", function (req, res) {
                 else if (Number(req.body.status == 3)) {
                     createstudentid().then((a) => {
                         console.log(String(a).padStart(3, '0'))
-                        Student.create({ _id: newid, studentid: String(a).padStart(3, '0'), firstname: req.body.fname, semester: req.body.semester, department: req.body.dept, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
+                        trial = 'S' + String(a).padStart(3, '0')
+                        console.log(trial)
+                        Student.create({ _id: newid, studentid: trial, firstname: req.body.fname, semester: req.body.semester, department: req.body.dept, lastname: req.body.lname, username: req.body.email, gender: req.body.gender, dob: req.body.dob },
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err)
@@ -312,7 +316,7 @@ app.post("/xlogin", function (req, res) {
 })
 
 app.post("/subjectregister", function (req, res) {
-    Subject.create({ subjectname: req.body.sname, _id: req.body.scode }).then(function (done) {
+    Subject.create({ subjectname: req.body.sname, _id: req.body.scode, department: req.body.dept, semester: req.body.sem }).then(function (done) {
         if (done) {
             res.redirect("/addsubject")
         }
@@ -345,7 +349,7 @@ app.post("/login", function (req, res) {
                         res.redirect("/teacherlogin")
                     }
                     if (Number(users.status) == 3) {
-                        res.redirect("/studentlogin")
+                        res.redirect("/studentHomePage")
                     }
                 }).catch((e) => {
                     console.log(e)
@@ -408,7 +412,7 @@ app.get("/StudentProfiles", function (req, res) {
     //res.render("studentlist_adminview", { students: lauda })
 })
 app.get("/viewsubjects", function (req, res) {
-    Student.find({}, { "subjectname": 1, "department": 1, "subjectid": 1, "semester": 1 }).exec().then(sublist => {
+    Subject.find({}, { "subjectname": 1, "department": 1, "subjectid": 1, "semester": 1 }).exec().then(sublist => {
         studentlist = sublist
         res.render("subjectlist_adminview", { subject: sublist })
     })
@@ -428,17 +432,8 @@ app.get("/assignsubjects", function (req, res) {
             })
         })
     }
+})
 
-})
-app.get("/studentlogin", function (req, res) {
-    console.log(req.session.uniqueid)
-    if (req.isAuthenticated()) {
-        res.send("Ssuccess")
-    }
-    else {
-        res.redirect("/");
-    }
-})
 
 app.get("/teacherlogin", function (req, res) {
     console.log(req.session.uniqueid)
@@ -451,26 +446,52 @@ app.get("/teacherlogin", function (req, res) {
 })
 
 app.get("/addsubject", function (req, res) {
-
-    subjects = [
-        {
-            _id: '1',
-            subjectname: 'Discrete Mathematics',
-            department: 'Mathematics Department',
-            semester: 1,
-        }
-    ];
-
-    res.render('registersubjects', {
-        subject: subjects
-
-    });
+    res.render('registersubjects');
 })
-
-
 app.post("/testroute", function (req, res) {
     console.log(req.body)
 })
+app.get('/studentHomePage', function (req, res) {
+    if (req.isAuthenticated()) {
+        console.log(req.session.uniqueid)
+        Student.findOne({ _id: req.session.uniqueid }, { studentid: 1 }).exec().then(stud => {
+            Subject_student_mapping.find({ studentid: stud.studentid }).exec().then(ans => {
+                subsenrolled = []
+                for (var i = 0; i < ans.length; i++) {
+                    subsenrolled.push(ans[i].subjectid)
+                }
+                console.log(subsenrolled)
+                Subject.find({ _id: { $in: subsenrolled } }).exec().then(ans2 => {
+                    console.log(ans2)
+                    colNotifs = [
+                        {
+                            message:
+                                'College fest starts from 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
+                        }
+                    ];
+                    teacherNotifs = [
+                        {
+                            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
+                        }
+                    ];
+                    res.render('studentHomePage', {
+                        subject: ans2,
+                        colNotif: colNotifs,
+                        teacherNotifs: teacherNotifs,
+                    });
+                })
+
+            })
+        })
+
+
+
+    }
+    else {
+        res.redirect("/")
+    }
+
+});
 app.get("/testroute", function (req, res) {
     Subject_student_mapping.find({ studentid: 1 }).exec().then(ans => {
         subsenrolled = []
@@ -499,15 +520,7 @@ app.post("/assignsubjects", function (req, res) {
             _id:
                 { teacherid: req.body.tid, subjectid: req.body.scode },
             teacherid: req.body.tid, subjectid: req.body.scode
-        }).then(Teacher.findOneAndUpdate(
-            {
-                teacherid: req.body.tid
-            },
-            {
-                $push: { subjects_assigned: [req.body.sub_name, req.body.scode] }
-            })).catch((err) => {
-                console.log(err)
-            })
+        }).then(res.redirect("/assignsubjects"))
 })
 app.post("/enrollsubject", function (req, res) {
     Subject_student_mapping.create(
@@ -547,94 +560,7 @@ app.get("/admin", function (req, res) {
     res.render("admin")
 })
 
-app.get('/studentHomePage', function (req, res) {
-    subjects = [
-        {
-            _id: '1',
-            subjectname: 'Discrete Mathematics',
-            department: 'Mathematics Department',
-            semester: 1,
-        },
-        {
-            _id: '2',
-            subjectname: 'Introduction to embedded systems',
-            department: 'Electronics and Communication',
-            semester: 2,
-        },
-        {
-            _id: 3,
-            subjectname: 'history',
-            department: 'humanities',
-            semester: 2,
-        },
-        {
-            _id: 4,
-            subjectname: 'civics',
-            department: 'humanities',
-            semester: 3,
-        },
-        {
-            _id: 5,
-            subjectname: 'fluids',
-            department: 'physics',
-            semester: 5,
-        },
-        {
-            _id: 6,
-            subjectname: 'thermodynamics',
-            department: 'mechanics',
-            semester: 6,
-        },
-        {
-            _id: 7,
-            subjectname: 'english',
-            department: 'humanities',
-            semester: 3,
-        },
-        {
-            _id: 8,
-            subjectname: 'geography',
-            department: 'humanities',
-            semester: 3,
-        },
-    ];
 
-    colNotifs = [
-        {
-            message:
-                'College fest starts from 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
-        },
-        {
-            message: 'College om 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
-        },
-        {
-            message: 'College fest starts frg with shhf;adjfaldjfha;jdhfajsdfh',
-        },
-        {
-            message:
-                ' fest starts from 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
-        },
-    ];
-    teacherNotifs = [
-        {
-            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
-        },
-        {
-            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
-        },
-        {
-            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
-        },
-        {
-            message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
-        },
-    ];
-    res.render('studentHomePage', {
-        subject: subjects,
-        colNotif: colNotifs,
-        teacherNotifs: teacherNotifs,
-    });
-});
 app.get("/exp", function (req, res) {
     subjects = [
         {

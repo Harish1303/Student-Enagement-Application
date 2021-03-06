@@ -131,15 +131,16 @@ The above copyright notice and this permission notice shall be included in all c
                                     <p class="card-category">Assign subjects to teachers</p>
                                 </div>
                                 <div class="card-body">
-                                    <form action="/testroute" method="POST">
+                                    <form action="/assignsubjects" method="POST">
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Example multiple select</label>
                                                 <select class="form-control" data-style="btn btn-link" name="tid">
                                                     <% teacher.forEach(function(detail){ %>
-                                                        <option value="<%=detail._id%>">
-                                                            <%=detail.firstname%>
-                                                                <%=detail.lastname%>
+                                                        <option value="<%=detail.teacherid%>">
+                                                            <%=detail.teacherid%>
+                                                                <%=detail.firstname%>
+                                                                    <%=detail.lastname%>
                                                         </option>
                                                         <% }) %>
                                                 </select>
@@ -151,7 +152,8 @@ The above copyright notice and this permission notice shall be included in all c
                                                 <select class="form-control" data-style="btn btn-link" name="scode">
                                                     <% subject.forEach(function(detail){ %>
                                                         <option value="<%=detail._id%>">
-                                                            <%=detail.subjectname%>
+                                                            <%=detail._id%>
+                                                                <%=detail.subjectname%>
                                                         </option>
                                                         <% }) %>
                                                 </select>
@@ -160,8 +162,6 @@ The above copyright notice and this permission notice shall be included in all c
                                         <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
                                         <div class="clearfix"></div>
                                     </form>
-
-
                                 </div>
                             </div>
                         </div>
@@ -169,8 +169,6 @@ The above copyright notice and this permission notice shall be included in all c
                     </div>
                 </div>
             </div>
-
-
 
         </div>
 

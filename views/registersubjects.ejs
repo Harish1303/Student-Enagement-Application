@@ -126,17 +126,26 @@ The above copyright notice and this permission notice shall be included in all c
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-primary">
-                                    <h4 class="card-title">Assign Subjects</h4>
-                                    <p class="card-category">Assign subjects to teachers</p>
+                                    <h4 class="card-title">Add Courses</h4>
+                                    <p class="card-category">Add a new course by providing the following details</p>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="/testroute">
+                                    <form method="POST" action="/subjectregister">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Enter the course code of the
+                                                    subject</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp" placeholder="Eg: 15CSE311"
+                                                    name="scode">
+
+                                            </div>
+                                        </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Enter the name of the subject</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp" placeholder="Eg: Physics" name="email">
-
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp" placeholder="Eg: Physics" name="sname">
                                             </div>
                                         </div>
 
@@ -144,60 +153,26 @@ The above copyright notice and this permission notice shall be included in all c
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Enter the name of the Department the
                                                     subject is to be taught by</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail1"
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
                                                     aria-describedby="emailHelp"
-                                                    placeholder="Eg: Department of Mathematics">
+                                                    placeholder="Eg: Department of Mathematics" name="dept">
 
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Enter the course code of the
-                                                    subject</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp" placeholder="Eg: 15CSE311">
+                                                <label for="exampleInputEmail1">Enter the semester the subject is
+                                                    offered to</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp"
+                                                    placeholder="Eg: Department of Mathematics" name="sem">
 
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Enter the subject to be assigned</label>
-                                                <select class="form-control" data-style="btn btn-link">
 
-                                                    <option value="1">
-                                                        1st Semester
-                                                    </option>
-                                                    <option value="2">
-                                                        2nd Semester
-                                                    </option>
-                                                    <option value="3">
-                                                        3rd Semester
-                                                    </option>
-                                                    <option value="4">
-                                                        4th Semester
-                                                    </option>
-                                                    <option value="5">
-                                                        5th Semester
-                                                    </option>
-                                                    <option value="6">
-                                                        6th Semester
-                                                    </option>
-                                                    <option value="7">
-                                                        7th Semester
-                                                    </option>
-                                                    <option value="8">
-                                                        8th Semester
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" class="btn btn-primary pull-right">Update
-                                            Profile</button>
+                                        <button type="submit" class="btn btn-primary pull-right">Add Course</button>
                                         <div class="clearfix"></div>
                                     </form>
-
-
                                 </div>
                             </div>
                         </div>
@@ -205,9 +180,6 @@ The above copyright notice and this permission notice shall be included in all c
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
     </div>
