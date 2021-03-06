@@ -616,7 +616,42 @@ app.get('/enrollsubject', function (req, res) {
         subject: subjects,
     });
 });
-
+app.get('/userProfile', function (req, res) {
+  studentList = [
+    {
+      _id: 10,
+      studentid: 90,
+      firstname: 'Saketh',
+      semester: 7,
+      department: 'CSE',
+      lastname: 'Thogarucheeti',
+      username: 'Saketh Thogarucheeti',
+      gender: 'male',
+      dob: '05/06/2000',
+    },
+  ];
+  res.render('userProfile', {
+    student: studentList,
+  });
+});
+app.get('/editUserProfile', function (req, res) {
+  studentList = [
+    {
+      _id: 10,
+      studentid: 90,
+      firstname: 'Saketh',
+      semester: 7,
+      department: 'CSE',
+      lastname: 'Thogarucheeti',
+      username: 'Saketh Thogarucheeti',
+      gender: 'male',
+      dob: '05/06/2000',
+    },
+  ];
+  res.render('editUserProfile', {
+    student: studentList,
+  });
+});
 app.get('/admin', function (req, res) {
     res.render('admin');
 });
