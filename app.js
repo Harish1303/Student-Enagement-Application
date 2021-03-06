@@ -80,8 +80,7 @@ const student = new mongoose.Schema({
     studentid: String,
     dob: String,
     semester: Number,
-    department: String,
-    subjects_enrolled: [[String]]
+    department: String
 });
 const subject = new mongoose.Schema({
     _id: String,
@@ -98,8 +97,7 @@ const teacher = new mongoose.Schema({
     gender: String,
     teacherid: String,
     dob: String,
-    department: String,
-    subjects_assigned: [[String]]
+    department: String
 });
 const admincounter = new mongoose.Schema({
     _id: String,
@@ -409,6 +407,13 @@ app.get("/StudentProfiles", function (req, res) {
     }
     //res.render("studentlist_adminview", { students: lauda })
 })
+app.get("/viewsubjects", function (req, res) {
+    Student.find({}, { "subjectname": 1, "department": 1, "subjectid": 1, "semester": 1 }).exec().then(sublist => {
+        studentlist = sublist
+        res.render("subjectlist_adminview", { subject: sublist })
+    })
+    //res.render("subjectlist_adminview", { subject: [] })
+})
 app.get("/assignsubjects", function (req, res) {
     if (req.isAuthenticated()) {
         Teacher.find({}, { "firstname": 1, "lastname": 1, "teacherid": 1 }).exec().then(tlist => {
@@ -446,6 +451,7 @@ app.get("/teacherlogin", function (req, res) {
 })
 
 app.get("/addsubject", function (req, res) {
+
     subjects = [
         {
             _id: '1',
@@ -454,15 +460,10 @@ app.get("/addsubject", function (req, res) {
             semester: 1,
         }
     ];
-    teachers = [
-        {
-            _id: 1,
-            teacherid: 51,
-        }
-    ];
+
     res.render('registersubjects', {
-        subject: subjects,
-        teacher: teachers,
+        subject: subjects
+
     });
 })
 
@@ -470,6 +471,28 @@ app.get("/addsubject", function (req, res) {
 app.post("/testroute", function (req, res) {
     console.log(req.body)
 })
+app.get("/testroute", function (req, res) {
+    Subject_student_mapping.find({ studentid: 1 }).exec().then(ans => {
+        subsenrolled = []
+        for (var i = 0; i < ans.length; i++) {
+            subsenrolled.push(ans[i].subjectid)
+        }
+        //console.log(subsenrolled)
+        Subject.find({ _id: { $in: subsenrolled } }).exec().then(ans2 => {
+            console.log(ans2)
+            res.send("ab")
+        })
+        //res.send("ab")
+    })
+    /*
+    Subject_student_mapping.find({ studentid: { $in: [1, 4, 5] } }).exec().then(ans => {
+        console.log(ans)
+        res.send("a")
+
+    })
+    */
+})
+
 app.post("/assignsubjects", function (req, res) {
     Subject_teacher_mapping.create(
         {

@@ -44,37 +44,32 @@ The above copyright notice and this permission notice shall be included in all c
                 </a></div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="nav-item active  ">
+                    <li class="nav-item  ">
                         <a class="nav-link" href="./dashboard.html">
                             <i class="material-icons">dashboard</i>
                             <p>Dashboard</p>
-
-
                         </a>
                     </li>
+
+
                     <li class="nav-item ">
-                        <a class="nav-link" href="./user.html">
-                            <i class="material-icons">person</i>
-                            <p>User Profile</p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="./tables.html">
-                            <i class="material-icons">content_paste</i>
-                            <p>Table List</p>
+                        <a class="nav-link" href="./typography.html">
+                            <i class="material-icons">library_books</i>
+                            <p>Add Course</p>
                         </a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="./typography.html">
                             <i class="material-icons">library_books</i>
-                            <p>Typography</p>
+                            <p>Assign Courses</p>
                         </a>
                     </li>
-
-
-
-
-
+                    <li class="nav-item ">
+                        <a class="nav-link" href="./typography.html">
+                            <i class="material-icons">library_books</i>
+                            <p>Make an Announcement</p>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -83,7 +78,7 @@ The above copyright notice and this permission notice shall be included in all c
             <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
-                        <a class="navbar-brand" href="javascript:;">Assign Subjects</a>
+                        <a class="navbar-brand" href="javascript:;">Dashboard</a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -105,8 +100,8 @@ The above copyright notice and this permission notice shall be included in all c
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href=" " id="navbarDropdownProfile" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="material-icons">person</i>
                                     <p class="d-lg-none d-md-block">
                                         Account
@@ -124,101 +119,84 @@ The above copyright notice and this permission notice shall be included in all c
                 </div>
             </nav>
             <!-- End Navbar -->
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header card-header-primary">
-                                    <h4 class="card-title">Assign Subjects</h4>
-                                    <p class="card-category">Assign subjects to teachers</p>
+            <div class="container-fluid">
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header card-header-primary">
+                                        <h4 class="card-title">Enroll Subjects</h4>
+                                        <p class="card-category">Enroll subjects for your semester</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">Subject Code</th>
+                                                        <th>Subject Name</th>
+                                                        <th class="text-center">Enrollment</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% subject.forEach(function(detail){ %>
+                                                        <tr>
+                                                            <td class="text-center">
+                                                                <%=detail._id%>
+                                                            </td>
+                                                            <td>
+                                                                <%=detail.subjectname%>
+                                                            </td>
+                                                            <td class="td-actions text-right text-center">
+                                                                <form action="/testroute" method="POST">
+                                                                    <input type="hidden" value="<%=detail._id%>"
+                                                                        name="sid">
+                                                                    <input type="hidden"
+                                                                        value="<%=detail._subjectname%>"
+                                                                        name="sub_name">
+                                                                    <button class="btn btn-primary  btn-lg btn-round"
+                                                                        type="submit">
+                                                                        <i class="material-icons"
+                                                                            aria-hidden="true">check</i>
+                                                                        Enroll
+                                                                    </button>
+                                                                </form>
+
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Enter the name of the subject</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp" placeholder="Eg: Physics">
 
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Enter the name of the Department the
-                                                    subject is to be taught by</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp"
-                                                    placeholder="Eg: Department of Mathematics">
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Enter the course code of the
-                                                    subject</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp" placeholder="Eg: 15CSE311">
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Enter the subject to be assigned</label>
-                                                <select class="form-control" data-style="btn btn-link">
-
-                                                    <option value="1">
-                                                        1st Semester
-                                                    </option>
-                                                    <option value="2">
-                                                        2nd Semester
-                                                    </option>
-                                                    <option value="3">
-                                                        3rd Semester
-                                                    </option>
-                                                    <option value="4">
-                                                        4th Semester
-                                                    </option>
-                                                    <option value="5">
-                                                        5th Semester
-                                                    </option>
-                                                    <option value="6">
-                                                        6th Semester
-                                                    </option>
-                                                    <option value="7">
-                                                        7th Semester
-                                                    </option>
-                                                    <option value="8">
-                                                        8th Semester
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card card-plain">
 
 
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
 
-
-
-                                        <button type="submit" class="btn btn-primary pull-right">Update
-                                            Profile</button>
-                                        <div class="clearfix"></div>
-                                    </form>
-
-
+                                    </table>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
+    </div>
+    </div>
+    <footer class="footer">
 
+    </footer>
     </div>
     </div>
 
