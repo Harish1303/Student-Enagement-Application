@@ -45,7 +45,7 @@ The above copyright notice and this permission notice shall be included in all c
             <div class="sidebar-wrapper">
                 <ul class="nav">
                     <li class="nav-item  ">
-                        <a class="nav-link" href="./dashboard.html">
+                        <a class="nav-link" href="/admin">
                             <i class="material-icons">dashboard</i>
                             <p>Dashboard</p>
                         </a>
@@ -53,19 +53,19 @@ The above copyright notice and this permission notice shall be included in all c
 
 
                     <li class="nav-item ">
-                        <a class="nav-link" href="./typography.html">
+                        <a class="nav-link" href="/addubject">
                             <i class="material-icons">library_books</i>
                             <p>Add Course</p>
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="./typography.html">
+                        <a class="nav-link" href="/assignsubjects">
                             <i class="material-icons">library_books</i>
                             <p>Assign Courses</p>
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="./typography.html">
+                        <a class="nav-link" href="">
                             <i class="material-icons">library_books</i>
                             <p>Make an Announcement</p>
                         </a>
@@ -74,123 +74,126 @@ The above copyright notice and this permission notice shall be included in all c
             </div>
         </div>
         <div class="main-panel">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-                <div class="container-fluid">
-                    <div class="navbar-wrapper">
-                        <a class="navbar-brand" href="javascript:;">Dashboard</a>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-end">
-
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="javascript:;">
-                                    <i class="material-icons">dashboard</i>
-                                    <p class="d-lg-none d-md-block">
-                                        Stats
-                                    </p>
-                                </a>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-icons">person</i>
-                                    <p class="d-lg-none d-md-block">
-                                        Account
-                                    </p>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                                    <a class="dropdown-item" href="#">Profile</a>
-                                    <a class="dropdown-item" href="#">Settings</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Log out</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- End Navbar -->
-            <div class="container-fluid">
-                <div class="content">
+            <div class="row">
+                <!-- Navbar -->
+                <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
                     <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header card-header-primary">
-                                        <h4 class="card-title">Enroll Subjects</h4>
-                                        <p class="card-category">Enroll subjects for your semester</p>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="col-md-12">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">Subject Code</th>
-                                                        <th>Subject Name</th>
-                                                        <th class="text-center">Enrollment</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <% subject.forEach(function(detail){ %>
-                                                        <tr>
-                                                            <td class="text-center">
-                                                                <%=detail._id%>
-                                                            </td>
-                                                            <td>
-                                                                <%=detail.subjectname%>
-                                                            </td>
-                                                            <td class="td-actions text-right text-center">
-                                                                <form action="/testroute" method="POST">
-                                                                    <input type="hidden" value="<%=detail._id%>"
-                                                                        name="sid">
-                                                                    <input type="hidden"
-                                                                        value="<%=detail._subjectname%>"
-                                                                        name="sub_name">
-                                                                    <button class="btn btn-primary  btn-lg btn-round"
-                                                                        type="submit">
-                                                                        <i class="material-icons"
-                                                                            aria-hidden="true">check</i>
-                                                                        Enroll
-                                                                    </button>
-                                                                </form>
+                        <div class="navbar-wrapper">
+                            <a class="navbar-brand" href="javascript:;">Dashboard</a>
+                        </div>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="navbar-toggler-icon icon-bar"></span>
+                            <span class="navbar-toggler-icon icon-bar"></span>
+                            <span class="navbar-toggler-icon icon-bar"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-end">
 
-                                                            </td>
-                                                        </tr>
-                                                        <% }) %>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="javascript:;">
+                                        <i class="material-icons">dashboard</i>
+                                        <p class="d-lg-none d-md-block">
+                                            Stats
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="javascript:;" id="navbarDropdownProfile"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">person</i>
+                                        <p class="d-lg-none d-md-block">
+                                            Account
+                                        </p>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right"
+                                        aria-labelledby="navbarDropdownProfile">
+                                        <a class="dropdown-item" href="#">Profile</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Log out</a>
                                     </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <!-- End Navbar -->
+            </div>
+            <div class=" ">
+                <div class="content">
+
+                    <div class="content">
+                        <div class="container-fluid " style="margin-top: 10%;">
+                            <div class="card">
+                                <div class="card-header card-header-primary">
+                                    <h4 class="card-title">Enroll Subjects</h4>
+                                    <p class="card-category">Enroll subjects for your semester</p>
                                 </div>
 
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="card card-plain">
+                                <div class="card-body">
+                                    <div class="col-md-12">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Subject Code</th>
+                                                    <th>Subject Name</th>
+                                                    <th class="text-center">View</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% subject.forEach(function(detail){ %>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <%=detail._id%>
+                                                        </td>
+                                                        <td>
+                                                            <%=detail.subjectname%>
+                                                        </td>
+                                                        <td class="td-actions text-right text-center">
+                                                            <form action="/testroute" method="POST">
+                                                                <input type="hidden" value="<%=detail._id%>" name="sid">
+                                                                <input type="hidden" value="<%=detail._subjectname%>"
+                                                                    name="sub_name">
+                                                                <button class="btn btn-primary  btn-lg btn-round"
+                                                                    type="submit">
+                                                                    <i class="material-icons"
+                                                                        aria-hidden="true">visibility</i>
+                                                                    Subject
+                                                                </button>
+                                                                <button class="btn btn-primary  btn-lg btn-round"
+                                                                    type="submit">
+                                                                    <i class="material-icons"
+                                                                        aria-hidden="true">how_to_reg</i>
+                                                                    Teacher
+                                                                </button>
+                                                                <button class="btn btn-primary  btn-lg btn-round"
+                                                                    type="submit">
+                                                                    <i class="material-icons"
+                                                                        aria-hidden="true">people</i>
+                                                                    Student
+                                                                </button>
+                                                            </form>
 
 
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-
-                                    </table>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
+
+
+    </div>
     </div>
     </div>
     </div>
