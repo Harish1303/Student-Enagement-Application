@@ -142,17 +142,32 @@ The above copyright notice and this permission notice shall be included in all c
                                                 <% students.forEach(function(detail){ %>
                                                     <tr>
                                                         <td>
-                                                            <%=detail.teacherid%>
+                                                            <b>
+                                                                <%=detail.teacherid%>
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            <%=detail.firstname%>
-                                                                <%=detail.lastname%>
+                                                            <b>
+                                                                <%=detail.firstname%>
+                                                                    <%=detail.lastname%>
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            <%=detail.department%>
+                                                            <b>
+                                                                <%=detail.department%>
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            <%=detail.marks%>
+                                                            <form action="/testroute" method="POST">
+                                                                <input type="hidden" value="<%=detail.teacherid%>"
+                                                                    name="tid">
+                                                                <button class="btn btn-primary  btn-md btn-round"
+                                                                    type="submit">
+                                                                    <i class="material-icons"
+                                                                        aria-hidden="true">visibility</i>
+                                                                    View Details
+                                                                </button>
+                                                            </form>
                                                         </td>
 
 

@@ -53,7 +53,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 
                     <li class="nav-item ">
-                        <a class="nav-link" href="/admin/registersubjects">
+                        <a class="nav-link" href="/admin/addsubject">
                             <i class="material-icons">library_books</i>
                             <p>Add Course</p>
                         </a>
@@ -136,26 +136,45 @@ The above copyright notice and this permission notice shall be included in all c
                                                 <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Department</th>
-                                                <th>Marks</th>
+                                                <th>Semester</th>
+                                                <th>View Details</th>
                                             </thead>
                                             <tbody>
 
                                                 <% students.forEach(function(detail){ %>
                                                     <tr>
-                                                        <td>
-                                                            <%=detail.studentid%>
+                                                        <td><b>
+                                                                <%=detail.studentid%>
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            <%=detail.firstname%>
-                                                                <%=detail.lastname%>
+                                                            <b>
+                                                                <%=detail.firstname%>
+                                                                    <%=detail.lastname%>
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            <%=detail.department%>
+                                                            <b>
+                                                                <%=detail.department%>
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            <%=detail.semester%>
+                                                            <b>
+                                                                <%=detail.semester%>
+                                                            </b>
                                                         </td>
-
+                                                        <td>
+                                                            <form action="/testroute" method="POST">
+                                                                <input type="hidden" value="<%=detail.studentid%>"
+                                                                    name="sid">
+                                                                <button class="btn btn-primary  btn-sm btn-round"
+                                                                    type="submit">
+                                                                    <i class="material-icons"
+                                                                        aria-hidden="true">visibility</i>
+                                                                    View Details
+                                                                </button>
+                                                            </form>
+                                                        </td>
 
                                                     </tr>
                                                     <% }) %>
