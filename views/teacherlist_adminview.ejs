@@ -158,7 +158,9 @@ The above copyright notice and this permission notice shall be included in all c
                                                             </b>
                                                         </td>
                                                         <td>
-                                                            <form action="/testroute" method="POST">
+                                                            <form
+                                                                action="/admin/viewdetails/teacher/<%=detail.teacherid%>"
+                                                                method="POST">
                                                                 <input type="hidden" value="<%=detail.teacherid%>"
                                                                     name="tid">
                                                                 <button class="btn btn-primary  btn-md btn-round"

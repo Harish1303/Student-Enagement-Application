@@ -666,6 +666,9 @@ app.get('/admin/userProfile', function (req, res) {
             res.render("userProfile", { detail: ar })
         })
     }
+    else {
+        res.redirect("/")
+    }
 });
 app.post('/admin/viewdetails/student/:sid', function (req, res) {
     if (req.isAuthenticated()) {
@@ -673,6 +676,20 @@ app.post('/admin/viewdetails/student/:sid', function (req, res) {
             ar = [arr]
             res.render("viewdetailsstudent", { detail: ar })
         })
+    }
+    else {
+        res.redirect("/")
+    }
+});
+app.post('/admin/viewdetails/teacher/:tid', function (req, res) {
+    if (req.isAuthenticated()) {
+        Teacher.findOne({ teacherid: req.params.tid }, { firstname: 1, lastname: 1, gender: 1, dob: 1, teacherid: 1 }).exec().then(arr => {
+            ar = [arr]
+            res.render("viewdetailsteacher", { detail: ar })
+        })
+    }
+    else {
+        res.redirect("/")
     }
 });
 app.get('/admin/editUserProfile', function (req, res) {
