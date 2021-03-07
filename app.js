@@ -468,6 +468,16 @@ app.get('/admin/viewsubjects', function (req, res) {
     }
 
 });
+app.post('/viewsubjects/subjectdetial/:scode', function (req, res) {
+    if (req.isAuthenticated()) {
+        var scode = req.params.scode
+        Subject.findOne({ _id: scode }).exec().then(sub => {
+            console.log(sub)
+            res.render("subjectprofile", { detail: [sub] })
+        })
+    }
+});
+
 app.get('/admin/assignsubjects', function (req, res) {
     if (req.isAuthenticated()) {
         Teacher.find({}, { firstname: 1, lastname: 1, teacherid: 1 })
