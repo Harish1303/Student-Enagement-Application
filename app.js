@@ -405,24 +405,33 @@ app.post('/login', function (req, res) {
 
 
 app.get('/admin', function (req, res) {
+
     if (req.isAuthenticated()) {
-        counts = [];
-        Teacher.estimatedDocumentCount()
-            .exec()
-            .then((ans) => {
-                counts.push(ans);
-                Student.estimatedDocumentCount()
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("fuck")
+            }
+            else {
+                counts = [];
+                Teacher.estimatedDocumentCount()
                     .exec()
-                    .then((sc) => {
-                        counts.push(sc);
-                        Subject.estimatedDocumentCount()
+                    .then((ans) => {
+                        counts.push(ans);
+                        Student.estimatedDocumentCount()
                             .exec()
-                            .then((subc) => {
-                                counts.push(subc);
-                                res.render('admin', { counts: counts });
+                            .then((sc) => {
+                                counts.push(sc);
+                                Subject.estimatedDocumentCount()
+                                    .exec()
+                                    .then((subc) => {
+                                        counts.push(subc);
+                                        res.render('admin', { counts: counts });
+                                    });
                             });
                     });
-            });
+            }
+        })
+
     } else {
         res.redirect('/');
     }
@@ -430,69 +439,102 @@ app.get('/admin', function (req, res) {
 
 app.get('/admin/TeacherProfiles', function (req, res) {
     if (req.isAuthenticated()) {
-        Teacher.find({}, { firstname: 1, lastname: 1, department: 1, teacherid: 1 })
-            .exec()
-            .then((tlist) => {
-                teacherlist = tlist;
-                res.render('teacherlist_adminview', { students: tlist });
-            });
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("fuck")
+            }
+            else {
+                Teacher.find({}, { firstname: 1, lastname: 1, department: 1, teacherid: 1 })
+                    .exec()
+                    .then((tlist) => {
+                        teacherlist = tlist;
+                        res.render('teacherlist_adminview', { students: tlist });
+                    });
+            }
+        })
+
     } else {
         res.redirect('/');
     }
 });
 app.post('/admin/teachersassigned/:sid', function (req, res) {
+
     if (req.isAuthenticated()) {
-        console.log(req.params.sid)
-        Subject_teacher_mapping.find({ subjectid: req.params.sid }).exec().then(list => {
-            for (var i = 0; i < list.length; i++) {
-                list[i] = list[i].teacherid
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("FUCK")
             }
-            Teacher.find({ teacherid: { $in: list } }, { firstname: 1, lastname: 1, department: 1, teacherid: 1 })
-                .exec()
-                .then((tlist) => {
-                    teacherlist = tlist;
-                    res.render('teachersassignedlist', { students: tlist });
-                });
-            //res.send("suck")
+            else {
+                Subject_teacher_mapping.find({ subjectid: req.params.sid }).exec().then(list => {
+                    for (var i = 0; i < list.length; i++) {
+                        list[i] = list[i].teacherid
+                    }
+                    Teacher.find({ teacherid: { $in: list } }, { firstname: 1, lastname: 1, department: 1, teacherid: 1 })
+                        .exec()
+                        .then((tlist) => {
+                            teacherlist = tlist;
+                            res.render('teachersassignedlist', { students: tlist });
+                        });
+
+                })
+            }
         })
+
+
     } else {
         res.redirect('/');
     }
 });
 app.post('/admin/studentsenrolled/:sid', function (req, res) {
     if (req.isAuthenticated()) {
-        console.log(req.params.sid)
-        Subject_student_mapping.find({ subjectid: req.params.sid }).exec().then(list => {
-            console.log(list)
-            for (var i = 0; i < list.length; i++) {
-                list[i] = list[i].studentid
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("FUCK")
             }
-            console.log(list)
-            Student.find({ studentid: { $in: list } }, { firstname: 1, lastname: 1, department: 1, studentid: 1, semester: 1 })
-                .exec()
-                .then((tlist) => {
-                    console.log(tlist)
-                    teacherlist = tlist;
-                    res.render('studentsenrolledlist', { students: tlist });
-                });
-            //res.send("suck")
+            else {
+                Subject_student_mapping.find({ subjectid: req.params.sid }).exec().then(list => {
+                    console.log(list)
+                    for (var i = 0; i < list.length; i++) {
+                        list[i] = list[i].studentid
+                    }
+                    console.log(list)
+                    Student.find({ studentid: { $in: list } }, { firstname: 1, lastname: 1, department: 1, studentid: 1, semester: 1 })
+                        .exec()
+                        .then((tlist) => {
+                            console.log(tlist)
+                            teacherlist = tlist;
+                            res.render('studentsenrolledlist', { students: tlist });
+                        });
+                    //res.send("suck")
+                })
+            }
         })
+
     } else {
         res.redirect('/');
     }
 });
 app.get('/admin/StudentProfiles', function (req, res) {
-    if (req.isAuthenticated()) {
-        Student.find(
-            {},
-            { firstname: 1, lastname: 1, department: 1, studentid: 1, semester: 1 }
-        )
-            .exec()
-            .then((slist) => {
-                studentlist = slist;
 
-                res.render('studentlist_adminview', { students: slist });
-            });
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("fuck")
+            }
+            else {
+                Student.find(
+                    {},
+                    { firstname: 1, lastname: 1, department: 1, studentid: 1, semester: 1 }
+                )
+                    .exec()
+                    .then((slist) => {
+                        studentlist = slist;
+
+                        res.render('studentlist_adminview', { students: slist });
+                    });
+            }
+        })
+
     } else {
         res.redirect('/');
     }
@@ -500,12 +542,20 @@ app.get('/admin/StudentProfiles', function (req, res) {
 });
 app.get('/admin/viewsubjects', function (req, res) {
     if (req.isAuthenticated()) {
-        Subject.find({}, { subjectname: 1, department: 1, subjectid: 1, semester: 1 })
-            .exec()
-            .then((sublist) => {
-                studentlist = sublist;
-                res.render('subjectlist_adminview', { subject: sublist });
-            });
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("FUCK")
+            }
+            else {
+                Subject.find({}, { subjectname: 1, department: 1, subjectid: 1, semester: 1 })
+                    .exec()
+                    .then((sublist) => {
+                        studentlist = sublist;
+                        res.render('subjectlist_adminview', { subject: sublist });
+                    });
+            }
+        })
+
     }
 
 });
@@ -520,22 +570,34 @@ app.post('/viewsubjects/subjectdetial/:scode', function (req, res) {
 });
 
 app.get('/admin/assignsubjects', function (req, res) {
+
     if (req.isAuthenticated()) {
-        Teacher.find({}, { firstname: 1, lastname: 1, teacherid: 1 })
-            .exec()
-            .then((tlist) => {
-                teacherlist = tlist;
-                Subject.find({}, { subjectname: 1, _id: 1 })
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("FUCK")
+            }
+            else {
+                Teacher.find({}, { firstname: 1, lastname: 1, teacherid: 1 })
                     .exec()
-                    .then((sublist) => {
-                        subjectlist = sublist;
-                        res.render('assignsubjects', {
-                            subject: sublist,
-                            teacher: tlist,
-                        });
-                        //res.render("teacherlist_adminview", { students: tlist })
+                    .then((tlist) => {
+                        teacherlist = tlist;
+                        Subject.find({}, { subjectname: 1, _id: 1 })
+                            .exec()
+                            .then((sublist) => {
+                                subjectlist = sublist;
+                                res.render('assignsubjects', {
+                                    subject: sublist,
+                                    teacher: tlist,
+                                });
+                                //res.render("teacherlist_adminview", { students: tlist })
+                            });
                     });
-            });
+            }
+        })
+
+    }
+    else {
+        res.redirect("/")
     }
 });
 
@@ -549,7 +611,16 @@ app.get('/teacherlogin', function (req, res) {
 });
 
 app.get('/admin/addsubject', function (req, res) {
-    res.render('registersubjects');
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("FUCK")
+            }
+            else {
+                res.render("registersubjects")
+            }
+        })
+    }
 });
 app.post('/testroute', function (req, res) {
     console.log(req.body);
@@ -616,55 +687,52 @@ app.get('/testroute', function (req, res) {
 });
 
 app.post('/assignsubjects', function (req, res) {
+    console.log(req.body)
     Subject_teacher_mapping.create({
         _id: { teacherid: req.body.tid, subjectid: req.body.scode },
         teacherid: req.body.tid,
         subjectid: req.body.scode,
-    }).then(res.redirect('/assignsubjects'));
+    }).then(res.redirect('/admin/assignsubjects')).catch(err => {
+        console.log(err)
+    });
 });
 
 app.post('/enrollsubject', function (req, res) {
     Subject_student_mapping.create({
-        _id: { studentid: req.body.sid, subjectid: req.body.scode },
-        studentid: req.body.sid,
-        subjectid: req.body.scode,
+        _id: { studentid: req.body.studid, subjectid: req.body.subcode },
+        studentid: req.body.studid,
+        subjectid: req.body.subcode,
     })
-        .then(
-            Student.findOneAndUpdate(
-                {
-                    studentid: req.body.sid,
-                },
-                {
-                    $push: { subjects_enrolled: [req.body.sub_name, req.body.scode] },
-                }
-            )
-        )
-        .catch((err) => {
-            console.log(err);
-        });
 });
 
 app.get('/enrollsubject', function (req, res) {
-    subjects = [
-        {
-            _id: '1',
-            subjectname: 'Discrete Mathematics',
-            department: 'Mathematics Department',
-            semester: 1,
-        },
-    ];
-    res.render('subjectenroll', {
-        subject: subjects,
-    });
+    Student.findOne({ _id: req.session.uniqueid }, { semester: 1, studentid: 1 }).exec().then(sem => {
+        Subject.find({ semester: sem.semester }, {}).exec().then(subjects => {
+            console.log(sem.studentid)
+            res.render('subjectenroll', {
+                subject: subjects, studid: sem.studentid
+            });
+        })
+    })
+
+
 });
 app.get('/admin/userProfile', function (req, res) {
+
     if (req.isAuthenticated()) {
-        console.log(req.session.uniqueid)
-        Admin.findOne({ _id: req.session.uniqueid }, { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1 }).exec().then(arr => {
-            console.log(arr)
-            ar = [arr]
-            res.render("userProfile", { detail: ar })
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status != 1) {
+                res.send("FUCK")
+            }
+            else {
+                Admin.findOne({ _id: req.session.uniqueid }, { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1 }).exec().then(arr => {
+                    console.log(arr)
+                    ar = [arr]
+                    res.render("userProfile", { detail: ar })
+                })
+            }
         })
+
     }
     else {
         res.redirect("/")

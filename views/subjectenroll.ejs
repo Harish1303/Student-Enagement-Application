@@ -83,7 +83,8 @@ The above copyright notice and this permission notice shall be included in all c
                         <div class="container-fluid">
                             <div class="card">
                                 <div class="card-header card-header-primary">
-                                    <h4 class="card-title">Enroll Subjects</h4>
+                                    <h4 class="card-title">Enroll Subjects
+                                    </h4>
                                     <p class="card-category">Enroll subjects for your semester</p>
                                 </div>
                                 <div class="card-body">
@@ -92,7 +93,8 @@ The above copyright notice and this permission notice shall be included in all c
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">Subject Code</th>
-                                                    <th>Subject Name</th>
+                                                    <th>Subject Name
+                                                    </th>
                                                     <th class="text-center">Enrollment</th>
                                                 </tr>
                                             </thead>
@@ -106,10 +108,10 @@ The above copyright notice and this permission notice shall be included in all c
                                                             <%=detail.subjectname%>
                                                         </td>
                                                         <td class="td-actions text-right text-center">
-                                                            <form action="/testroute" method="POST">
-                                                                <input type="hidden" value="<%=detail._id%>" name="sid">
-                                                                <input type="hidden" value="<%=detail._subjectname%>"
-                                                                    name="sub_name">
+                                                            <form action="/enrollsubject" method="POST">
+                                                                <input type="hidden" value="<%=detail._id%>"
+                                                                    name="subcode">
+                                                                <input type="hidden" value="<%=studid%>" name="studid">
                                                                 <button class="btn btn-primary  btn-lg btn-round"
                                                                     type="submit">
                                                                     <i class="material-icons"
