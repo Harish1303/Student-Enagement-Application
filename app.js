@@ -351,21 +351,24 @@ app.post('/xlogin', function (req, res) {
     });
 });
 
-app.post('/subjectregister', function (req, res) {
-    Subject.create({
-        subjectname: req.body.sname,
-        _id: req.body.scode,
-        department: req.body.dept,
-        semester: req.body.sem,
-    })
-        .then(function (done) {
-            if (done) {
-                res.redirect('/addsubject');
-            }
+app.post('/admin/subjectregister', function (req, res) {
+    if (req.isAuthenticated()) {
+        Subject.create({
+            subjectname: req.body.sname,
+            _id: req.body.scode,
+            department: req.body.dept,
+            semester: req.body.sem,
         })
-        .catch(function (err) {
-            res.redirect('/register');
-        });
+            .then(function (done) {
+                if (done) {
+                    res.redirect('/admin/addsubject');
+                }
+            })
+            .catch(function (err) {
+                res.redirect('/register');
+            });
+    }
+
 });
 
 app.post('/login', function (req, res) {
@@ -383,7 +386,7 @@ app.post('/login', function (req, res) {
                     .then((users) => {
                         req.session.uniqueid = users._id;
                         if (Number(users.status) == 1) {
-                            res.redirect('/adminlogin');
+                            res.redirect('/admin');
                         }
                         if (Number(users.status) == 2) {
                             res.redirect('/teacherlogin');
@@ -409,7 +412,7 @@ Teacher.find({}, { "firstname": 1 }).exec().then(tlist => {
             res.render("adminpage", { students: studentlist, teachers: teacherlist })
         })
 */
-app.get('/adminlogin', function (req, res) {
+app.get('/admin', function (req, res) {
     if (req.isAuthenticated()) {
         counts = [];
         Teacher.estimatedDocumentCount()
@@ -565,13 +568,7 @@ app.get('/testroute', function (req, res) {
                 });
             //res.send("ab")
         });
-    /*
-      Subject_student_mapping.find({ studentid: { $in: [1, 4, 5] } }).exec().then(ans => {
-          console.log(ans)
-          res.send("a")
-  
-      })
-      */
+
 });
 
 app.post('/assignsubjects', function (req, res) {
@@ -616,66 +613,43 @@ app.get('/enrollsubject', function (req, res) {
         subject: subjects,
     });
 });
-app.get('/userProfile', function (req, res) {
-  studentList = [
-    {
-      _id: 10,
-      studentid: 90,
-      firstname: 'Saketh',
-      semester: 7,
-      department: 'CSE',
-      lastname: 'Thogarucheeti',
-      username: 'Saketh Thogarucheeti',
-      gender: 'male',
-      dob: '05/06/2000',
-    },
-  ];
-  res.render('userProfile', {
-    student: studentList,
-  });
+app.get('/admin/userProfile', function (req, res) {
+    if (req.isAuthenticated()) {
+        console.log(req.session.uniqueid)
+        Admin.findOne({ _id: req.session.uniqueid }, { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1 }).exec().then(arr => {
+            console.log(arr)
+            ar = [arr]
+            res.render("userProfile", { detail: ar })
+        })
+    }
+
 });
-app.get('/editUserProfile', function (req, res) {
-  studentList = [
-    {
-      _id: 10,
-      studentid: 90,
-      firstname: 'Saketh',
-      semester: 7,
-      department: 'CSE',
-      lastname: 'Thogarucheeti',
-      username: 'Saketh Thogarucheeti',
-      gender: 'male',
-      dob: '05/06/2000',
-    },
-  ];
-  res.render('editUserProfile', {
-    student: studentList,
-  });
-});
-app.get('/admin', function (req, res) {
-    res.render('admin');
+app.get('/admin/editUserProfile', function (req, res) {
+    studentList = [
+        {
+            _id: 10,
+            studentid: 90,
+            firstname: 'Saketh',
+            semester: 7,
+            department: 'CSE',
+            lastname: 'Thogarucheeti',
+            username: 'Saketh Thogarucheeti',
+            gender: 'male',
+            dob: '05/06/2000',
+        },
+    ];
+    res.render('editUserProfile', {
+        student: studentList,
+    });
 });
 
 app.get('/exp', function (req, res) {
-    subjects = [
-        {
-            _id: '1',
-            subjectname: 'Discrete Mathematics',
-            department: 'Mathematics Department',
-            semester: 1,
-        },
-    ];
-    teachers = [
-        {
-            _id: 1,
-            teacherid: 51,
-            firstname: 'saketh1',
-        },
-    ];
-    res.render('exp', {
-        subject: subjects,
-        teacher: teachers,
-    });
+    Admin.findOne({ adminid: "ADMIN006" }, { firstname: 1, lastname: 1, gender: 1, dob: 1 }).exec().then(arr => {
+        console.log(arr)
+        ar = [arr]
+        //res.send("a")
+        res.render("exp", { detail: ar })
+    })
 });
 app.get("/logout", function (req, res) {
     req.logout();
