@@ -351,7 +351,7 @@ app.post('/xlogin', function (req, res) {
     });
 });
 
-app.post('/admin/subjectregister', function (req, res) {
+app.post('/subjectregister', function (req, res) {
     if (req.isAuthenticated()) {
         Subject.create({
             subjectname: req.body.sname,
@@ -403,15 +403,7 @@ app.post('/login', function (req, res) {
     });
 });
 
-/* 
-Teacher.find({}, { "firstname": 1 }).exec().then(tlist => {
-            teacherlist = tlist
-        })
-        Student.find({}, { "firstname": 1 }).exec().then(slist => {
-            studentlist = slist
-            res.render("adminpage", { students: studentlist, teachers: teacherlist })
-        })
-*/
+
 app.get('/admin', function (req, res) {
     if (req.isAuthenticated()) {
         counts = [];
@@ -436,7 +428,7 @@ app.get('/admin', function (req, res) {
     }
 });
 
-app.get('/TeacherProfiles', function (req, res) {
+app.get('/admin/TeacherProfiles', function (req, res) {
     if (req.isAuthenticated()) {
         Teacher.find({}, { firstname: 1, lastname: 1, department: 1, teacherid: 1 })
             .exec()
@@ -447,9 +439,8 @@ app.get('/TeacherProfiles', function (req, res) {
     } else {
         res.redirect('/');
     }
-    //res.render("teacherlist_adminview", { students: lauda })
 });
-app.get('/StudentProfiles', function (req, res) {
+app.get('/admin/StudentProfiles', function (req, res) {
     if (req.isAuthenticated()) {
         Student.find(
             {},
@@ -464,18 +455,20 @@ app.get('/StudentProfiles', function (req, res) {
     } else {
         res.redirect('/');
     }
-    //res.render("studentlist_adminview", { students: lauda })
+
 });
-app.get('/viewsubjects', function (req, res) {
-    Subject.find({}, { subjectname: 1, department: 1, subjectid: 1, semester: 1 })
-        .exec()
-        .then((sublist) => {
-            studentlist = sublist;
-            res.render('subjectlist_adminview', { subject: sublist });
-        });
-    //res.render("subjectlist_adminview", { subject: [] })
+app.get('/admin/viewsubjects', function (req, res) {
+    if (req.isAuthenticated()) {
+        Subject.find({}, { subjectname: 1, department: 1, subjectid: 1, semester: 1 })
+            .exec()
+            .then((sublist) => {
+                studentlist = sublist;
+                res.render('subjectlist_adminview', { subject: sublist });
+            });
+    }
+
 });
-app.get('/assignsubjects', function (req, res) {
+app.get('/admin/assignsubjects', function (req, res) {
     if (req.isAuthenticated()) {
         Teacher.find({}, { firstname: 1, lastname: 1, teacherid: 1 })
             .exec()
@@ -504,7 +497,7 @@ app.get('/teacherlogin', function (req, res) {
     }
 });
 
-app.get('/addsubject', function (req, res) {
+app.get('/admin/addsubject', function (req, res) {
     res.render('registersubjects');
 });
 app.post('/testroute', function (req, res) {
@@ -647,7 +640,6 @@ app.get('/exp', function (req, res) {
     Admin.findOne({ adminid: "ADMIN006" }, { firstname: 1, lastname: 1, gender: 1, dob: 1 }).exec().then(arr => {
         console.log(arr)
         ar = [arr]
-        //res.send("a")
         res.render("exp", { detail: ar })
     })
 });
