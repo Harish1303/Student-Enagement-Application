@@ -666,7 +666,14 @@ app.get('/admin/userProfile', function (req, res) {
             res.render("userProfile", { detail: ar })
         })
     }
-
+});
+app.post('/admin/viewdetails/student/:sid', function (req, res) {
+    if (req.isAuthenticated()) {
+        Student.findOne({ studentid: req.params.sid }, { firstname: 1, lastname: 1, gender: 1, dob: 1, studentid: 1 }).exec().then(arr => {
+            ar = [arr]
+            res.render("viewdetailsstudent", { detail: ar })
+        })
+    }
 });
 app.get('/admin/editUserProfile', function (req, res) {
     studentList = [
