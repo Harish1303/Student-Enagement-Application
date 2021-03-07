@@ -440,6 +440,47 @@ app.get('/admin/TeacherProfiles', function (req, res) {
         res.redirect('/');
     }
 });
+app.post('/admin/teachersassigned/:sid', function (req, res) {
+    if (req.isAuthenticated()) {
+        console.log(req.params.sid)
+        Subject_teacher_mapping.find({ subjectid: req.params.sid }).exec().then(list => {
+            for (var i = 0; i < list.length; i++) {
+                list[i] = list[i].teacherid
+            }
+            Teacher.find({ teacherid: { $in: list } }, { firstname: 1, lastname: 1, department: 1, teacherid: 1 })
+                .exec()
+                .then((tlist) => {
+                    teacherlist = tlist;
+                    res.render('teachersassignedlist', { students: tlist });
+                });
+            //res.send("suck")
+        })
+    } else {
+        res.redirect('/');
+    }
+});
+app.post('/admin/studentsenrolled/:sid', function (req, res) {
+    if (req.isAuthenticated()) {
+        console.log(req.params.sid)
+        Subject_student_mapping.find({ subjectid: req.params.sid }).exec().then(list => {
+            console.log(list)
+            for (var i = 0; i < list.length; i++) {
+                list[i] = list[i].studentid
+            }
+            console.log(list)
+            Student.find({ studentid: { $in: list } }, { firstname: 1, lastname: 1, department: 1, studentid: 1, semester: 1 })
+                .exec()
+                .then((tlist) => {
+                    console.log(tlist)
+                    teacherlist = tlist;
+                    res.render('studentsenrolledlist', { students: tlist });
+                });
+            //res.send("suck")
+        })
+    } else {
+        res.redirect('/');
+    }
+});
 app.get('/admin/StudentProfiles', function (req, res) {
     if (req.isAuthenticated()) {
         Student.find(

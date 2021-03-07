@@ -74,130 +74,130 @@ The above copyright notice and this permission notice shall be included in all c
             </div>
         </div>
         <div class="main-panel">
-            <div class="row">
-                <!-- Navbar -->
-                <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-                    <div class="container-fluid">
-                        <div class="navbar-wrapper">
-                            <a class="navbar-brand" href="javascript:;"></a>
-                        </div>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="navbar-toggler-icon icon-bar"></span>
-                            <span class="navbar-toggler-icon icon-bar"></span>
-                            <span class="navbar-toggler-icon icon-bar"></span>
-                        </button>
-                        <div class="collapse navbar-collapse justify-content-end">
-
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="javascript:;">
-                                        <i class="material-icons">dashboard</i>
-                                        <p class="d-lg-none d-md-block">
-                                            Stats
-                                        </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link" href="javascript:;" id="navbarDropdownProfile"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">person</i>
-                                        <p class="d-lg-none d-md-block">
-                                            Account
-                                        </p>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right"
-                                        aria-labelledby="navbarDropdownProfile">
-                                        <a class="dropdown-item" href="/admin/userProfile">Profile</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="/logout">Log out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <a class="navbar-brand" href="javascript:;">Dashboard</a>
                     </div>
-                </nav>
-                <!-- End Navbar -->
-            </div>
-            <div class=" ">
-                <div class="content">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="navbar-toggler-icon icon-bar"></span>
+                        <span class="navbar-toggler-icon icon-bar"></span>
+                        <span class="navbar-toggler-icon icon-bar"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end">
 
-                    <div class="content">
-                        <div class="container-fluid " style="margin-top: 10%;">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="javascript:;">
+                                    <i class="material-icons">dashboard</i>
+                                    <p class="d-lg-none d-md-block">
+                                        Stats
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons">person</i>
+                                    <p class="d-lg-none d-md-block">
+                                        Account
+                                    </p>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                                    <a class="dropdown-item" href="/admin/userProfile">Profile</a>
+
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/logout">Log out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-primary">
-                                    <h4 class="card-title"> List Of Courses</h4>
-                                    <p class="card-category"></p>
+                                    <h4 class="card-title ">Students enrolled </h4>
+                                    <p class="card-category"> Nobody knows why this random table is present</p>
                                 </div>
-
                                 <div class="card-body">
-                                    <div class="col-md-12">
+                                    <div class="table-responsive">
                                         <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">Subject Code</th>
-                                                    <th>Subject Name</th>
-                                                    <th class="text-center">Set Up</th>
-                                                </tr>
+                                            <thead class="text-warning">
+                                                <th>Student ID</th>
+                                                <th>Name</th>
+                                                <th>Department</th>
+                                                <th>Set Up</th>
                                             </thead>
                                             <tbody>
-                                                <% subject.forEach(function(detail){ %>
+
+                                                <% students.forEach(function(detail){ %>
                                                     <tr>
-                                                        <td class="text-center">
-                                                            <%=detail._id%>
+                                                        <td>
+                                                            <b>
+                                                                <%=detail.studentid%>
+                                                            </b>
                                                         </td>
                                                         <td>
-                                                            <%=detail.subjectname%>
+                                                            <b>
+                                                                <%=detail.firstname%>
+                                                                    <%=detail.lastname%>
+                                                            </b>
                                                         </td>
-                                                        <td class="td-actions text-right text-center">
-                                                            <form action="/viewsubjects/subjectdetial/<%=detail._id%>"
-                                                                method="POST">
-                                                                <input type="hidden" value="<%=detail._id%>" name="sid">
-                                                                <input type="hidden" value="<%=detail._subjectname%>"
-                                                                    name="sub_name">
-                                                                <button class="btn btn-primary  btn-sm btn-round"
+                                                        <td>
+                                                            <b>
+                                                                <%=detail.department%>
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <form action="/testroute" method="POST">
+                                                                <input type="hidden" value="<%=detail.teacherid%>"
+                                                                    name="tid">
+                                                                <button class="btn btn-primary  btn-md btn-round"
                                                                     type="submit">
                                                                     <i class="material-icons"
                                                                         aria-hidden="true">visibility</i>
-                                                                    Subject Details
-                                                                </button>
-                                                                <button class="btn btn-primary  btn-sm btn-round"
-                                                                    type="submit"
-                                                                    formaction="/admin/teachersassigned/<%=detail._id%>">
-                                                                    <i class="material-icons"
-                                                                        aria-hidden="true">how_to_reg</i>
-                                                                    Teachers Assigned
-                                                                </button>
-                                                                <button class="btn btn-primary  btn-sm btn-round"
-                                                                    type="submit"
-                                                                    formaction="/admin/studentsenrolled/<%=detail._id%>">
-                                                                    <i class=" material-icons"
-                                                                        aria-hidden="true">people</i>
-                                                                    Students Enrolled
+                                                                    View Details
                                                                 </button>
                                                             </form>
-
-
                                                         </td>
+
+
                                                     </tr>
                                                     <% }) %>
+
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="col-md-12">
+                            <div class="card card-plain">
 
+
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
-
-
-    </div>
-    </div>
     </div>
     </div>
     <footer class="footer">
