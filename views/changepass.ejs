@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <section>
+        <h2>
+            <font color="#0375e7">Login Form</font>
+        </h2>
+        <hr>
+        <br>
+        <div class="loginbox" id="login">
+
+            <form class="form" action="/testroute" method="POST">
+                <div class="inputbox">
+                    <label for="uname"><b>Username</b></label>
+                    <input type='text' placeholder='xyz123@gmail.com' name="username">
+                </div>
+                <br>
+                <div class="inputbox">
+                    <label for="psw"><b>Password</b></label>
+                    <input type='password' placeholder='************' name="password">
+                </div>
+                <br>
+                <div class='remember'>
+                    <label>
+                        <input type='checkbox'>
+                        <span>Remember </span>
+                    </label>
+                </div>
+
+                <div class='reg'>
+                    <input type='submit' value='Login'>
+                </div>
+
+                <div class='text'>
+                    <p>
+                        Don't have an account?
+                        <a href="/register">Register</a>
+                    </p>
+                </div>
+
+            </form>
+        </div>
+    </section>
+</body>

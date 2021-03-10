@@ -8,6 +8,17 @@ const passportLocalMongoose = require('passport-local-mongoose');
 var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
+const nodemailer = require('nodemailer');
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+function generateString(length) {
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+}
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -45,8 +56,7 @@ mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
 var imageSchema = new mongoose.Schema({
-    name: String,
-    desc: String,
+    fname: String,
     img: {
         data: Buffer,
         contentType: String,
@@ -120,14 +130,7 @@ const subject_student_mapping = new mongoose.Schema({
     subjectid: String,
 });
 
-var imageSchema = new mongoose.Schema({
-    name: String,
-    desc: String,
-    img: {
-        data: Buffer,
-        contentType: String,
-    },
-});
+
 
 userschema.plugin(passportLocalMongoose);
 const User = new mongoose.model('User', userschema);
@@ -214,11 +217,10 @@ app.get('/register', function (req, res) {
     res.render('register');
 });
 
-app.get('/xlogin', function (req, res) {
-    res.render('xindex');
-});
+
 app.get('/uploadimage', (req, res) => {
-    imgModel.find({}, (err, items) => {
+    console.log(req.session.uniqueid)
+    imgModel.find({ _id: req.session.uniqueid }, (err, items) => {
         if (err) {
             console.log(err);
             res.status(500).send('An error occurred', err);
@@ -227,28 +229,44 @@ app.get('/uploadimage', (req, res) => {
         }
     });
 });
-app.post('/uploadimage', upload.single('image'), (req, res) => {
-    var obj = {
-        name: 'harish',
-        desc: 'harish',
-        img: {
-            data: fs.readFileSync(
-                path.join(__dirname + '/uploads/' + req.file.filename)
-            ),
-            contentType: 'image/png',
+
+function sendmail(p1) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        //port: 587,
+        //secure: false, // true for 465, false for other ports
+        auth: {
+            user: 'krishnavarun307@gmail.com', // generated ethereal user
+            pass: 'krishna@307'  // generated ethereal password
         },
-    };
-    imgModel.create(obj, (err, item) => {
-        if (err) {
-            console.log(err);
-        } else {
-            // item.save();
-            res.redirect('/');
+        tls: {
+            rejectUnauthorized: false
         }
     });
-});
+    let mailOptions = {
+        from: 'krishnavarun307@gmail.com', // sender address
+        to: 'harishrenukunta132001@gmail.com', // list of receivers
+        subject: 'Node Contact Request', // Subject line
+        text: p1, // plain text body
+        //html: output // html body
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            //return console.log(error);
+            res.redirect("/")
+        }
+        console.log('Message sent: %s', info.messageId);
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        //res.render('contact', { msg: 'Email has been sent' });
+
+    });
+}
 app.post('/register', function (req, res) {
+    console.log(req.body)
     var newid = new mongoose.mongo.ObjectId();
+    pass = generateString(8)
+    console.log(pass)
+    console.log(typeof pass)
     User.register(
         {
             username: req.body.email,
@@ -262,6 +280,7 @@ app.post('/register', function (req, res) {
                 console.log(err);
                 res.redirect('/register');
             } else {
+                console.log("registered")
                 if (Number(req.body.status == 1)) {
                     createadminid().then((a) => {
                         trial = 'ADMIN' + String(a).padStart(3, '0');
@@ -279,12 +298,26 @@ app.post('/register', function (req, res) {
                                 if (err) {
                                     console.log(err);
                                 } else {
-                                    res.redirect('/');
+
+                                    imgModel.create({
+                                        _id: ctd._id,
+                                        fname: "d",
+                                        img: {
+                                            data: fs.readFileSync(
+                                                path.join(__dirname + '/uploads/' + "image-1615047525141")
+                                            ),
+                                            contentType: 'image/png',
+                                        }
+                                    })
+
+                                    //sendmail(pass)
+                                    res.redirect("/")
                                 }
                             }
-                        );
+                        )
                     });
-                } else if (Number(req.body.status == 2)) {
+                }
+                else if (Number(req.body.status == 2)) {
                     createteacherid().then((a) => {
                         trial = 'T' + String(a).padStart(3, '0');
                         Teacher.create(
@@ -301,8 +334,14 @@ app.post('/register', function (req, res) {
                             function (err, ctd) {
                                 if (err) {
                                     console.log(err);
-                                } else {
-                                    res.redirect('/');
+                                }
+                                else {
+                                    imgModel.create({
+                                        _id: ctd._id
+                                    })
+                                    sendmail(pass)
+                                    res.redirect("/")
+                                    //res.redirect('/');
                                 }
                             }
                         );
@@ -328,12 +367,19 @@ app.post('/register', function (req, res) {
                                 if (err) {
                                     console.log(err);
                                 } else {
+                                    imgModel.create({
+                                        _id: ctd._id
+                                    })
+                                    sendmail(pass)
                                     res.redirect('/');
                                 }
                             }
                         );
                     });
                 }
+
+
+
             }
         }
     );
@@ -389,7 +435,7 @@ app.post('/login', function (req, res) {
                             res.redirect('/admin');
                         }
                         if (Number(users.status) == 2) {
-                            res.redirect('/teacherlogin');
+                            res.redirect('/teacherHomePage');
                         }
                         if (Number(users.status) == 3) {
                             res.redirect('/studentHomePage');
@@ -622,8 +668,51 @@ app.get('/admin/addsubject', function (req, res) {
         })
     }
 });
+/*
+User.findOne({ username: "gmail@yaho.com" }).exec().then(user => {
+        user.changePassword("newpassword", "gmail@yaho.com").then(c => {
+            console.log(c)
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                //port: 587,
+                //secure: false, // true for 465, false for other ports
+                auth: {
+                    user: 'krishnavarun307@gmail.com', // generated ethereal user
+                    pass: 'krishna@307'  // generated ethereal password
+                },
+                tls: {
+                    rejectUnauthorized: false
+                }
+            });
+            let mailOptions = {
+                from: 'krishnavarun307@gmail.com', // sender address
+                to: 'harishrenukunta132001@gmail.com', // list of receivers
+                subject: 'Node Contact Request', // Subject line
+                text: 'Hello world?', // plain text body
+                //html: output // html body
+            };
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('Message sent: %s', info.messageId);
+                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+                //res.render('contact', { msg: 'Email has been sent' });
+            });
+
+
+        }).catch(err => {
+            console.log(error)
+        })
+    })
+*/
 app.post('/testroute', function (req, res) {
     console.log(req.body);
+    res.render("xindex", { jf: req.body.fck })
+});
+app.get('/xlogin', function (req, res) {
+    res.render('xindex', { jf: { jf: "1" } });
 });
 app.get('/studentHomePage', function (req, res) {
     if (req.isAuthenticated()) {
@@ -631,6 +720,7 @@ app.get('/studentHomePage', function (req, res) {
         Student.findOne({ _id: req.session.uniqueid }, { studentid: 1 })
             .exec()
             .then((stud) => {
+
                 Subject_student_mapping.find({ studentid: stud.studentid })
                     .exec()
                     .then((ans) => {
@@ -640,6 +730,47 @@ app.get('/studentHomePage', function (req, res) {
                         }
                         console.log(subsenrolled);
                         Subject.find({ _id: { $in: subsenrolled } })
+                            .exec()
+                            .then((ans2) => {
+                                console.log(ans2);
+                                colNotifs = [
+                                    {
+                                        message:
+                                            'College fest starts from 7th march along with shhf;adjfaldjfha;jdhfajsdfh',
+                                    },
+                                ];
+                                teacherNotifs = [
+                                    {
+                                        message: 'Assignment postponed to adhfhaljfdhsl;ajfdsha',
+                                    },
+                                ];
+                                res.render('studentHomePage', {
+                                    subject: ans2,
+                                    colNotif: colNotifs,
+                                    teacherNotifs: teacherNotifs,
+                                });
+                            });
+                    });
+            });
+    } else {
+        res.redirect('/');
+    }
+});
+app.get('/teacherHomePage', function (req, res) {
+    if (req.isAuthenticated()) {
+        console.log(req.session.uniqueid);
+        Teacher.findOne({ _id: req.session.uniqueid }, { teacherid: 1 })
+            .exec()
+            .then((teach) => {
+                Subject_teacher_mapping.find({ teacherid: teach.teacherid })
+                    .exec()
+                    .then((ans) => {
+                        subsassigned = [];
+                        for (var i = 0; i < ans.length; i++) {
+                            subsassigned.push(ans[i].subjectid);
+                        }
+                        console.log(subsassigned);
+                        Subject.find({ _id: { $in: subsassigned } })
                             .exec()
                             .then((ans2) => {
                                 console.log(ans2);
@@ -717,6 +848,47 @@ app.get('/enrollsubject', function (req, res) {
 
 
 });
+app.post('/uploadimage', upload.single('image'), (req, res) => {
+    imgModel.findOne({ _id: req.session.uniqueid }).then(a => {
+        var imgname = a.fname
+        console.log(imgname)
+        console.log(imgname.length)
+        if (imgname.length < 3) {
+            console.log("reacher till here")
+            console.log(req.file)
+            imgModel.findOneAndUpdate({ _id: req.session.uniqueid }, {
+                fname: req.file.filename,
+                img: {
+                    data: fs.readFileSync(
+                        path.join(__dirname + '/uploads/' + req.file.filename)
+                    ),
+                    contentType: 'image/png',
+                }
+            }).then(p => {
+                console.log(p)
+            })
+        }
+        else {
+            console.log("reacher here")
+            console.log(imgname)
+            fs.unlinkSync(__dirname + "/uploads" + '/' + imgname);
+            console.log(a);
+            imgModel.findOneAndUpdate({ _id: req.session.uniqueid }, {
+                fname: req.file.filename,
+                img: {
+                    data: fs.readFileSync(
+                        path.join(__dirname + '/uploads/' + req.file.filename)
+                    ),
+                    contentType: 'image/png',
+                },
+            }).then(v => {
+                console.log(v);
+            }).catch(cat => {
+                console.log(cat)
+            })
+        }
+    })
+});
 app.get('/admin/userProfile', function (req, res) {
 
     if (req.isAuthenticated()) {
@@ -726,9 +898,15 @@ app.get('/admin/userProfile', function (req, res) {
             }
             else {
                 Admin.findOne({ _id: req.session.uniqueid }, { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1 }).exec().then(arr => {
-                    console.log(arr)
+                    //console.log(arr)
                     ar = [arr]
-                    res.render("userProfile", { detail: ar })
+                    //res.render("userProfile", { detail: ar })
+
+                    imgModel.findOne({ _id: req.session.uniqueid }).exec().then(mg => {
+                        //console.log(mg)
+                        res.render("userProfile", { detail: ar, image: mg })
+                    })
+
                 })
             }
         })
@@ -780,16 +958,13 @@ app.get('/admin/editUserProfile', function (req, res) {
 });
 
 app.get('/exp', function (req, res) {
-    Admin.findOne({ adminid: "ADMIN006" }, { firstname: 1, lastname: 1, gender: 1, dob: 1 }).exec().then(arr => {
-        console.log(arr)
-        ar = [arr]
-        res.render("exp", { detail: ar })
-    })
+    res.render("xindex", { jf: { jf: "1" } })
 });
 app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/");
 });
+
 app.listen(3000, function () {
     console.log('Server is running');
 });
