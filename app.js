@@ -210,9 +210,11 @@ Teachercounter.create({
 }).catch((err) => { });
 
 app.get('/', function (req, res) {
+    res.render('landingpage', { err: "" });
+});
+app.get('/index', function (req, res) {
     res.render('index', { err: "" });
 });
-
 app.get('/register', function (req, res) {
     res.render('register');
 });
@@ -253,7 +255,7 @@ function sendmail(p1) {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             //return console.log(error);
-            res.redirect("/")
+            res.redirect("/index")
         }
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
@@ -311,7 +313,7 @@ app.post('/register', function (req, res) {
                                     })
 
                                     //sendmail(pass)
-                                    res.redirect("/")
+                                    res.redirect("/index")
                                 }
                             }
                         )
@@ -340,7 +342,7 @@ app.post('/register', function (req, res) {
                                         _id: ctd._id
                                     })
                                     sendmail(pass)
-                                    res.redirect("/")
+                                    res.redirect("/index")
                                     //res.redirect('/');
                                 }
                             }
@@ -371,7 +373,7 @@ app.post('/register', function (req, res) {
                                         _id: ctd._id
                                     })
                                     sendmail(pass)
-                                    res.redirect('/');
+                                    res.redirect('/index');
                                 }
                             }
                         );
@@ -426,7 +428,7 @@ app.post('/login', function (req, res) {
     req.login(user, function (err) {
         if (err) {
             console.log(err);
-            res.redirect("/")
+            res.redirect("/index")
         } else {
             passport.authenticate('local', { failureRedirect: "/errorlogin" })(req, res, function () {
                 User.findOne({ username: req.body.username })
@@ -483,7 +485,7 @@ app.get('/admin', function (req, res) {
         })
 
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 });
 
@@ -504,7 +506,7 @@ app.get('/admin/TeacherProfiles', function (req, res) {
         })
 
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 });
 app.post('/admin/teachersassigned/:sid', function (req, res) {
@@ -532,7 +534,7 @@ app.post('/admin/teachersassigned/:sid', function (req, res) {
 
 
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 });
 app.post('/admin/studentsenrolled/:sid', function (req, res) {
@@ -561,7 +563,7 @@ app.post('/admin/studentsenrolled/:sid', function (req, res) {
         })
 
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 });
 app.get('/admin/StudentProfiles', function (req, res) {
@@ -586,7 +588,7 @@ app.get('/admin/StudentProfiles', function (req, res) {
         })
 
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 
 });
@@ -647,7 +649,7 @@ app.get('/admin/assignsubjects', function (req, res) {
 
     }
     else {
-        res.redirect("/")
+        res.redirect("/index")
     }
 });
 
@@ -656,7 +658,7 @@ app.get('/teacherlogin', function (req, res) {
     if (req.isAuthenticated()) {
         res.send('Tsuccess');
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 });
 
@@ -757,7 +759,7 @@ app.get('/studentHomePage', function (req, res) {
                     });
             });
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 });
 app.get('/teacherHomePage', function (req, res) {
@@ -798,7 +800,7 @@ app.get('/teacherHomePage', function (req, res) {
                     });
             });
     } else {
-        res.redirect('/');
+        res.redirect('/index');
     }
 });
 app.get('/testroute', function (req, res) {
@@ -919,7 +921,7 @@ app.get('/admin/userProfile', function (req, res) {
 
     }
     else {
-        res.redirect("/")
+        res.redirect("/index")
     }
 });
 app.post('/admin/viewdetails/student/:sid', function (req, res) {
@@ -930,7 +932,7 @@ app.post('/admin/viewdetails/student/:sid', function (req, res) {
         })
     }
     else {
-        res.redirect("/")
+        res.redirect("/index")
     }
 });
 app.post('/admin/viewdetails/teacher/:tid', function (req, res) {
@@ -941,7 +943,7 @@ app.post('/admin/viewdetails/teacher/:tid', function (req, res) {
         })
     }
     else {
-        res.redirect("/")
+        res.redirect("/index")
     }
 });
 app.get('/admin/editUserProfile', function (req, res) {
@@ -968,7 +970,7 @@ app.get('/exp', function (req, res) {
 });
 app.get("/logout", function (req, res) {
     req.logout();
-    res.redirect("/");
+    res.redirect("/index");
 });
 
 app.listen(3000, function () {
