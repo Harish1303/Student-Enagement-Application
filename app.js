@@ -337,11 +337,18 @@ app.post('/register', function (req, res) {
                                 }
                                 else {
                                     imgModel.create({
-                                        _id: ctd._id
+                                        _id: ctd._id,
+                                        fname: "d",
+                                        img: {
+                                            data: fs.readFileSync(
+                                                path.join(__dirname + '/uploads/' + "image-1615047525141")
+                                            ),
+                                            contentType: 'image/png',
+                                        }
                                     })
-                                    sendmail(pass)
+
+                                    //sendmail(pass)
                                     res.redirect("/")
-                                    //res.redirect('/');
                                 }
                             }
                         );
@@ -368,10 +375,18 @@ app.post('/register', function (req, res) {
                                     console.log(err);
                                 } else {
                                     imgModel.create({
-                                        _id: ctd._id
+                                        _id: ctd._id,
+                                        fname: "d",
+                                        img: {
+                                            data: fs.readFileSync(
+                                                path.join(__dirname + '/uploads/' + "image-1615047525141")
+                                            ),
+                                            contentType: 'image/png',
+                                        }
                                     })
-                                    sendmail(pass)
-                                    res.redirect('/');
+
+                                    //sendmail(pass)
+                                    res.redirect("/")
                                 }
                             }
                         );
@@ -869,8 +884,21 @@ app.post('/uploadimage', upload.single('image'), (req, res) => {
                     contentType: 'image/png',
                 }
             }).then(p => {
-                console.log(p)
-                res.redirect("/admin/userProfile")
+                //console.log(p)
+                User.findOne({ _id: req.session.uniqueid }).then(use => {
+                    console.log(use)
+                    if (use.status == 1) {
+                        console.log("Aaaa")
+                        console.log(use)
+                        res.redirect("/admin/userProfile")
+                    }
+                    else if (use.status == 2) {
+                        res.redirect("/teacher/userProfile")
+                    }
+                    else if (use.status == 3) {
+                        res.redirect("/student/userProfile")
+                    }
+                })
             })
         }
         else {
@@ -887,7 +915,20 @@ app.post('/uploadimage', upload.single('image'), (req, res) => {
                     contentType: 'image/png',
                 },
             }).then(v => {
-                res.redirect("/admin/userProfile")
+                User.findOne({ _id: req.session.uniqueid }).then(use => {
+                    console.log(use)
+                    if (use.status == 1) {
+                        console.log("Aaaa")
+                        console.log(use)
+                        res.redirect("/admin/userProfile")
+                    }
+                    else if (use.status == 2) {
+                        res.redirect("/teacher/userProfile")
+                    }
+                    else if (use.status == 3) {
+                        res.redirect("/student/userProfile")
+                    }
+                })
                 console.log(v);
             }).catch(cat => {
                 console.log(cat)
@@ -963,8 +1004,19 @@ app.get('/admin/editUserProfile', function (req, res) {
     });
 });
 
-app.get('/exp', function (req, res) {
-    res.render("xindex", { jf: { jf: "1" } })
+app.get('/student/userProfile', function (req, res) {
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid }).exec().then(user => {
+            if (user.status == 3) {
+                Student.findOne({ _id: user._id }).then(p => {
+                    imgModel.findOne({ _id: req.session.uniqueid }).then(ig => {
+                        res.render("studentviewprofile", { detail: [p], image: ig })
+                    })
+
+                })
+            }
+        })
+    }
 });
 app.get("/logout", function (req, res) {
     req.logout();
