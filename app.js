@@ -210,7 +210,7 @@ Teachercounter.create({
 }).catch((err) => { });
 
 app.get('/', function (req, res) {
-    res.render('index');
+    res.render('index', { err: "" });
 });
 
 app.get('/register', function (req, res) {
@@ -426,8 +426,9 @@ app.post('/login', function (req, res) {
     req.login(user, function (err) {
         if (err) {
             console.log(err);
+            res.redirect("/")
         } else {
-            passport.authenticate('local')(req, res, function () {
+            passport.authenticate('local', { failureRedirect: "/errorlogin" })(req, res, function () {
                 User.findOne({ username: req.body.username })
                     .then((users) => {
                         req.session.uniqueid = users._id;
@@ -442,6 +443,7 @@ app.post('/login', function (req, res) {
                         }
                     })
                     .catch((e) => {
+                        res.redirect("/login")
                         console.log(e);
                     });
             });
@@ -449,7 +451,9 @@ app.post('/login', function (req, res) {
     });
 });
 
-
+app.get('/errorlogin', function (req, res) {
+    res.render("index", { err: "WRONG USERNAME OR PASSWORD" })
+})
 app.get('/admin', function (req, res) {
 
     if (req.isAuthenticated()) {
@@ -866,6 +870,7 @@ app.post('/uploadimage', upload.single('image'), (req, res) => {
                 }
             }).then(p => {
                 console.log(p)
+
             })
         }
         else {
