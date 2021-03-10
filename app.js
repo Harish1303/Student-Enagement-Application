@@ -870,7 +870,7 @@ app.post('/uploadimage', upload.single('image'), (req, res) => {
                 }
             }).then(p => {
                 console.log(p)
-
+                res.redirect("/admin/userProfile")
             })
         }
         else {
@@ -887,6 +887,7 @@ app.post('/uploadimage', upload.single('image'), (req, res) => {
                     contentType: 'image/png',
                 },
             }).then(v => {
+                res.redirect("/admin/userProfile")
                 console.log(v);
             }).catch(cat => {
                 console.log(cat)
