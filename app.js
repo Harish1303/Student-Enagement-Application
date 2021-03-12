@@ -98,15 +98,15 @@ const subject = new mongoose.Schema({
 });
 const teacher = new mongoose.Schema({
     firstname: String,
-    lastname: String,
-    phonenumber: String,
-    username: String,
-    password: String,
-    gender: String,
-    teacherid: String,
-    dob: String,
-    department: String,
-});
+        lastname: String,
+        phonenumber: String,
+        username: String,
+        password: String,
+        gender: String,
+        teacherid: String,
+        dob: String,
+        department: String,
+    });
 const admincounter = new mongoose.Schema({
     _id: String,
     sequence_value: Number,
@@ -218,6 +218,23 @@ app.get('/index', function (req, res) {
 app.get('/register', function (req, res) {
     res.render('register');
 });
+
+app.get('/forgotpassword', function (req, res) {
+    res.render('exception_handlingpage');
+});
+
+app.get('/admin/change_password', function (req, res) {
+    res.render('change_password');
+});
+
+    
+app.get('/admin/newStudent', function (req, res) {   
+     res.render('newStudent');
+ });
+app.get('/admin/newTeacher', function (req, res) {
+        res.render('newTeacher');
+});
+
 
 
 app.get('/uploadimage', (req, res) => {

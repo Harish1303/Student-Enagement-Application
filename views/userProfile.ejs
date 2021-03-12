@@ -63,6 +63,18 @@ The above copyright notice and this permission notice shall be included in all c
                         </a>
                     </li>
                     <li class="nav-item ">
+                        <a class="nav-link" href="/admin/newStudent">
+                            <i class="material-icons">add_circle</i>
+                            <p>New Student</p>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin/newTeacher">
+                            <i class="material-icons">add_circle</i>
+                            <p>New Teacher</p>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
                         <a class="nav-link" href="#">
                             <i class="material-icons">library_books</i>
                             <p>Make an Announcement</p>
@@ -197,16 +209,40 @@ The above copyright notice and this permission notice shall be included in all c
                                 <div class="card-body">
                                     <p class="card-description">
                                     <form action="/uploadimage" method="POST" enctype="multipart/form-data">
-                                        <input type="file" id="image" name="image" value="" required />
+                                        
+                                        <input type="file"  id="image" name="image" value="" required />
                                         <button type="submit" class="btn btn-primary "> <i
                                                 class="material-icons">edit</i>
                                             Update
                                             Picture</button>
                                     </form>
+                                    
 
                                     </p>
 
                                 </div>
+                               
+                                
+                            </div>
+                            <div class="card-body">
+                                <p class= "card-description"></p>
+                                <form action="/admin/change_password" method="GET" enctype="multipart/form-data">
+                                   <style>
+                                       .Centre-button{
+                                           text-align: center;
+                                       }
+                                    </style>
+
+                                    <div class= "Centre-button">
+                                        <button type="submit" href align="centre" class="btn btn-primary "> <i
+                                            class="material-icons">edit</i>
+                                        Change
+                                        Password </button>
+                                    </div>
+
+                                   
+
+                                </form>
                             </div>
                         </div>
                     </div>
