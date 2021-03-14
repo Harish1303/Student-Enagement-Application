@@ -219,22 +219,19 @@ app.get('/register', function (req, res) {
 });
 
 app.get('/forgotpassword', function (req, res) {
-    res.render('exception_handlingpage');
+  res.render('exception_handlingpage');
 });
 
 app.get('/admin/change_password', function (req, res) {
-    res.render('change_password');
+  res.render('change_password');
 });
 
-    
-app.get('/admin/newStudent', function (req, res) {   
-     res.render('newStudent');
- });
+app.get('/admin/newStudent', function (req, res) {
+  res.render('newStudent');
+});
 app.get('/admin/newTeacher', function (req, res) {
-        res.render('newTeacher');
+  res.render('newTeacher');
 });
-
-
 
 app.get('/uploadimage', (req, res) => {
   console.log(req.session.uniqueid);
@@ -492,7 +489,7 @@ app.get('/admin', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('fuck');
+          res.send('Not an Admin');
         } else {
           counts = [];
           Teacher.estimatedDocumentCount()
@@ -524,7 +521,7 @@ app.get('/admin/TeacherProfiles', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('fuck');
+          res.send('Not an Admin');
         } else {
           Teacher.find(
             {},
@@ -547,7 +544,7 @@ app.post('/admin/teachersassigned/:sid', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('FUCK');
+          res.send('Not an Admin');
         } else {
           Subject_teacher_mapping.find({ subjectid: req.params.sid })
             .exec()
@@ -577,7 +574,7 @@ app.post('/admin/studentsenrolled/:sid', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('FUCK');
+          res.send('Not an Admin');
         } else {
           Subject_student_mapping.find({ subjectid: req.params.sid })
             .exec()
@@ -617,7 +614,7 @@ app.get('/admin/StudentProfiles', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('fuck');
+          res.send('Not an Admin');
         } else {
           Student.find(
             {},
@@ -647,7 +644,7 @@ app.get('/admin/viewsubjects', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('FUCK');
+          res.send('Not an Admin');
         } else {
           Subject.find(
             {},
@@ -680,7 +677,7 @@ app.get('/admin/assignsubjects', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('FUCK');
+          res.send('Not an Admin');
         } else {
           Teacher.find({}, { firstname: 1, lastname: 1, teacherid: 1 })
             .exec()
@@ -719,7 +716,7 @@ app.get('/admin/addsubject', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('FUCK');
+          res.send('Not an admin');
         } else {
           res.render('registersubjects');
         }
@@ -872,7 +869,12 @@ app.get('/testroute', function (req, res) {
       //res.send("ab")
     });
 });
-
+app.get('/testroute2', function (req, res) {
+  console.log(req.body);
+});
+app.post('/testroute2', function (req, res) {
+  console.log(req.body);
+});
 app.post('/assignsubjects', function (req, res) {
   console.log(req.body);
   Subject_teacher_mapping.create({
@@ -990,7 +992,7 @@ app.get('/admin/userProfile', function (req, res) {
       .exec()
       .then((user) => {
         if (user.status != 1) {
-          res.send('FUCK');
+          res.send('Not an Admin');
         } else {
           Admin.findOne(
             { _id: req.session.uniqueid },
@@ -998,20 +1000,15 @@ app.get('/admin/userProfile', function (req, res) {
           )
             .exec()
             .then((arr) => {
-              //console.log(arr)
               ar = [arr];
-              //res.render("userProfile", { detail: ar })
-
               imgModel
                 .findOne({ _id: req.session.uniqueid })
                 .exec()
                 .then((mg) => {
-                  //console.log(mg)
                   res.render('userProfile', { detail: ar, image: mg });
                 });
             });
         }
-        F;
       });
   } else {
     res.redirect('/index');
@@ -1048,76 +1045,63 @@ app.post('/admin/viewdetails/teacher/:tid', function (req, res) {
   }
 });
 app.get('/admin/editUserProfile', function (req, res) {
-  studentList = [
-    {
-      _id: 10,
-      studentid: 90,
-      firstname: 'Saketh',
-      semester: 7,
-      department: 'CSE',
-      lastname: 'Thogarucheeti',
-      username: 'Saketh Thogarucheeti',
-      gender: 'male',
-      dob: '05/06/2000',
-    },
-  ];
-  res.render('editUserProfile', {
-    student: studentList,
-  });
+  if (req.isAuthenticated()) {
+    User.findOne({ _id: req.session.uniqueid })
+      .exec()
+      .then((user) => {
+        if (user.status != 1) {
+          res.send('Not an Admin');
+        } else {
+          Admin.findOne(
+            { _id: req.session.uniqueid },
+            { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1 }
+          )
+            .exec()
+            .then((arr) => {
+              ar = [arr];
+              imgModel
+                .findOne({ _id: req.session.uniqueid })
+                .exec()
+                .then((mg) => {
+                  res.render('editUserProfile', { student: ar, image: mg });
+                });
+            });
+        }
+      });
+  } else {
+    res.redirect('/index');
+  }
 });
 app.get('/student/editUserProfile', function (req, res) {
-  studentList = [
-    {
-      _id: 10,
-      studentid: 90,
-      firstname: 'Saketh',
-      semester: 7,
-      department: 'CSE',
-      lastname: 'Thogarucheeti',
-      username: 'Saketh Thogarucheeti',
-      gender: 'male',
-      dob: '05/06/2000',
-    },
-  ];
-  res.render('editStudentProfile', {
-    student: studentList,
-  });
+  if (req.isAuthenticated()) {
+    User.findOne({ _id: req.session.uniqueid })
+      .exec()
+      .then((user) => {
+        if (user.status == 3) {
+          Student.findOne({ _id: user._id }).then((p) => {
+            imgModel.findOne({ _id: req.session.uniqueid }).then((ig) => {
+              res.render('editStudentProfile', { student: [p], image: ig });
+            });
+          });
+        }
+      });
+  }
 });
-app.get('/student/editUserProfile', function (req, res) {
-  teacherList = [
-    {
-      _id: 10,
-      studentid: 90,
-      firstname: 'Saketh',
-      semester: 7,
-      department: 'CSE',
-      lastname: 'Thogarucheeti',
-      username: 'Saketh Thogarucheeti',
-      gender: 'male',
-      dob: '05/06/2000',
-    },
-  ];
-  res.render('editStudentProfile', {
-    teacher: teacherList,
-  });
-});
-app.get('/teacher/editUserProfile', function (req, res) {
-  teacherList = [
-    {
-      _id: 10,
-      studentid: 90,
-      firstname: 'Saketh',
-      semester: 7,
-      department: 'CSE',
-      lastname: 'Thogarucheeti',
-      username: 'Saketh Thogarucheeti',
-      gender: 'male',
-      dob: '05/06/2000',
-    },
-  ];
-  res.render('editTeacherProfile', {
-    teacher: teacherList,
-  });
+
+app.get('/teacher/editUserProfile/:id', function (req, res) {
+  if (req.isAuthenticated()) {
+    User.findOne({ _id: req.session.uniqueid })
+      .exec()
+      .then((user) => {
+        if (user.status == 2) {
+          Teacher.findOne({ _id: user._id }).then((p) => {
+            imgModel.findOne({ _id: req.session.uniqueid }).then((ig) => {
+              res.render('editTeacherProfile', { teacher: [p], image: ig });
+            });
+          });
+        }
+      });
+  }
 });
 app.get('/student/userProfile', function (req, res) {
   if (req.isAuthenticated()) {
