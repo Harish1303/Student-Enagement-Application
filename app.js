@@ -263,7 +263,8 @@ app.get('/uploadimage', (req, res) => {
     });
 });
 
-function sendmail(p1) {
+function sendmail(p1, gmailid) {
+    console.log(gmailid)
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         //port: 587,
@@ -278,7 +279,7 @@ function sendmail(p1) {
     });
     let mailOptions = {
         from: 'krishnavarun307@gmail.com', // sender address
-        to: 'harishrenukunta132001@gmail.com', // list of receivers
+        to: gmailid, // list of receivers
         subject: 'Node Contact Request', // Subject line
         text: p1, // plain text body
         //html: output // html body
@@ -342,7 +343,7 @@ app.post('/register', function (req, res) {
                                             contentType: 'image/png',
                                         },
                                     });
-                                    sendmail(pass)
+                                    sendmail(pass, req.body.email)
                                     res.redirect('/index');
                                 }
                             }
