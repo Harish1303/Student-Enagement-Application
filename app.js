@@ -9,6 +9,7 @@ var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 const nodemailer = require('nodemailer');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 function generateString(length) {
@@ -821,11 +822,10 @@ app.get('/studentHomePage', function (req, res) {
                         for (var i = 0; i < ans.length; i++) {
                             subsenrolled.push(ans[i].subjectid);
                         }
-                        console.log(subsenrolled);
+
                         Subject.find({ _id: { $in: subsenrolled } })
                             .exec()
                             .then((ans2) => {
-                                console.log(ans2);
                                 colNotifs = [
                                     {
                                         message:
@@ -916,20 +916,42 @@ app.post('/enrollsubject', function (req, res) {
         studentid: req.body.studid,
         subjectid: req.body.subcode,
     });
+    res.redirect("/enrollsubject")
 });
 
 app.get('/enrollsubject', function (req, res) {
-    Student.findOne({ _id: req.session.uniqueid }, { semester: 1, studentid: 1 })
+    Student.findOne({ _id: req.session.uniqueid }, { semester: 1, studentid: 1, department: 1 })
         .exec()
         .then((sem) => {
-            Subject.find({ semester: sem.semester }, {})
+            Subject.find({ semester: sem.semester, department: sem.department }, {})
                 .exec()
                 .then((subjects) => {
-                    console.log(sem.studentid);
-                    res.render('subjectenroll', {
-                        subject: subjects,
-                        studid: sem.studentid,
-                    });
+                    Subject_student_mapping.find({ studentid: sem.studentid }, { subjectid: 1 }).then(subs => {
+                        arrA = []
+                        arrB = []
+                        for (var i = 0; i < subjects.length; i++) {
+                            arrA.push(subjects[i]._id)
+                        }
+                        for (var i = 0; i < subs.length; i++) {
+                            arrB.push(subs[i].subjectid)
+                        }
+                        let difference = arrA.filter(x => !arrB.includes(x));
+                        final = []
+                        console.log(difference)
+                        console.log(subjects)
+                        for (var i = 0; i < difference.length; i++) {
+                            for (var j = 0; j < subjects.length; j++) {
+                                if (difference[i] == subjects[j]._id) {
+                                    final.push(subjects[j])
+                                }
+                            }
+
+                        }
+                        res.render('subjectenroll', {
+                            subject: final,
+                            studid: sem.studentid,
+                        });
+                    })
                 });
         });
 });
@@ -1209,25 +1231,7 @@ app.get('/logout', function (req, res) {
 //*********** */
 // SPRINT-2 
 //********** */
-app.get('/fake', function (req, res) {
-    res.render('fake', {
-        assignment: {
-            _id: 'TEST101',
-            assignments: [
-                {
-                    _id: '606066ed0cc4291aecc27a91',
-                    description: ';alfjad;lfkjadlfkjald;fjdas;lfk0',
-                    assignment_file_code: '4',
-                },
-                {
-                    _id: '6060670a0cc4291aecc27a93',
-                    description: ';alfjad;lfkjadlfkjald;fjdas;lfk0',
-                    assignment_file_code: '5',
-                },
-            ],
-        },
-    });
-});
+
 
 app.get('/teacher/viewPerformance', function (req, res) {
     res.render('viewPerformance', {
@@ -1294,6 +1298,7 @@ app.get('/teacher/:scode', function (req, res) {
                 if (user.status == 2) {
                     Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
                         console.log(asslist)
+                        res.render("fake", { assignment: asslist })
                     })
                 }
             });
