@@ -150,13 +150,13 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>First Name</label>
                                             <input data-validate="Valid first name required: example abc"
-                                                class="form-control" type="text" name="fname" placeholder="" required>
+                                                class="form-control" type="text" name="fname" placeholder=""pattern="[a-zA-Z]+"title="Enter a valid first name" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Last Name</label>
                                             <input data-validate="Valid last name required: example abc"
-                                                class="form-control" type="text" name="lname" placeholder="" required>
+                                                class="form-control" type="text" name="lname" placeholder="" pattern="[a-zA-Z]+"title="Enter a valid last name" required>
                                         </div>
 
                                         <div class="form-group">
@@ -169,7 +169,7 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>Date of Birth</label>
                                             <input data-validate="Valid date required: dd-mm-yyyy " class="form-control"
-                                                type="date" name="dob" required>
+                                                type="date" min="2000-01-01" name="dob" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
@@ -183,13 +183,13 @@ The above copyright notice and this permission notice shall be included in all c
                                             &nbsp;
                                             &nbsp;
                                             <input class="radiobutton" type="radio" id="Female" name="gender"
-                                                value="Male"><label>Female</label>
+                                                value="Female"><label>Female</label>
                                             &nbsp;
                                             &nbsp;
                                             &nbsp;
                                             &nbsp;
                                             <input class="radiobutton" type="radio" id="other" name="gender"
-                                                value="Male"><label>Other</label>
+                                                value="other"><label>Other</label>
 
                                         </div>
                                         <div class="form-group">
@@ -204,15 +204,15 @@ The above copyright notice and this permission notice shall be included in all c
                                                 name="dept" required>
                                         </div>
                                         <div class="form-group">
-                                            <label>Semester</label>
-                                            <input class="form-control" type="text" name="semester" required>
+                                            <label></label>
+                                            <input class="form-control" type="text" value="1" hidden name="semester" required>
                                         </div>
                                         <div class="form-group">
                                             <input data-validate="Valid status required! (example student)"
                                                 class="form-control" type=hidden value="3" name="status" required>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                                        <button type="submit" class="btn btn-primary pull-right">Add Student </button>
 
 
                                     </div>

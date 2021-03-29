@@ -150,13 +150,13 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>First Name</label>
                                             <input data-validate="Valid first name required: example abc"
-                                                class="form-control" type="text" name="fname" placeholder="" required>
+                                                class="form-control" type="text" name="fname"  placeholder=""pattern="[a-zA-Z]+"title="Enter a valid first name" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Last Name</label>
                                             <input data-validate="Valid last name required: example abc"
-                                                class="form-control" type="text" name="lname" placeholder="" required>
+                                                class="form-control" type="text" name="lname" placeholder=""  pattern="[a-zA-Z]+"title="Enter a valid first name" required>
                                         </div>
 
                                         <div class="form-group">
@@ -169,7 +169,7 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>Date of Birth</label>
                                             <input data-validate="Valid date required: dd-mm-yyyy " class="form-control"
-                                                type="date" name="dob" required>
+                                                type="date" name="dob" min="1960-01-01" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
@@ -209,7 +209,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                 class="form-control" type="hidden" name="status" value="2" required>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                                        <button type="submit" class="btn btn-primary pull-right">Add Teacher  </button>
 
 
                                     </div>

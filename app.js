@@ -1,4 +1,4 @@
-const express = require('express');
+const   xpress = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
@@ -552,7 +552,7 @@ app.post('/login', function (req, res) {
 });
 
 app.get('/errorlogin', function (req, res) {
-    res.render('landingpage', { err: 'WRONG USERNAME OR PASSWORD' });
+    res.render('index', { err: 'WRONG USERNAME OR PASSWORD' });
 });
 app.get('/admin', function (req, res) {
     if (req.isAuthenticated()) {
