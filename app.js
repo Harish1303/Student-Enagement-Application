@@ -270,7 +270,7 @@ app.get('/assfake', function (req, res) {
 
 
 app.get('/forgotpassword', function (req, res) {
-    res.render('exception_handlingpage');
+    res.render('exception_handlingpage', {mes:""});
 });
 
 app.get('/admin/change_password', function (req, res) {
@@ -430,7 +430,7 @@ app.post('/register', function (req, res) {
                                         },
                                     });
                                     sendmail(pass, req.body.email)
-                                    res.redirect('/');
+                                    res.redirect('/admin/newTeacher');
                                 }
                             }
                         );
@@ -469,7 +469,7 @@ app.post('/register', function (req, res) {
                                         },
                                     });
                                     sendmail(pass, req.body.email)
-                                    res.redirect('/');
+                                    res.redirect('/admin/newStudent');
                                 }
                             }
                         );
@@ -487,10 +487,18 @@ app.post('/forgotpassword', function (req, res) {
     User.findByUsername(uname).then(function (su) {
         if (su) {
             su.setPassword(pass, function () {
+                
                 su.save();
-                res.redirect('/register');
+                
+                res.redirect('/forgotpassword', {mes:" New  Password sent to registered emailid ! "});
             });
         }
+        else {
+            console.log("hey");
+            res.render('exception_handlingpage', {mes:"User does not exist"} )
+        }
+    }).catch( err=>{
+        
     });
 });
 
