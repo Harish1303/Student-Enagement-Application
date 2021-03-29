@@ -80,17 +80,27 @@ The above copyright notice and this permission notice shall be included in all c
                     <div class="card-body">
                         <div class="row">
                             <div class="coll-6">
-                                <% assignment.assignments.forEach(function(detail){ %>
-                                    <h4 class="card-title">
-                                        <%=detail._id%>
-                                    </h4>
-                                    <div class="alert alert-success alert-with-icon" data-notify="container">
 
+
+                                <% assignment.forEach(function(detail){ %>
+                                    <h4 class="card-title">
+                                        <%=detail.name%>
+                                    </h4>
+
+
+                                    <div class="alert alert-success alert-with-icon" data-notify="container">
                                         <span data-notify="message">
                                             <p>
                                                 <%=detail.description%>
                                             </p>
+
                                         </span>
+                                        <div class="container-login100-form-btn">
+                                            <h6>
+                                                <%=detail.score%>
+                                            </h6>
+
+                                        </div>
                                         <div class="container-login100-form-btn">
                                             <button type='submit' class="login100-form-btn">
                                                 View Submission
@@ -103,6 +113,7 @@ The above copyright notice and this permission notice shall be included in all c
                                     <% }) %>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
