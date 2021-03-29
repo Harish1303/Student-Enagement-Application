@@ -1,4 +1,4 @@
-const   express = require('express');
+const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
@@ -268,7 +268,7 @@ app.get('/assfake', function (req, res) {
 
 
 app.get('/forgotpassword', function (req, res) {
-    res.render('exception_handlingpage', {mes:""});
+    res.render('exception_handlingpage', { mes: "" });
 });
 
 app.get('/admin/change_password', function (req, res) {
@@ -485,18 +485,18 @@ app.post('/forgotpassword', function (req, res) {
     User.findByUsername(uname).then(function (su) {
         if (su) {
             su.setPassword(pass, function () {
-                
+
                 su.save();
-                
-                res.redirect('/forgotpassword', {mes:" New  Password sent to registered emailid ! "});
+
+                res.redirect('/forgotpassword', { mes: " New  Password sent to registered emailid ! " });
             });
         }
         else {
             console.log("hey");
-            res.render('exception_handlingpage', {mes:"User does not exist"} )
+            res.render('exception_handlingpage', { mes: "User does not exist" })
         }
-    }).catch( err=>{
-        
+    }).catch(err => {
+
     });
 });
 
@@ -1045,7 +1045,12 @@ app.post('/admin/viewdetails/student/:sid', function (req, res) {
             .exec()
             .then((arr) => {
                 ar = [arr];
-                res.render('viewdetailsstudent', { detail: ar });
+                Student.findOne({ studentid: req.params.sid }, { _id: 1 }).then(stud => {
+                    imgModel.findOne({ _id: stud._id }).then(img => {
+                        res.render('viewdetailsstudent', { detail: ar, image: img });
+                    })
+                })
+
             });
     } else {
         res.redirect('/index');
@@ -1060,7 +1065,11 @@ app.post('/admin/viewdetails/teacher/:tid', function (req, res) {
             .exec()
             .then((arr) => {
                 ar = [arr];
-                res.render('viewdetailsteacher', { detail: ar });
+                Teacher.findOne({ teacherid: req.params.tid }, { _id: 1 }).then(teach => {
+                    imgModel.findOne({ _id: teach._id }).then(img => {
+                        res.render('viewdetailsteacher', { detail: ar, image: img });
+                    })
+                })
             });
     } else {
         res.redirect('/index');
@@ -1202,81 +1211,81 @@ app.get('/logout', function (req, res) {
 //********** */
 app.get('/fake', function (req, res) {
     res.render('fake', {
-      assignment: {
-        _id: 'TEST101',
-        assignments: [
-          {
-            _id: '606066ed0cc4291aecc27a91',
-            description: ';alfjad;lfkjadlfkjald;fjdas;lfk0',
-            assignment_file_code: '4',
-          },
-          {
-            _id: '6060670a0cc4291aecc27a93',
-            description: ';alfjad;lfkjadlfkjald;fjdas;lfk0',
-            assignment_file_code: '5',
-          },
-        ],
-      },
+        assignment: {
+            _id: 'TEST101',
+            assignments: [
+                {
+                    _id: '606066ed0cc4291aecc27a91',
+                    description: ';alfjad;lfkjadlfkjald;fjdas;lfk0',
+                    assignment_file_code: '4',
+                },
+                {
+                    _id: '6060670a0cc4291aecc27a93',
+                    description: ';alfjad;lfkjadlfkjald;fjdas;lfk0',
+                    assignment_file_code: '5',
+                },
+            ],
+        },
     });
-  });
+});
 
-  app.get('/teacher/viewPerformance', function (req, res) {
+app.get('/teacher/viewPerformance', function (req, res) {
     res.render('viewPerformance', {
-      assignment: [
-        {
-          name: 'physics',
-          description:
-            'aldkfjahdf;alkjdf;alfkjdafjhda;fjlfa;dahf;dljfha;ljdfh;aljfh;aljfhd;ljfhd;alfjhda;fljhdf;jhaf;ljdha;lfjdhf;lajhfd;lajfh;djfha;ljfh;jlfha;ljfha;ljfh;ajhf;lajfh;ajlfh;aldfhaljfha;ldhfa;flaksdjf',
-          score: 'not evaluated',
-        },
-        {
-          name: 'physics',
-          description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
-          score: 'not evaluated',
-        },
-        {
-          name: 'physics',
-          description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
-          score: 'not evaluated',
-        },
-        {
-          name: 'physics',
-          description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
-          score: 'not evaluated',
-        },
-      ],
+        assignment: [
+            {
+                name: 'physics',
+                description:
+                    'aldkfjahdf;alkjdf;alfkjdafjhda;fjlfa;dahf;dljfha;ljdfh;aljfh;aljfhd;ljfhd;alfjhda;fljhdf;jhaf;ljdha;lfjdhf;lajhfd;lajfh;djfha;ljfh;jlfha;ljfha;ljfh;ajhf;lajfh;ajlfh;aldfhaljfha;ldhfa;flaksdjf',
+                score: 'not evaluated',
+            },
+            {
+                name: 'physics',
+                description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
+                score: 'not evaluated',
+            },
+            {
+                name: 'physics',
+                description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
+                score: 'not evaluated',
+            },
+            {
+                name: 'physics',
+                description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
+                score: 'not evaluated',
+            },
+        ],
     });
-  });
-  app.get('/teacher/studentPerformance', function (req, res) {
+});
+app.get('/teacher/studentPerformance', function (req, res) {
     if (req.isAuthenticated()) {
-      User.findOne({ _id: req.session.uniqueid })
-        .exec()
-        .then((user) => {
-          if (user.status != 2) {
-            res.send('Not a teacher');
-          } else {
-            Student.find(
-              {},
-              {
-                firstname: 1,
-                lastname: 1,
-                department: 1,
-                studentid: 1,
-                semester: 1,
-              }
-            )
-              .exec()
-              .then((slist) => {
-                studentlist = slist;
-                res.render('studentPerformance', { students: slist });
-              });
-          }
-        });
+        User.findOne({ _id: req.session.uniqueid })
+            .exec()
+            .then((user) => {
+                if (user.status != 2) {
+                    res.send('Not a teacher');
+                } else {
+                    Student.find(
+                        {},
+                        {
+                            firstname: 1,
+                            lastname: 1,
+                            department: 1,
+                            studentid: 1,
+                            semester: 1,
+                        }
+                    )
+                        .exec()
+                        .then((slist) => {
+                            studentlist = slist;
+                            res.render('studentPerformance', { students: slist });
+                        });
+                }
+            });
     } else {
-      res.redirect('/index');
+        res.redirect('/index');
     }
-  });
-   
+});
+
 app.get('/teacher/:scode', function (req, res) {
     if (req.isAuthenticated()) {
         User.findOne({ _id: req.session.uniqueid })
