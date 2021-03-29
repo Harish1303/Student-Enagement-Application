@@ -217,6 +217,13 @@ app.get('/index', function (req, res) {
 app.get('/register', function (req, res) {
     res.render('register');
 });
+app.get('/fake', function (req, res) {
+    res.render('fake');
+});
+app.get('/assfake', function (req, res) {
+    res.render('assfake');
+});
+
 
 app.get('/forgotpassword', function (req, res) {
     res.render('exception_handlingpage');

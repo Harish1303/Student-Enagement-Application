@@ -44,19 +44,12 @@ The above copyright notice and this permission notice shall be included in all c
 
         Tip 2: you can also add an image using data-image tag-->
             <div class="logo"><a class="simple-text logo-normal">
-                &nbsp;&nbsp;       Student Engagement Application
+                &nbsp;&nbsp;  Student Engagement Application
                 </a></div>
             <div class="container ">
                 <ul class="navbar-nav ml-auto">
-
                     <li class="nav-item ">
-                        <a class="nav-link" href="/enrollsubject">
-                            <i class="material-icons">library_books</i>
-                            <p>Enroll Subjects</p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="student/userProfile">
+                        <a class="nav-link" href="/teacher/userProfile">
                             <i class="material-icons">person</i>
                             <p>User Profile</p>
                         </a>
@@ -73,76 +66,66 @@ The above copyright notice and this permission notice shall be included in all c
 
             </div>
         </div>
-        <div class="">
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <% subject.forEach(function(detail){ %>
-                            <div class="col-lg-3 col-md-6 col-sm-6">
-                                <div class="card card-stats">
-                                    <div class="card-header card-header-warning card-header-icon">
-                                        <div class="card-icon">
-                                            <i class="material-icons">book</i>
-                                        </div>
-                                        <p class="card-category">
-                                            <%=detail._id%>
-
-                                        </p>
-                                        <h4 class="card-title text-center font-weight-bold text-capitalize">
-                                            <%=detail.subjectname%>
-                                                <small>
-
-                                                </small>
-                                        </h4>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="stats">
-                                            <i class="material-icons">date_range</i>
-                                            <%=detail.department%>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <% }) %>
-                    </div>
-                </div>
-            </div>
+        
             <div class="content">
                 <div class="container-fluid">
                     <div class="card">
                         <div class="card-header card-header-primary">
-                            <h3 class="card-title">Notifications</h3>
+                            <h3 class="card-title">Assignments</h3>
+                           
                             <p class="card-category">
-                                
+
                             </p>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <h4 class="card-title">College Notifications</h4>
-                                    <% colNotifs.forEach(function(detail){ %>
+                                <div class="coll-6">
+                                    <button type="submit" class="btn btn-primary1 pull-left" href="">Add new assignment   <i class="material-icons" data-notify="icon">add_chart</i> </button><br>
+                                    <br><br>
+                                    <h4 class="card-title">Assignment 1</h4>
+                                     
 
                                         <div class="alert alert-info alert-with-icon" data-notify="container">
-                                            <i class="material-icons" data-notify="icon">add_alert</i>
-                                            <span data-notify="message">
-                                                <%=detail.message%>.
+                                          <span data-notify="message">
+                                            <p>This is a half-page paragraph in narrative form that describes the assignment purpose, background, main elements, expectations, required format/length, and points possible. Many professors stop at the assignment description paragraph and expect students to be able to pull out the requirements. 
+                                                However, preferred assignment descriptions also contain more specific steps to guide the student and information about the grading rubric that will be used to score the assignment.</p>
+                                                
                                             </span>
+                                            <div class="container-login100-form-btn">
+                                                <button type='submit' class="login100-form-btn">
+                                                    View Submission
+                                                </button>
+                                                <button type='submit' class="login100-form-btn">
+                                                    Download assignment
+                                                </button>
+                                            </div>
                                         </div>
-                                        <% }) %>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4 class="card-title">Teacher Notification</h4>
-                                    <% colNotifs.forEach(function(detail){ %>
-
-                                        <div class="alert alert-success alert-with-icon" data-notify="container">
-                                            <i class="material-icons" data-notify="icon">add_alert</i>
-                                            <span data-notify="message">
-                                                <%=detail.message%>.
-                                            </span>
-                                        </div>
-                                        <% }) %>
+                                        
                                 </div>
                             </div>
+                                <div class="row">
+                                <div class="coll-6">
+                                    <h4 class="card-title">Assignment 2</h4>
+                                    
+
+                                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                                        
+                                            <span data-notify="message">
+                                                <p>This is a half-page paragraph in narrative form that describes the assignment purpose, background, main elements, expectations, required format/length, and points possible. Many professors stop at the assignment description paragraph and expect students to be able to pull out the requirements. 
+                                                    However, preferred assignment descriptions also contain more specific steps to guide the student and information about the grading rubric that will be used to score the assignment.</p>
+                                            </span>
+                                            <div class="container-login100-form-btn">
+                                                <button type='submit' class="login100-form-btn">
+                                                    View Submission
+                                                </button>
+                                                <button type='submit' class="login100-form-btn">
+                                                    Download assignment
+                                                </button>
+                                            </div>
+                                        </div>
+                                       
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>

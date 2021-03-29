@@ -1130,7 +1130,15 @@ pre code {
   flex-grow: 1;
   max-width: 100%;
 }
+.coll-6{
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: -50px;
+  padding-left: 50px;
+  margin-right:200px;
 
+}
 .col-auto {
   flex: 0 0 auto;
   width: auto;
@@ -2866,7 +2874,24 @@ fieldset:disabled a.btn {
   border-color: #2196f3;
   box-shadow: none;
 }
-
+.btn-primary1 {
+  color: #ffffff;
+  background-color: #2196f3;
+  border-color: #2196f3;
+  box-shadow: none;
+}
+.btn-primary2 {
+  color: #ee17ee;
+  background-color: #2196f3;
+  border-color: #2196f3;
+  box-shadow: none;
+  width: 100%;
+}
+.btn-primary2:hover {
+  color: #ffffff;
+  background-color: #0c83e2;
+  border-color: #0c7cd5;
+}
 .btn-primary:hover {
   color: #ffffff;
   background-color: #0c83e2;
@@ -4830,6 +4855,7 @@ tbody.collapse.show {
 
 .card-title {
   margin-bottom: 0.75rem;
+  
 }
 
 .card-subtitle {

@@ -37,29 +37,31 @@
                         Registration Form
                     </span>
                     <div class="wrap-input100 " data-validate="Valid first name required: example abc">
-                        <input class="input100" type="text" name="fname" placeholder="First Name">
+                        <input class="input100" type="text" name="fname" placeholder="First Name" maxlength="12" required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-user" aria-hidden="true"></i>
                         </span>
                     </div>
                     <div class="wrap-input100 " data-validate="Valid last name required: example xyz">
-                        <input class="input100" type="text" name="lname" placeholder="Last Name">
+                        <input class="input100" type="text" name="lname" placeholder="Last Name" maxlength="12"required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-user" aria-hidden="true"></i>
                         </span>
                     </div>
                     <div class="wrap-input100 " data-validate="Valid mobile number required">
-                        <input class="input100" type="number" name="number" placeholder="Mobile Number" minlength="10"
-                            maxlength="10">
+                        <input class="input100" type="number" name="number" placeholder="Mobile Number" 
+                        pattern="[789][0-9]{9}"   
+                        minlength="10"
+                            maxlength="10"required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-phone" aria-hidden="true"></i>
                         </span>
                     </div>
                     <div class="wrap-input100 " data-validate="Valid date required: dd-mm-yyyy ">
-                        <input class="input100" type="date" name="dob" placeholder="Date of Birth ">
+                        <input class="input100" type="date" name="dob" placeholder="Date of Birth "required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-birthday-cake" aria-hidden="true"></i>
@@ -73,43 +75,23 @@
                             value="Male"><label>Other</label>
                     </div>
                     <div class="wrap-input100 " data-validate="Valid email is required: ex@abc.xyz">
-                        <input class="input100" type="text" name="email" placeholder="Email">
+                        <input class="input100" type="text" name="email" placeholder="Email" maxlength="31"required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                         </span>
                     </div>
 
-                    <div class="wrap-input100 " data-validate="Password is required">
-                        <input class="input100" type="password" name="psw" placeholder="Password" minlength="8">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-lock" aria-hidden="true"></i>
-                        </span>
-                    </div>
-
-                    <div class="wrap-input100 " data-validate="Passwords do not match">
-                        <input class="input100" type="password" name="psw" placeholder="Confirm Password" minlength="8">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-lock" aria-hidden="true"></i>
-                        </span>
-                    </div>
+                  
 
                     <div class="wrap-input100 " data-validate="Valid Department required! (example CSE) ">
-                        <input class="input100" type="text" name="dept" placeholder="Department">
+                        <input class="input100" type="text" name="dept" placeholder="Department"maxlength="15"required>
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-building" aria-hidden="true"></i>
                         </span>
                     </div>
-                    <div class="wrap-input100 " ">
-                        <input class=" input100" type="text" name="semester" placeholder="semester">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-building" aria-hidden="true"></i>
-                        </span>
-                    </div>
+                   
                     <div class="wrap-input100 " data-validate="Valid status required! (example student)">
                         <input class="input100" type="text" name="status" placeholder="Status">
                         <span class="focus-input100"></span>
