@@ -1225,8 +1225,15 @@ app.get('/teacher/createassignment/:scode', function (req, res) {
     }
 });
 //, { "assignments": { $elemMatch: { $elemMatch: { "submissions.studentid": "S097" } } } }
-app.get('/teacher/performance/:sid', function (req, res) {
+app.get("/fck", function (req, res) {
     console.log("A")
+    Subject.findOne({ _id: "TEST101" }, { "assignments": { $elemMatch: { "submissions.studentid": "S097" } } }).then(asslist => {
+        console.log(asslist)
+    })
+})
+app.get('/teacher/performance', function (req, res) {
+    console.log("Abcdefg")
+    /*
     if (req.isAuthenticated()) {
         User.findOne({ _id: req.session.uniqueid })
             .exec()
@@ -1238,7 +1245,9 @@ app.get('/teacher/performance/:sid', function (req, res) {
                 }
             });
     }
+    */
 });
+
 app.post("/assignmentupload", upload.single('file'), (req, res) => {
     console.log("called")
     createfileid().then(filecode => {
