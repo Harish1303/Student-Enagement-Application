@@ -17,7 +17,6 @@ function generateString(length) {
     for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-
     return result;
 }
 
@@ -91,12 +90,7 @@ const student = new mongoose.Schema({
     semester: Number,
     department: String,
 });
-const subject = new mongoose.Schema({
-    _id: String,
-    subjectname: String,
-    department: String,
-    semester: Number,
-});
+
 const teacher = new mongoose.Schema({
     firstname: String,
     lastname: String,
@@ -120,6 +114,10 @@ const teachercounter = new mongoose.Schema({
     _id: String,
     sequence_value: Number,
 });
+const filecounter = new mongoose.Schema({
+    _id: String,
+    sequence_value: Number,
+});
 const subject_teacher_mapping = new mongoose.Schema({
     _id: { teacherid: { type: String }, subjectid: { type: String } },
     teacherid: String,
@@ -130,20 +128,47 @@ const subject_student_mapping = new mongoose.Schema({
     studentid: String,
     subjectid: String,
 });
-
+const uploadfile = new mongoose.Schema({
+    filecode: String,
+    data: Buffer
+})
+var submission = new mongoose.Schema({
+    studentid: String,
+    evaluated: Boolean,
+    marks: Number,
+    answer_file_code: String
+})
+var assignments = new mongoose.Schema({
+    assignment_file_code: String,
+    submissions: [submission]
+})
+const subject = new mongoose.Schema({
+    _id: String,
+    subjectname: String,
+    department: String,
+    semester: Number,
+    assignments: [assignments],
+    credits: Number
+});
 userschema.plugin(passportLocalMongoose);
 const User = new mongoose.model('User', userschema);
 const Admin = new mongoose.model('Admin', administrator);
 const Admincounter = new mongoose.model('Admincounter', admincounter);
 const Teachercounter = new mongoose.model('Teachercounter', teachercounter);
 const Studentcounter = new mongoose.model('Studentcounter', studentcounter);
+const Filecounter = new mongoose.model('Filecounter', filecounter);
 const Teacher = new mongoose.model('Teacher', teacher);
 const Student = new mongoose.model('Student', student);
 const Subject = new mongoose.model('Subject', subject);
+const Uploadfile = new mongoose.model('Uploadfile', uploadfile);
+const Submissions = new mongoose.model('Submissions', submission);
+const Assignments = new mongoose.model('Assignments', assignments);
+const Subjects = new mongoose.model('Subjects', subject);
 const Subject_teacher_mapping = new mongoose.model(
     'Subject_teacher_mapping',
     subject_teacher_mapping
 );
+
 const Subject_student_mapping = new mongoose.model(
     'Subject_student_mapping',
     subject_student_mapping
@@ -176,6 +201,13 @@ function getNextSequenceValuesforteachers(sequenceName) {
         { new: true }
     ).exec();
 }
+function getNextSequenceValuesforfiles(sequenceName) {
+    return Filecounter.findOneAndUpdate(
+        { _id: sequenceName },
+        { $inc: { sequence_value: 1 } },
+        { new: true }
+    ).exec();
+}
 function createadminid() {
     h = getNextSequenceValues('adminid').then((p) => {
         h = p.sequence_value;
@@ -197,6 +229,13 @@ function createstudentid() {
     });
     return h;
 }
+function createfileid() {
+    h = getNextSequenceValuesforfiles('fileid').then((p) => {
+        h = p.sequence_value;
+        return h;
+    });
+    return h;
+}
 
 Studentcounter.create({
     _id: 'studentid',
@@ -207,6 +246,11 @@ Teachercounter.create({
     _id: 'teacherid',
     sequence_value: 0,
 }).catch((err) => { });
+Filecounter.create({
+    _id: 'fileid',
+    sequence_value: 0,
+}).catch((err) => { });
+
 
 app.get('/', function (req, res) {
     res.render('landingpage', { err: '' });
@@ -270,7 +314,7 @@ app.get('/uploadimage', (req, res) => {
     });
 });
 
-function sendmail(p1) {
+function sendmail(p1, currmail) {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         //port: 587,
@@ -285,7 +329,7 @@ function sendmail(p1) {
     });
     let mailOptions = {
         from: 'krishnavarun307@gmail.com', // sender address
-        to: 'harishrenukunta132001@gmail.com', // list of receivers
+        to: currmail, // list of receivers
         subject: 'Node Contact Request', // Subject line
         text: p1, // plain text body
         //html: output // html body
@@ -303,7 +347,7 @@ function sendmail(p1) {
 app.post('/register', function (req, res) {
     console.log(req.body);
     var newid = new mongoose.mongo.ObjectId();
-    pass = generateString(8);
+    pass = "asdfghjkl";
     console.log(pass);
     console.log(typeof pass);
     User.register(
@@ -349,7 +393,7 @@ app.post('/register', function (req, res) {
                                             contentType: 'image/png',
                                         },
                                     });
-                                    sendmail(pass)
+                                    sendmail(pass, req.body.email)
                                     res.redirect('/index');
                                 }
                             }
@@ -385,7 +429,7 @@ app.post('/register', function (req, res) {
                                             contentType: 'image/png',
                                         },
                                     });
-                                    sendmail(pass)
+                                    sendmail(pass, req.body.email)
                                     res.redirect('/');
                                 }
                             }
@@ -424,7 +468,7 @@ app.post('/register', function (req, res) {
                                             contentType: 'image/png',
                                         },
                                     });
-                                    sendmail(pass)
+                                    sendmail(pass, req.body.email)
                                     res.redirect('/');
                                 }
                             }
@@ -439,7 +483,7 @@ app.post('/register', function (req, res) {
 app.post('/forgotpassword', function (req, res) {
     const uname = req.body.username;
     pass = generateString(8)
-    sendmail(pass)
+    sendmail(pass, req.body.username)
     User.findByUsername(uname).then(function (su) {
         if (su) {
             su.setPassword(pass, function () {
@@ -627,7 +671,7 @@ app.post('/admin/studentsenrolled/:sid', function (req, res) {
                                     teacherlist = tlist;
                                     res.render('studentsenrolledlist', { students: tlist });
                                 });
-                            //res.send("suck")
+
                         });
                 }
             });
@@ -757,45 +801,6 @@ app.post("/changepassword", function (req, res) {
         })
     })
 })
-/*
-User.findOne({ username: "gmail@yaho.com" }).exec().then(user => {
-        user.changePassword("newpassword", "gmail@yaho.com").then(c => {
-            console.log(c)
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                //port: 587,
-                //secure: false, // true for 465, false for other ports
-                auth: {
-                    user: 'krishnavarun307@gmail.com', // generated ethereal user
-                    pass: 'krishna@307'  // generated ethereal password
-                },
-                tls: {
-                    rejectUnauthorized: false
-                }
-            });
-            let mailOptions = {
-                from: 'krishnavarun307@gmail.com', // sender address
-                to: 'harishrenukunta132001@gmail.com', // list of receivers
-                subject: 'Node Contact Request', // Subject line
-                text: 'Hello world?', // plain text body
-                //html: output // html body
-            };
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Message sent: %s', info.messageId);
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-                //res.render('contact', { msg: 'Email has been sent' });
-            });
-
-
-        }).catch(err => {
-            console.log(error)
-        })
-    })
-*/
 
 app.get('/studentHomePage', function (req, res) {
     if (req.isAuthenticated()) {
@@ -1184,6 +1189,153 @@ app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/index');
 });
+
+
+//*********** */
+// SPRINT-2 
+//********** */
+app.get('/teacher/:scode', function (req, res) {
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid })
+            .exec()
+            .then((user) => {
+                if (user.status == 2) {
+                    Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
+                        console.log(asslist)
+                    })
+                }
+            });
+    }
+});
+app.get('/teacher/:scode/:acode', function (req, res) {
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid })
+            .exec()
+            .then((user) => {
+                if (user.status == 2) {
+                    Subject.findOne({ _id: req.params.scode }, { "assignments": { $elemMatch: { assignment_file_code: req.params.acode } } }).then(asslist => {
+                        console.log(asslist.assignments[0].submissions)
+                    })
+                }
+            });
+    }
+});
+app.get('/teacher/createassignment/:scode', function (req, res) {
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid })
+            .exec()
+            .then((user) => {
+                if (user.status == 2) {
+                    res.render("pagename", req.params.scode)
+                }
+            });
+    }
+});
+//, { "assignments": { $elemMatch: { $elemMatch: { "submissions.studentid": "S097" } } } }
+app.get("/fck", function (req, res) {
+    console.log("A")
+    Subject.findOne({ _id: "TEST101" }, { "assignments": { $elemMatch: { "submissions.studentid": "S097" } } }).then(asslist => {
+        console.log(asslist)
+    })
+})
+app.get('/teacher/performance', function (req, res) {
+    console.log("Abcdefg")
+    /*
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid })
+            .exec()
+            .then((user) => {
+                if (user.status == 2) {
+                    Subject.findOne({ _id: "TEST101" }).then(asslist => {
+                        console.log(asslist)
+                    })
+                }
+            });
+    }
+    */
+});
+
+app.post("/assignmentupload", upload.single('file'), (req, res) => {
+    console.log("called")
+    createfileid().then(filecode => {
+        var obj = {
+            filecode: filecode,
+            file: fs.readFileSync(
+                path.join(__dirname + '/uploads/' + req.file.filename)
+            )
+        };
+        Uploadfile.create(obj).then(uploaded => {
+            var obj2 = {
+                assignment_file_code: filecode
+            }
+            subid = "TEST101" //req.body.subjectid
+            Subjects.findOneAndUpdate({ _id: subid }, {
+                $push: { assignments: obj2 }
+            }).then(uploaded_ass => {
+                res.redirect("/filetest")
+            })
+        })
+    })
+})
+app.post("/submitassignment", upload.single('file'), (req, res) => {
+    console.log("called")
+    createfileid().then(filecode => {
+        var obj = {
+            filecode: filecode,
+            file: fs.readFileSync(
+                path.join(__dirname + '/uploads/' + req.file.filename)
+            )
+        };
+        Uploadfile.create(obj).then(uploaded => {
+            var obj2 = {
+                answer_file_code: filecode,
+                evaluated: false,
+                studentid: "S097"
+            }
+            subid = "TEST101" //req.body.subjectid
+            assignmentcode = 5   //req.body.assignmentcode
+            jsonobj = {}
+            jsonobj["assignments.$.submissions"] = obj2
+            Subjects.findOneAndUpdate({ "assignments.assignment_file_code": assignmentcode }, {
+                $push: jsonobj
+            }).then(submitted_ass => {
+                res.redirect("/filetest")
+            })
+        })
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(3000, function () {
     console.log('Server is running');
