@@ -107,8 +107,14 @@ The above copyright notice and this permission notice shall be included in all c
                                             </h6>
                                         </div>
                                         <div class="container-login100-form-btn">
-                                            <form action="/har" method="POST">
+                                            <form action="/submitassignment" method="POST"
+                                                enctype="multipart/form-data">
                                                 <input type="file" id="image" name="file" value="" required />
+                                                <input type="text" name="lathcore" value="aa" hidden>
+                                                <input type="text" name="subjectid" value="<%=subjectid%>" hidden>
+                                                <input type="text" name="assignmentcode"
+                                                    value="<%=detail.assignment_file_code%>" hidden>
+                                                <button type="submit"> SUBMIT</button>
                                             </form>
                                             <%=detail.assignment_file_code%>
                                                 <a href="/file/<%= detail.assignment_file_code %>" download>

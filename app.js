@@ -1304,7 +1304,8 @@ app.get('/student/:scode', function (req, res) {
                 if (user.status == 3) {
                     Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
                         console.log(asslist)
-                        res.render("viewPerformanceStudent", { assignment: asslist.assignments })
+
+                        res.render("viewPerformanceStudent", { assignment: asslist.assignments, subjectid: req.params.scode })
                     })
                 }
             });
@@ -1348,6 +1349,7 @@ app.get('/teacher/createassignment/:scode', function (req, res) {
     }
 });
 app.post("/har", function (req, res) {
+    console.log("caled")
     console.log(req.body)
 })
 app.get("/file/:filecode", function (req, res) {
@@ -1383,39 +1385,35 @@ app.post("/assignmentupload", upload.single('file'), (req, res) => {
 })
 app.post("/submitassignment", upload.single('file'), (req, res) => {
     console.log("called")
-    createfileid().then(filecode => {
-        var obj = {
-            filecode: filecode,
-            file: fs.readFileSync(
-                path.join(__dirname + '/uploads/' + req.file.filename)
-            )
-        };
-        Uploadfile.create(obj).then(uploaded => {
-            var obj2 = {
-                answer_file_code: filecode,
-                evaluated: false,
-                studentid: "S097"
-            }
-            subid = req.body.subjectid
-            assignmentcode = req.body.assignmentcode
-            jsonobj = {}
-            jsonobj["assignments.$.submissions"] = obj2
-            Subjects.findOneAndUpdate({ "assignments.assignment_file_code": assignmentcode }, {
-                $push: jsonobj
-            }).then(submitted_ass => {
-                res.redirect("/studentHomePage")
+    Student.findOne({ _id: req.session.uniqueid }, { studentid: 1 }).then(si => {
+
+        createfileid().then(filecode => {
+            var obj = {
+                filecode: filecode,
+                file: fs.readFileSync(
+                    path.join(__dirname + '/uploads/' + req.file.filename)
+                )
+            };
+            Uploadfile.create(obj).then(uploaded => {
+                var obj2 = {
+                    answer_file_code: filecode,
+                    evaluated: false,
+                    studentid: si.studentid
+                }
+                subid = req.body.subjectid
+                assignmentcode = req.body.assignmentcode
+                jsonobj = {}
+                jsonobj["assignments.$.submissions"] = obj2
+                Subjects.findOneAndUpdate({ "assignments.assignment_file_code": assignmentcode }, {
+                    $push: jsonobj
+                }).then(submitted_ass => {
+                    res.redirect("/studentHomePage")
+                })
             })
         })
     })
+
 })
-
-
-
-
-
-
-
-
 
 
 
