@@ -1296,6 +1296,20 @@ app.get('/teacher/:scode', function (req, res) {
             });
     }
 });
+app.get('/student/:scode', function (req, res) {
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid })
+            .exec()
+            .then((user) => {
+                if (user.status == 3) {
+                    Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
+                        console.log(asslist)
+                        res.render("viewPerformanceStudent", { assignment: [asslist] })
+                    })
+                }
+            });
+    }
+});
 app.get('/teacher/:scode/:acode/:eval', function (req, res) {
     if (req.isAuthenticated()) {
         User.findOne({ _id: req.session.uniqueid })
