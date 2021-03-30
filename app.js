@@ -1304,7 +1304,7 @@ app.get('/student/:scode', function (req, res) {
                 if (user.status == 3) {
                     Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
                         console.log(asslist)
-                        res.render("viewPerformanceStudent", { assignment: [asslist] })
+                        res.render("viewPerformanceStudent", { assignment: asslist.assignments })
                     })
                 }
             });
@@ -1350,11 +1350,11 @@ app.get('/teacher/createassignment/:scode', function (req, res) {
 app.post("/har", function (req, res) {
     console.log(req.body)
 })
-app.post("/file/:filecode", function (req, res) {
+app.get("/file/:filecode", function (req, res) {
     console.log("called")
     Uploadfile.findOne({ filecode: req.params.filecode }).exec().then(f => {
         res.contentType("application/pdf");
-        return res.send(f.data)
+        return res.send(f.file)
     })
 })
 app.post("/assignmentupload", upload.single('file'), (req, res) => {
@@ -1403,7 +1403,7 @@ app.post("/submitassignment", upload.single('file'), (req, res) => {
             Subjects.findOneAndUpdate({ "assignments.assignment_file_code": assignmentcode }, {
                 $push: jsonobj
             }).then(submitted_ass => {
-                res.redirect("/filetest")
+                res.redirect("/studentHomePage")
             })
         })
     })

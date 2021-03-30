@@ -44,7 +44,7 @@ The above copyright notice and this permission notice shall be included in all c
 
         Tip 2: you can also add an image using data-image tag-->
             <div class="logo"><a class="simple-text logo-normal">
-                &nbsp;&nbsp;       Student Engagement Application
+                    &nbsp;&nbsp; Student Engagement Application
                 </a></div>
             <div class="container ">
                 <ul class="navbar-nav ml-auto">
@@ -90,7 +90,7 @@ The above copyright notice and this permission notice shall be included in all c
 
                                 <% assignment.forEach(function(detail){ %>
                                     <h4 class="card-title">
-                                        <%=detail.name%>
+                                        <%=detail.assignment_name%>
                                     </h4>
 
 
@@ -103,20 +103,23 @@ The above copyright notice and this permission notice shall be included in all c
                                         </span>
                                         <div class="container-login100-form-btn">
                                             <h6>
-                                                <%=detail.score%>
+                                                <%=detail.marks%>
                                             </h6>
-
                                         </div>
                                         <div class="container-login100-form-btn">
-                                            <button type='submit' class="login100-form-btn">
-                                                Upload Solution
-                                            </button>
-                                            <button type='submit' class="login100-form-btn">
-                                                Download Assignment
-                                            </button>
+                                            <form action="/har" method="POST">
+                                                <input type="file" id="image" name="file" value="" required />
+                                            </form>
+                                            <%=detail.assignment_file_code%>
+                                                <a href="/file/<%= detail.assignment_file_code %>" download>
+                                                    Download Assignment
+                                                </a>
+
                                         </div>
                                     </div>
+
                                     <% }) %>
+
                             </div>
                         </div>
 
@@ -128,7 +131,7 @@ The above copyright notice and this permission notice shall be included in all c
 
         </footer>
     </div>
-    </div> 
+    </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
