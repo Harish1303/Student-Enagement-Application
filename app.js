@@ -10,6 +10,8 @@ var path = require('path');
 var multer = require('multer');
 const nodemailer = require('nodemailer');
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
+const e = require('express');
+const { Console } = require('console');
 const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 function generateString(length) {
@@ -141,6 +143,8 @@ var submission = new mongoose.Schema({
 })
 var assignments = new mongoose.Schema({
     assignment_file_code: String,
+    assignment_name: String,
+    assignment_description: String,
     submissions: [submission]
 })
 const subject = new mongoose.Schema({
@@ -263,9 +267,7 @@ app.get('/register', function (req, res) {
     res.render('register');
 });
 
-app.get('/assfake', function (req, res) {
-    res.render('assfake');
-});
+
 
 
 app.get('/forgotpassword', function (req, res) {
@@ -1232,14 +1234,20 @@ app.get('/logout', function (req, res) {
 // SPRINT-2 
 //********** */
 
-
-app.get('/teacher/viewPerformance', function (req, res) {
+//{ "assignments": { $elemMatch: { "submissions.studentid": "S097" } } }
+app.get('/teacher/viewPerformance/:sid/:subcode', function (req, res) {
+    console.log(req.params.sid)
+    console.log(req.params.subcode)
+    Subject.find({ _id: req.params.subcode }, { "assignments": { $elemMatch: { "submissions.studentid": "S098" } } }
+    ).then(subs => {
+        console.log(subs)
+    })
     res.render('viewPerformance', {
         assignment: [
             {
                 name: 'physics',
                 description:
-                    'aldkfjahdf;alkjdf;alfkjdafjhda;fjlfa;dahf;dljfha;ljdfh;aljfh;aljfhd;ljfhd;alfjhda;fljhdf;jhaf;ljdha;lfjdhf;lajhfd;lajfh;djfha;ljfh;jlfha;ljfha;ljfh;ajhf;lajfh;ajlfh;aldfhaljfha;ldhfa;flaksdjf',
+                    'aldkfjajfha;ldhfa;flaksdjf',
                 score: 'not evaluated',
             },
             {
@@ -1247,20 +1255,10 @@ app.get('/teacher/viewPerformance', function (req, res) {
                 description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
                 score: 'not evaluated',
             },
-            {
-                name: 'physics',
-                description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
-                score: 'not evaluated',
-            },
-            {
-                name: 'physics',
-                description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
-                score: 'not evaluated',
-            },
-        ],
+        ]
     });
 });
-app.get('/teacher/studentPerformance', function (req, res) {
+app.get('/teacher/studentPerformance/:scode', function (req, res) {
     if (req.isAuthenticated()) {
         User.findOne({ _id: req.session.uniqueid })
             .exec()
@@ -1268,21 +1266,16 @@ app.get('/teacher/studentPerformance', function (req, res) {
                 if (user.status != 2) {
                     res.send('Not a teacher');
                 } else {
-                    Student.find(
-                        {},
-                        {
-                            firstname: 1,
-                            lastname: 1,
-                            department: 1,
-                            studentid: 1,
-                            semester: 1,
+                    Subject_student_mapping.find({ subjectid: req.params.scode }).then(studs => {
+                        arr = []
+                        for (var i = 0; i < studs.length; i++) {
+                            arr.push(studs[i].studentid)
                         }
-                    )
-                        .exec()
-                        .then((slist) => {
-                            studentlist = slist;
-                            res.render('studentPerformance', { students: slist });
-                        });
+                        Student.find({ studentid: { $in: arr } }).then(s => {
+                            console.log(s)
+                            res.render("studentPerformance", { students: s })
+                        })
+                    })
                 }
             });
     } else {
@@ -1304,15 +1297,28 @@ app.get('/teacher/:scode', function (req, res) {
             });
     }
 });
-app.get('/teacher/:scode/:acode', function (req, res) {
+app.get('/teacher/:scode/:acode/:eval', function (req, res) {
     if (req.isAuthenticated()) {
         User.findOne({ _id: req.session.uniqueid })
             .exec()
             .then((user) => {
                 if (user.status == 2) {
                     Subject.findOne({ _id: req.params.scode }, { "assignments": { $elemMatch: { assignment_file_code: req.params.acode } } }).then(asslist => {
-                        console.log(asslist.assignments[0].submissions)
+                        if (req.params.eval) {
+                            arr = []
+                            for (var i = 0; i < asslist.assignments[0].submissions.length; i++) {
+                                if (asslist.assignments[0].submissions[i].evaluated) {
+                                    arr.push(asslist.assignments[0].submissions[i])
+                                }
+                            }
+                            console.log(arr)
+                        }
+                        else {
+                            console.log(asslist.assignments[0].submissions)
+                        }
+
                     })
+
                 }
             });
     }
@@ -1323,7 +1329,7 @@ app.get('/teacher/createassignment/:scode', function (req, res) {
             .exec()
             .then((user) => {
                 if (user.status == 2) {
-                    res.render("pagename", req.params.scode)
+                    res.render("assfake")
                 }
             });
     }
@@ -1365,7 +1371,7 @@ app.post("/assignmentupload", upload.single('file'), (req, res) => {
             var obj2 = {
                 assignment_file_code: filecode
             }
-            subid = "TEST101" //req.body.subjectid
+            subid = req.body.subjectid
             Subjects.findOneAndUpdate({ _id: subid }, {
                 $push: { assignments: obj2 }
             }).then(uploaded_ass => {
@@ -1389,8 +1395,8 @@ app.post("/submitassignment", upload.single('file'), (req, res) => {
                 evaluated: false,
                 studentid: "S097"
             }
-            subid = "TEST101" //req.body.subjectid
-            assignmentcode = 5   //req.body.assignmentcode
+            subid = req.body.subjectid
+            assignmentcode = req.body.assignmentcode
             jsonobj = {}
             jsonobj["assignments.$.submissions"] = obj2
             Subjects.findOneAndUpdate({ "assignments.assignment_file_code": assignmentcode }, {
@@ -1401,16 +1407,6 @@ app.post("/submitassignment", upload.single('file'), (req, res) => {
         })
     })
 })
-
-
-
-
-
-
-
-
-
-
 
 
 
