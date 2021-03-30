@@ -133,7 +133,7 @@ const subject_student_mapping = new mongoose.Schema({
 });
 const uploadfile = new mongoose.Schema({
     filecode: String,
-    data: Buffer
+    file: Buffer
 })
 var submission = new mongoose.Schema({
     studentid: String,
@@ -1234,29 +1234,28 @@ app.get('/logout', function (req, res) {
 // SPRINT-2 
 //********** */
 
-//{ "assignments": { $elemMatch: { "submissions.studentid": "S097" } } }
+
 app.get('/teacher/viewPerformance/:sid/:subcode', function (req, res) {
     console.log(req.params.sid)
     console.log(req.params.subcode)
     Subject.find({ _id: req.params.subcode }, { "assignments": { $elemMatch: { "submissions.studentid": "S098" } } }
     ).then(subs => {
-        console.log(subs)
+        arr = []
+        for (var i = 0; i < subs[0].assignments.length; i++) {
+
+            for (var j = 0; j < subs[0].assignments[i].submissions.length; j++) {
+
+                if (subs[0].assignments[i].submissions[j].studentid == "S098") {
+                    subs[0].assignments[i].submissions[j]["name"] = "fame"
+                    subs[0].assignments[i].submissions[j]["description"] = "description"
+                    arr.push(subs[0].assignments[i].submissions[j])
+                }
+            }
+        }
+        console.log(arr)
+        res.render('viewPerformance', { assignment: arr });
     })
-    res.render('viewPerformance', {
-        assignment: [
-            {
-                name: 'physics',
-                description:
-                    'aldkfjajfha;ldhfa;flaksdjf',
-                score: 'not evaluated',
-            },
-            {
-                name: 'physics',
-                description: 'aldkfjahdf;alkjdf;alfkjda;flaksdjf',
-                score: 'not evaluated',
-            },
-        ]
-    });
+
 });
 app.get('/teacher/studentPerformance/:scode', function (req, res) {
     if (req.isAuthenticated()) {
@@ -1329,35 +1328,21 @@ app.get('/teacher/createassignment/:scode', function (req, res) {
             .exec()
             .then((user) => {
                 if (user.status == 2) {
-                    res.render("assfake")
+                    res.render("assfake", { subcode: req.params.scode })
                 }
             });
     }
 });
-//, { "assignments": { $elemMatch: { $elemMatch: { "submissions.studentid": "S097" } } } }
-app.get("/fck", function (req, res) {
-    console.log("A")
-    Subject.findOne({ _id: "TEST101" }, { "assignments": { $elemMatch: { "submissions.studentid": "S097" } } }).then(asslist => {
-        console.log(asslist)
+app.post("/har", function (req, res) {
+    console.log(req.body)
+})
+app.post("/file/:filecode", function (req, res) {
+    console.log("called")
+    Uploadfile.findOne({ filecode: req.params.filecode }).exec().then(f => {
+        res.contentType("application/pdf");
+        return res.send(f.data)
     })
 })
-app.get('/teacher/performance', function (req, res) {
-    console.log("Abcdefg")
-    /*
-    if (req.isAuthenticated()) {
-        User.findOne({ _id: req.session.uniqueid })
-            .exec()
-            .then((user) => {
-                if (user.status == 2) {
-                    Subject.findOne({ _id: "TEST101" }).then(asslist => {
-                        console.log(asslist)
-                    })
-                }
-            });
-    }
-    */
-});
-
 app.post("/assignmentupload", upload.single('file'), (req, res) => {
     console.log("called")
     createfileid().then(filecode => {
@@ -1369,13 +1354,15 @@ app.post("/assignmentupload", upload.single('file'), (req, res) => {
         };
         Uploadfile.create(obj).then(uploaded => {
             var obj2 = {
-                assignment_file_code: filecode
+                assignment_file_code: filecode,
+                assignment_name: req.body.assignmentname,
+                assignment_description: req.body.description
             }
-            subid = req.body.subjectid
+            subid = req.body.scode
             Subjects.findOneAndUpdate({ _id: subid }, {
                 $push: { assignments: obj2 }
             }).then(uploaded_ass => {
-                res.redirect("/filetest")
+                res.redirect("/teacherHomePage")
             })
         })
     })

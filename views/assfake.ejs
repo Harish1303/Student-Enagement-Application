@@ -40,7 +40,7 @@ The above copyright notice and this permission notice shall be included in all c
         
                 Tip 2: you can also add an image using data-image tag-->
             <div class="logo"><a class="simple-text logo-normal">
-                &nbsp;&nbsp;  Student Engagement Application
+                    &nbsp;&nbsp; Student Engagement Application
                 </a></div>
             <div class="container ">
                 <ul class="navbar-nav ml-auto">
@@ -69,34 +69,37 @@ The above copyright notice and this permission notice shall be included in all c
                         <div class="card">
                             <div class="card-header card-header-primary">
                                 <h4 class="card-title">Add Assignment</h4>
-                               
+
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="">
+                                <form method="POST" action="/assignmentupload" enctype="multipart/form-data">
                                     <div class="col-md-12">
-                                        <div class="form-group">
+                                        <input type="text" name="scode" value="<%=subcode%>" hidden>
+                                        <div class=" form-group">
                                             <label for="exampleInputEmail1">Add Assignment name </label>
                                             <input type="text" class="form-control" id="exampleInputEmail1"
                                                 aria-describedby="emailHelp" placeholder="Eg: Assignment 1"
-                                                name="scode" required>
+                                                name="assignmentname">
 
                                         </div>
                                     </div>
-                                   
+
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Enter the Description of the assignment to be published( 100 words)</label>
+                                            <label for="exampleInputEmail1">Enter the Description of the assignment to
+                                                be published( 100 words)</label>
                                             <input type="text" class="form-control" id="exampleInputEmail1"
-                                                 name="Description" required>
+                                                name="description">
                                         </div>
-                                       
+
                                     </div>
                                     &nbsp;
-                                    <button type="submit" class="btn btn-primary1 pull-left">Upload Assignment </button>
+                                    <input type="file" id="image" name="file" value="" required />
                                     <br>
                                     <br>
                                     <br>
-                                    <button type="submit" class="btn btn-primary2 pull-left">PUBLISH THIS ASSIGNMENT    </button>
+                                    <button type="submit" class="btn btn-primary2 pull-left">PUBLISH THIS ASSIGNMENT
+                                    </button>
 
 
                                     <div class="clearfix"></div>
@@ -109,13 +112,13 @@ The above copyright notice and this permission notice shall be included in all c
             </div>
         </div>
     </div>
-</div>
-</div>
-<footer class="footer">
+    </div>
+    </div>
+    <footer class="footer">
 
-</footer>
-</div>
-</div>
+    </footer>
+    </div>
+    </div>
 
     <!--   Core JS Files   -->
     <script src="/js/core/jquery.min.js"></script>
