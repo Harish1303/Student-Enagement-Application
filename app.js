@@ -360,9 +360,13 @@ app.post('/register', function (req, res) {
         pass,
         function (err) {
             if (err) {
-                console.log('error');
                 console.log(err);
-                res.redirect('/register');
+                if (req.body.status == "1") {
+                    res.redirect('/register');
+                }
+                else {
+                    res.redirect("/admin/newStudent")
+                }
             } else {
                 console.log('registered');
                 if (Number(req.body.status == 1)) {
@@ -1238,16 +1242,17 @@ app.get('/logout', function (req, res) {
 app.get('/teacher/viewPerformance/:sid/:subcode', function (req, res) {
     console.log(req.params.sid)
     console.log(req.params.subcode)
-    Subject.find({ _id: req.params.subcode }, { "assignments": { $elemMatch: { "submissions.studentid": "S098" } } }
+    Subject.find({ _id: req.params.subcode }, { "assignments": { $elemMatch: { "submissions.studentid": req.params.sid } } }
     ).then(subs => {
+        console.log(subs)
         arr = []
         for (var i = 0; i < subs[0].assignments.length; i++) {
 
             for (var j = 0; j < subs[0].assignments[i].submissions.length; j++) {
 
-                if (subs[0].assignments[i].submissions[j].studentid == "S098") {
-                    subs[0].assignments[i].submissions[j]["name"] = "fame"
-                    subs[0].assignments[i].submissions[j]["description"] = "description"
+                if (subs[0].assignments[i].submissions[j].studentid == req.params.sid) {
+                    subs[0].assignments[i].submissions[j]["name"] = subs[0].assignments[i].assignment_name
+                    subs[0].assignments[i].submissions[j]["description"] = subs[0].assignments[i].assignment_description
                     arr.push(subs[0].assignments[i].submissions[j])
                 }
             }
@@ -1272,7 +1277,7 @@ app.get('/teacher/studentPerformance/:scode', function (req, res) {
                         }
                         Student.find({ studentid: { $in: arr } }).then(s => {
                             console.log(s)
-                            res.render("studentPerformance", { students: s })
+                            res.render("studentPerformance", { students: s, subjectid: req.params.scode })
                         })
                     })
                 }
@@ -1290,7 +1295,7 @@ app.get('/teacher/:scode', function (req, res) {
                 if (user.status == 2) {
                     Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
                         console.log(asslist)
-                        res.render("fake", { assignment: asslist })
+                        res.render("fake", { assignment: asslist, scode: req.params.scode })
                     })
                 }
             });
@@ -1318,19 +1323,22 @@ app.get('/teacher/:scode/:acode/:eval', function (req, res) {
             .then((user) => {
                 if (user.status == 2) {
                     Subject.findOne({ _id: req.params.scode }, { "assignments": { $elemMatch: { assignment_file_code: req.params.acode } } }).then(asslist => {
-                        if (req.params.eval) {
-                            arr = []
-                            for (var i = 0; i < asslist.assignments[0].submissions.length; i++) {
-                                if (asslist.assignments[0].submissions[i].evaluated) {
-                                    arr.push(asslist.assignments[0].submissions[i])
-                                }
+                        arr = []
+                        arrne = []
+                        for (var i = 0; i < asslist.assignments[0].submissions.length; i++) {
+                            if (asslist.assignments[0].submissions[i].evaluated) {
+                                arr.push(asslist.assignments[0].submissions[i])
                             }
-                            console.log(arr)
+                            else {
+                                arrne.push(asslist.assignments[0].submissions[i])
+                            }
+                        }
+                        if (req.params.eval == "1") {
+                            res.render('evaluateAssignment', { assignments: arr, assignmentcode: req.params.acode })
                         }
                         else {
-                            console.log(asslist.assignments[0].submissions)
+                            res.render('evaluateAssignment', { assignments: arrne, assignmentcode: req.params.acode })
                         }
-
                     })
 
                 }
@@ -1414,7 +1422,29 @@ app.post("/submitassignment", upload.single('file'), (req, res) => {
     })
 
 })
-
+app.post("/evaluate", function (req, res) {
+    asscode = req.body.assignmentcode
+    console.log(asscode)
+    console.log(req.body)
+    Subjects.aggregate([{ "$project": { "matchedIndex": { "$indexOfArray": ["$assignments.assignment_file_code", "17"] } } }]).then(indx => {
+        for (var i = 0; i < indx.length; i++) {
+            if (indx[i].matchedIndex >= 0) {
+                f = indx[i].matchedIndex
+            }
+        }
+        console.log(f)
+        var jsonobj2 = {}
+        jsonobj2["assignments." + f.toString() + '.submissions.$.marks'] = Number(req.body.marks)
+        jsonobj2["assignments." + f.toString() + '.submissions.$.evaluated'] = true
+        console.log(jsonobj2)
+        Subjects.updateOne({ "assignments.assignment_file_code": asscode, "assignments.submissions.answer_file_code": req.body.submissioncode }, {
+            "$set": jsonobj2
+        }).then(a => {
+            console.log(a)
+            res.redirect("/teacherHomePage")
+        })
+    })
+})
 
 
 

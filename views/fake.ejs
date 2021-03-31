@@ -65,6 +65,12 @@ The above copyright notice and this permission notice shall be included in all c
 
         <div class="content">
             <div class="container-fluid">
+                <a href="/teacher/createassignment/<%=scode%>">
+                    <button>CREATE ASSIGNMENTS</button>
+                </a>
+                <a href="/teacher/studentPerformance/<%=scode%>">
+                    <button>VIEW STUDENT PERFORMANCE</button>
+                </a>
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h3 class="card-title">Assignments</h3>
@@ -84,15 +90,20 @@ The above copyright notice and this permission notice shall be included in all c
 
                                         <span data-notify="message">
                                             <p>
-                                                <%=detail.assignemnt_description%>
+                                                <%=detail.assignment_description%>
                                             </p>
                                         </span>
                                         <div class="container-login100-form-btn">
-                                            <button type='submit' class="login100-form-btn">
-                                                View Submissions
-                                            </button>
+                                            <a href="/teacher/<%=scode%>/<%=detail.assignment_file_code%>/0">
+                                                <button class="login100-form-btn">
+                                                    View Submissions
+                                                </button>
+                                            </a>
+
                                             <a href="/file/<%= detail.assignment_file_code %>" download>
-                                                Download Assignment
+                                                <button class="login100-form-btn">
+                                                    Download Assignment
+                                                </button>
                                             </a>
                                         </div>
                                     </div>

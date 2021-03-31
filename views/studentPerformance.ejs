@@ -95,20 +95,15 @@ The above copyright notice and this permission notice shall be included in all c
                                                                     <%=detail.lastname%>
                                                             </b>
                                                         </td>
-
                                                         <td>
-                                                            <form
-                                                                action="/teacher/viewPerformance/student/<%=detail.studentid%>"
-                                                                method="POST">
-                                                                <input type="hidden" value="<%=detail.studentid%>"
-                                                                    name="sid">
-                                                                <button class="btn btn-primary  btn-sm btn-round"
-                                                                    type="submit">
+                                                            <a
+                                                                href="/teacher/viewPerformance/<%=detail.studentid%>/<%= subjectid%>">
+                                                                <button class="btn btn-primary  btn-sm btn-round">
                                                                     <i class="material-icons"
                                                                         aria-hidden="true">trending_up</i>
                                                                     View Performance
                                                                 </button>
-                                                            </form>
+                                                            </a>
                                                         </td>
 
                                                     </tr>
