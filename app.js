@@ -749,7 +749,7 @@ app.post('/viewsubjects/subjectdetial/:scode', function (req, res) {
         Subject.findOne({ _id: scode })
             .exec()
             .then((sub) => {
-                console.log(sub);
+
                 res.render('subjectprofile', { detail: [sub] });
             });
     }
@@ -857,7 +857,7 @@ app.get('/studentHomePage', function (req, res) {
 });
 app.get('/teacherHomePage', function (req, res) {
     if (req.isAuthenticated()) {
-        console.log(req.session.uniqueid);
+
         Teacher.findOne({ _id: req.session.uniqueid }, { teacherid: 1 })
             .exec()
             .then((teach) => {
@@ -868,11 +868,11 @@ app.get('/teacherHomePage', function (req, res) {
                         for (var i = 0; i < ans.length; i++) {
                             subsassigned.push(ans[i].subjectid);
                         }
-                        console.log(subsassigned);
+
                         Subject.find({ _id: { $in: subsassigned } })
                             .exec()
                             .then((ans2) => {
-                                console.log(ans2);
+
                                 colNotifs = [
                                     {
                                         message:
@@ -1294,7 +1294,7 @@ app.get('/teacher/:scode', function (req, res) {
             .then((user) => {
                 if (user.status == 2) {
                     Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
-                        console.log(asslist)
+
                         res.render("fake", { assignment: asslist, scode: req.params.scode })
                     })
                 }
@@ -1309,7 +1309,6 @@ app.get('/student/:scode', function (req, res) {
                 if (user.status == 3) {
                     Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
                         console.log(asslist)
-
                         res.render("viewPerformanceStudent", { assignment: asslist.assignments, subjectid: req.params.scode })
                     })
                 }
@@ -1322,7 +1321,8 @@ app.get('/teacher/:scode/:acode/:eval', function (req, res) {
             .exec()
             .then((user) => {
                 if (user.status == 2) {
-                    Subject.findOne({ _id: req.params.scode }, { "assignments": { $elemMatch: { assignment_file_code: req.params.acode } } }).then(asslist => {
+                    Subject.findOne({ "assignments.assignment_file_code": req.params.acode }, { assignments: { $elemMatch: { assignment_file_code: req.params.acode } } }).then(asslist => {
+                        console.log(asslist)
                         arr = []
                         arrne = []
                         for (var i = 0; i < asslist.assignments[0].submissions.length; i++) {
@@ -1423,29 +1423,40 @@ app.post("/submitassignment", upload.single('file'), (req, res) => {
 
 })
 app.post("/evaluate", function (req, res) {
+    console.log("evaluation!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     asscode = req.body.assignmentcode
-    console.log(asscode)
+    //console.log(asscode)
     console.log(req.body)
-    Subjects.aggregate([{ "$project": { "matchedIndex": { "$indexOfArray": ["$assignments.assignment_file_code", "17"] } } }]).then(indx => {
+    Subjects.aggregate([{ "$project": { "matchedIndex": { "$indexOfArray": ["$assignments.assignment_file_code", asscode] } } }]).then(indx => {
+        var f = -1
         for (var i = 0; i < indx.length; i++) {
             if (indx[i].matchedIndex >= 0) {
                 f = indx[i].matchedIndex
             }
         }
-        console.log(f)
-        var jsonobj2 = {}
-        jsonobj2["assignments." + f.toString() + '.submissions.$.marks'] = Number(req.body.marks)
-        jsonobj2["assignments." + f.toString() + '.submissions.$.evaluated'] = true
-        console.log(jsonobj2)
-        Subjects.updateOne({ "assignments.assignment_file_code": asscode, "assignments.submissions.answer_file_code": req.body.submissioncode }, {
-            "$set": jsonobj2
-        }).then(a => {
-            console.log(a)
-            res.redirect("/teacherHomePage")
+        // console.log(f)
+        Subject.findOne({ "assignments.assignment_file_code": req.body.assignmentcode }, { "assignments.submissions": 1 }).then(a => {
+            console.log(a.assignments[f].submissions)
+            for (var i = 0; i < a.assignments[f].submissions.length; i++) {
+                if (a.assignments[f].submissions[i].answer_file_code == req.body.submissioncode) {
+                    console.log(i)
+                    ind = i
+                }
+            }
+            var jsonobj2 = {}
+            jsonobj2["assignments." + f.toString() + '.submissions.' + ind.toString() + '.marks'] = Number(req.body.marks)
+            jsonobj2["assignments." + f.toString() + '.submissions.' + ind.toString() + '.evaluated'] = true
+            //console.log(jsonobj2)
+            Subjects.updateOne({ "assignments.assignment_file_code": asscode, "assignments.submissions.answer_file_code": req.body.submissioncode }, {
+                "$set": jsonobj2
+            }).then(a => {
+                //  console.log(a)
+                res.redirect("/teacherHomePage")
+            })
         })
+
     })
 })
-
 
 
 
