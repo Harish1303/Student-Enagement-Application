@@ -44,7 +44,7 @@ The above copyright notice and this permission notice shall be included in all c
 
         Tip 2: you can also add an image using data-image tag-->
             <div class="logo"><a class="simple-text logo-normal">
-                &nbsp;&nbsp;       Student Engagement Application
+                    &nbsp;&nbsp; Student Engagement Application
                 </a></div>
             <div class="container ">
                 <ul class="navbar-nav ml-auto">
@@ -88,12 +88,11 @@ The above copyright notice and this permission notice shall be included in all c
                                             <%=detail._id%>
 
                                         </p>
-                                        <h4 class="card-title text-center font-weight-bold text-capitalize">
-                                            <%=detail.subjectname%>
-                                                <small>
-
-                                                </small>
-                                        </h4>
+                                        <a href="/student/<%=detail._id%>">
+                                            <h4 class="card-title text-center font-weight-bold text-capitalize">
+                                                <%=detail.subjectname%>
+                                            </h4>
+                                        </a>
                                     </div>
                                     <div class="card-footer">
                                         <div class="stats">
@@ -113,7 +112,7 @@ The above copyright notice and this permission notice shall be included in all c
                         <div class="card-header card-header-primary">
                             <h3 class="card-title">Notifications</h3>
                             <p class="card-category">
-                                
+
                             </p>
                         </div>
                         <div class="card-body">

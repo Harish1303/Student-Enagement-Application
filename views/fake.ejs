@@ -32,10 +32,6 @@ The above copyright notice and this permission notice shall be included in all c
 </head>
 
 <body class="">
-
-
-
-
     <div class="wrapper ">
         <div class="navbar navbar-expand-lg " data-color="white" data-background-color="white"
             data-image="../assets/img/sidebar-1.jpg">
@@ -82,22 +78,22 @@ The above copyright notice and this permission notice shall be included in all c
                             <div class="coll-6">
                                 <% assignment.assignments.forEach(function(detail){ %>
                                     <h4 class="card-title">
-                                        <%=detail._id%>
+                                        <%=detail.assignment_name%>
                                     </h4>
                                     <div class="alert alert-success alert-with-icon" data-notify="container">
 
                                         <span data-notify="message">
                                             <p>
-                                                <%=detail.description%>
+                                                <%=detail.assignemnt_description%>
                                             </p>
                                         </span>
                                         <div class="container-login100-form-btn">
                                             <button type='submit' class="login100-form-btn">
-                                                View Submission
+                                                View Submissions
                                             </button>
-                                            <button type='submit' class="login100-form-btn">
-                                                Download assignment
-                                            </button>
+                                            <a href="/file/<%= detail.assignment_file_code %>" download>
+                                                Download Assignment
+                                            </a>
                                         </div>
                                     </div>
                                     <% }) %>
