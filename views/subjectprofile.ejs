@@ -135,53 +135,67 @@ The above copyright notice and this permission notice shall be included in all c
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-9">
+                        
                             <div class="card">
                                 <div class="card-header card-header-primary">
                                     <h4 class="card-title">
-                                        <%=detail[0].username%>
+                                        <b>  <%=detail[0].username%> </b>
                                     </h4>
-                                    <p class="card-category">Subject Details</p>
+                                    <h3>Subject Details</h3> 
                                 </div>
                                 <div class="card-body">
 
-
+                                    &nbsp;
+                                    &nbsp;
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="bmd-label-floating">Subject Name</label>
+                                            <label class="bmd-label-floating"style="font-size:15px">Subject Name</label>
                                             <div>
+                                                <b>
                                                 <%=detail[0].subjectname%>
+                                                </b>
                                             </div>
                                         </div>
-
+                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
+                                        <div class="col-md-3">
+                                            <label class="bmd-label-floating"style="font-size:15px">Subject Id</label>
+                                            <div>
+                                                <b> <%=detail[0]._id%></b>
+                                               
+                                            </div>
+                                        </div>
                                     </div>
+                                    <br>
+                                    
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="bmd-label-floating">Department</label>
+                                            <label class="bmd-label-floating"style="font-size:15px" >Department</label>
                                             <div>
-                                                <%=detail[0].department%>
+                                                <b> <%=detail[0].department%></b>
+                                               
                                             </div>
                                         </div>
+                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label class="bmd-label-floating">Semester</label>
+                                                
+                                                <label class="bmd-label-floating" style="font-size:15px">Semester</label>
+                                                
                                                 <div>
-                                                    <%=detail[0].semester%>
+                                                    <b><%=detail[0].semester%></b>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="bmd-label-floating">Subject Id</label>
-                                            <div>
-                                                <%=detail[0]._id%>
-                                            </div>
-                                        </div>
-
-
-
-                                    </div>
+                                    <br>
+                                    
 
 
                                     <div class="clearfix"></div>
@@ -189,9 +203,7 @@ The above copyright notice and this permission notice shall be included in all c
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-
-                        </div>
+                       
                     </div>
                 </div>
             </div>
