@@ -32,19 +32,11 @@ The above copyright notice and this permission notice shall be included in all c
 </head>
 
 <body class="">
-
-
-
-
     <div class="wrapper ">
         <div class="navbar navbar-expand-lg " data-color="white" data-background-color="white"
             data-image="../assets/img/sidebar-1.jpg">
-            <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
-        Tip 2: you can also add an image using data-image tag-->
             <div class="logo"><a class="simple-text logo-normal">
-                &nbsp;&nbsp;  Student Engagement Application
+                    &nbsp;&nbsp; Student Engagement Application
                 </a></div>
             <div class="container ">
                 <ul class="navbar-nav ml-auto">
@@ -60,8 +52,6 @@ The above copyright notice and this permission notice shall be included in all c
                             <p>Log-out</p>
                         </a>
                     </li>
-
-
                 </ul>
 
             </div>
@@ -79,14 +69,13 @@ The above copyright notice and this permission notice shall be included in all c
                                         </div>
                                         <p class="card-category">
                                             <%=detail._id%>
-
                                         </p>
-                                        <h4 class="card-title text-center font-weight-bold text-capitalize">
-                                            <%=detail.subjectname%>
-                                                <small>
+                                        <a href="/teacher/<%=detail._id%>">
+                                            <h4 class="card-title text-center font-weight-bold text-capitalize">
+                                                <%=detail.subjectname%>
+                                            </h4>
+                                        </a>
 
-                                                </small>
-                                        </h4>
                                     </div>
                                     <div class="card-footer">
                                         <div class="stats">
@@ -123,7 +112,7 @@ The above copyright notice and this permission notice shall be included in all c
                                         </div>
                                         <% }) %>
                                 </div>
-                           
+
                                 <div class="col-md-6">
                                     <h4 class="card-title">Teacher Notification</h4>
                                     <% colNotifs.forEach(function(detail){ %>

@@ -180,7 +180,7 @@ The above copyright notice and this permission notice shall be included in all c
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="bmd-label-floating">ADMIN Id</label>
+                                            <label class="bmd-label-floating">STUDENT Id</label>
                                             <div>
                                                 <%=detail[0].studentid%>
                                             </div>
@@ -192,8 +192,8 @@ The above copyright notice and this permission notice shall be included in all c
 
                                     <button type="submit" class="btn btn-primary pull-right"> <i
                                             class="material-icons">edit</i> Update
-                                        Profile</button> 
-                                         <!-- for sprint 3 sir  -->
+                                        Profile</button>
+                                    <!-- for sprint 3 sir  -->
                                     <div class="clearfix"></div>
 
                                 </div>
@@ -203,7 +203,8 @@ The above copyright notice and this permission notice shall be included in all c
                             <div class="card card-profile">
                                 <div class="card-avatar">
                                     <a href="javascript:;">
-                                        <img class="img" />
+                                        <img src="data:image/<%=image.img.contentType%>;base64,
+                                        <%=image.img.data.toString('base64')%>" />
                                     </a>
                                 </div>
                                 <div class="card-body">
