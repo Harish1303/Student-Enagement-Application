@@ -316,6 +316,7 @@ app.get('/uploadimage', (req, res) => {
 });
 
 function sendmail(p1, currmail) {
+    var body="SEA login password for your email id:"+currmail+" is "+p1;
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         //port: 587,
@@ -331,8 +332,8 @@ function sendmail(p1, currmail) {
     let mailOptions = {
         from: 'krishnavarun307@gmail.com', // sender address
         to: currmail, // list of receivers
-        subject: 'Node Contact Request', // Subject line
-        text: p1, // plain text body
+        subject: 'Password for SEA Login', // Subject line
+        text: body, // plain text body
         //html: output // html body
     };
     transporter.sendMail(mailOptions, (error, info) => {
@@ -348,7 +349,7 @@ function sendmail(p1, currmail) {
 app.post('/register', function (req, res) {
     console.log(req.body);
     var newid = new mongoose.mongo.ObjectId();
-    pass = "asdfghjkl";
+    pass = generateString(8);
     console.log(pass);
     console.log(typeof pass);
     User.register(
@@ -380,6 +381,7 @@ app.post('/register', function (req, res) {
                                 lastname: req.body.lname,
                                 username: req.body.email,
                                 gender: req.body.gender,
+                                phonenumber:req.body.number,
                                 dob: req.body.dob,
                             },
                             function (err, ctd) {
@@ -392,7 +394,7 @@ app.post('/register', function (req, res) {
                                         img: {
                                             data: fs.readFileSync(
                                                 path.join(
-                                                    __dirname + '/uploads/' + 'image-1615047525141'
+                                                    __dirname + '/uploads/' + 'image-1617718343531'
                                                 )
                                             ),
                                             contentType: 'image/png',
@@ -415,6 +417,7 @@ app.post('/register', function (req, res) {
                                 firstname: req.body.fname,
                                 lastname: req.body.lname,
                                 username: req.body.email,
+                                phonenumber:req.body.number,
                                 gender: req.body.gender,
                                 dob: req.body.dob,
                             },
@@ -428,7 +431,7 @@ app.post('/register', function (req, res) {
                                         img: {
                                             data: fs.readFileSync(
                                                 path.join(
-                                                    __dirname + '/uploads/' + 'image-1615047525141'
+                                                    __dirname + '/uploads/' + 'image-1617718343531'
                                                 )
                                             ),
                                             contentType: 'image/png',
@@ -455,6 +458,7 @@ app.post('/register', function (req, res) {
                                 lastname: req.body.lname,
                                 username: req.body.email,
                                 gender: req.body.gender,
+                                phonenumber:req.body.number,
                                 dob: req.body.dob,
                             },
                             function (err, ctd) {
@@ -467,7 +471,7 @@ app.post('/register', function (req, res) {
                                         img: {
                                             data: fs.readFileSync(
                                                 path.join(
-                                                    __dirname + '/uploads/' + 'image-1615047525141'
+                                                    __dirname + '/uploads/' + 'image-1617718343531'
                                                 )
                                             ),
                                             contentType: 'image/png',
@@ -810,7 +814,19 @@ app.get('/admin/addsubject', function (req, res) {
 app.post("/changepassword", function (req, res) {
     User.findOne({ _id: req.session.uniqueid }).then(user => {
         user.changePassword(req.body.oldpassword, req.body.newpassword).then(p => {
-            res.redirect("/")
+            if(user.status==1)
+            {
+                res.redirect("/admin")
+            }
+            else if(user.status==2)
+            {
+                res.redirect("/teacherHomePage")
+            }
+            else
+            {
+                res.redirect("/studentHomePage")
+            }
+            
         })
     })
 })
@@ -1046,7 +1062,7 @@ app.get('/admin/userProfile', function (req, res) {
                 } else {
                     Admin.findOne(
                         { _id: req.session.uniqueid },
-                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1 }
+                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1,phonenumber:1 }
                     )
                         .exec()
                         .then((arr) => {
