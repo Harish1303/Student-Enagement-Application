@@ -92,7 +92,7 @@ The above copyright notice and this permission notice shall be included in all c
             <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
-                        <a class="navbar-brand" href="#">Dashboard</a>
+                        <a class="navbar-brand" ></a>Teacher</a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -202,7 +202,8 @@ The above copyright notice and this permission notice shall be included in all c
                             <div class="card card-profile">
                                 <div class="card-avatar">
                                     <a href="javascript:;">
-                                        <img class="img" />
+                                        <img src="data:image/<%=image.img.contentType%>;base64,
+                                        <%=image.img.data.toString('base64')%>" />
                                     </a>
                                 </div>
                                 <div class="card-body">
