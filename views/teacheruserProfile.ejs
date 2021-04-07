@@ -39,13 +39,13 @@ The above copyright notice and this permission notice shall be included in all c
                 Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
         
                 Tip 2: you can also add an image using data-image tag-->
-            <div class="logo"><a class="simple-text logo-normal">
-                &nbsp;&nbsp; Student Engagement Application
+            <div class="logo"><a class="simple-text logo-normal" href="/teacherHomePage">
+                    &nbsp;&nbsp; Student Engagement Application
                 </a></div>
             <div class="container ">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item ">
-                        <a class="nav-link" href="teacher/userProfile">
+                        <a class="nav-link" href="/teacher/userProfile">
                             <i class="material-icons">person</i>
                             <p>User Profile</p>
                         </a>
@@ -148,15 +148,16 @@ The above copyright notice and this permission notice shall be included in all c
                                 <div class="card-body">
                                     <p class="card-description">
                                     <form action="/uploadimage" method="POST" enctype="multipart/form-data">
-                                        <input type="file" id="image" name="image" value="" accept="image/jpeg,image/x-png,image/gif*"required />
+                                        <input type="file" id="image" name="image" value=""
+                                            accept="image/jpeg,image/x-png,image/gif*" required />
 
                                         <button type="submit" class="btn btn-primary "> <i
                                                 class="material-icons">edit</i> Update Picture</button>
-                                            </form>
-                                        </p>
+                                    </form>
+                                    </p>
                                 </div>
-                               
-    
+
+
                             </div>
                             <div class="card-body">
                                 <p class="card-description"></p>

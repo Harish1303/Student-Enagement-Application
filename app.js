@@ -322,7 +322,7 @@ app.get('/uploadimage', (req, res) => {
 });
 
 function sendmail(p1, currmail) {
-    var body="SEA login password for your email id:"+currmail+" is "+p1;
+    var body = "SEA login password for your email id:" + currmail + " is " + p1;
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         //port: 587,
@@ -387,7 +387,7 @@ app.post('/register', function (req, res) {
                                 lastname: req.body.lname,
                                 username: req.body.email,
                                 gender: req.body.gender,
-                                phonenumber:req.body.number,
+                                phonenumber: req.body.number,
                                 dob: req.body.dob,
                             },
                             function (err, ctd) {
@@ -423,7 +423,7 @@ app.post('/register', function (req, res) {
                                 firstname: req.body.fname,
                                 lastname: req.body.lname,
                                 username: req.body.email,
-                                phonenumber:req.body.number,
+                                phonenumber: req.body.number,
                                 gender: req.body.gender,
                                 dob: req.body.dob,
                             },
@@ -464,7 +464,7 @@ app.post('/register', function (req, res) {
                                 lastname: req.body.lname,
                                 username: req.body.email,
                                 gender: req.body.gender,
-                                phonenumber:req.body.number,
+                                phonenumber: req.body.number,
                                 dob: req.body.dob,
                             },
                             function (err, ctd) {
@@ -820,19 +820,16 @@ app.get('/admin/addsubject', function (req, res) {
 app.post("/changepassword", function (req, res) {
     User.findOne({ _id: req.session.uniqueid }).then(user => {
         user.changePassword(req.body.oldpassword, req.body.newpassword).then(p => {
-            if(user.status==1)
-            {
+            if (user.status == 1) {
                 res.redirect("/admin")
             }
-            else if(user.status==2)
-            {
+            else if (user.status == 2) {
                 res.redirect("/teacherHomePage")
             }
-            else
-            {
+            else {
                 res.redirect("/studentHomePage")
             }
-            
+
         })
     })
 })
@@ -1068,7 +1065,7 @@ app.get('/admin/userProfile', function (req, res) {
                 } else {
                     Admin.findOne(
                         { _id: req.session.uniqueid },
-                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1,phonenumber:1 }
+                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1, phonenumber: 1 }
                     )
                         .exec()
                         .then((arr) => {
@@ -1090,7 +1087,7 @@ app.post('/admin/viewdetails/student/:sid', function (req, res) {
     if (req.isAuthenticated()) {
         Student.findOne(
             { studentid: req.params.sid },
-            { firstname: 1, lastname: 1, gender: 1, dob: 1, studentid: 1, phonenumber: 1 }
+            { firstname: 1, lastname: 1, gender: 1, dob: 1, studentid: 1, phonenumber: 1, username: 1 }
         )
             .exec()
             .then((arr) => {
@@ -1110,11 +1107,12 @@ app.post('/admin/viewdetails/teacher/:tid', function (req, res) {
     if (req.isAuthenticated()) {
         Teacher.findOne(
             { teacherid: req.params.tid },
-            { firstname: 1, lastname: 1, gender: 1, dob: 1, teacherid: 1 }
+            { firstname: 1, lastname: 1, gender: 1, dob: 1, teacherid: 1, username: 1 }
         )
             .exec()
             .then((arr) => {
                 ar = [arr];
+                console.log(ar)
                 Teacher.findOne({ teacherid: req.params.tid }, { _id: 1 }).then(teach => {
                     imgModel.findOne({ _id: teach._id }).then(img => {
                         res.render('viewdetailsteacher', { detail: ar, image: img });

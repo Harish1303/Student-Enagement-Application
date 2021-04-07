@@ -92,7 +92,9 @@ The above copyright notice and this permission notice shall be included in all c
             <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
-                        <a class="navbar-brand" >Student </a>
+                        <a class="navbar-brand">
+                            <%=detail[0].username%>
+                        </a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -139,9 +141,10 @@ The above copyright notice and this permission notice shall be included in all c
                             <div class="card">
                                 <div class="card-header card-header-primary">
                                     <h4 class="card-title">
-                                        <%=detail[0].username%>
+                                        <%=detail[0].firstname%>
+                                            <%=detail[0].lastname%>
                                     </h4>
-                                    <p class="card-category">Your Profile</p>
+                                    <p class="card-category">User Profile</p>
                                 </div>
                                 <div class="card-body">
 

@@ -18,7 +18,7 @@ The above copyright notice and this permission notice shall be included in all c
     <link rel="icon" type="image/png" href="/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        SES
+        SEA
     </title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -135,79 +135,85 @@ The above copyright notice and this permission notice shall be included in all c
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        
-                            <div class="card">
-                                <div class="card-header card-header-primary">
-                                    <h4 class="card-title">
-                                        Subject Details
-                                    </h4>
- 
-                                </div>
-                                <div class="card-body">
 
+                        <div class="card">
+                            <div class="card-header card-header-primary">
+                                <h4 class="card-title">
+                                    Subject Details
+                                </h4>
+
+                            </div>
+                            <div class="card-body">
+
+                                &nbsp;
+                                &nbsp;
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="bmd-label-floating" style="font-size:15px">Subject Name</label>
+                                        <div>
+                                            <b>
+                                                <%=detail[0].subjectname%>
+                                            </b>
+                                        </div>
+                                    </div>
                                     &nbsp;
                                     &nbsp;
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="bmd-label-floating"style="font-size:15px">Subject Name</label>
+                                    &nbsp;
+                                    &nbsp;
+                                    <div class="col-md-3">
+                                        <label class="bmd-label-floating" style="font-size:15px">Subject Id</label>
+                                        <div>
+                                            <b>
+                                                <%=detail[0]._id%>
+                                            </b>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="bmd-label-floating" style="font-size:15px">Department</label>
+                                        <div>
+                                            <b>
+                                                <%=detail[0].department%>
+                                            </b>
+
+                                        </div>
+                                    </div>
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+
+                                            <label class="bmd-label-floating" style="font-size:15px">Semester</label>
+
                                             <div>
                                                 <b>
-                                                <%=detail[0].subjectname%>
+                                                    <%=detail[0].semester%>
                                                 </b>
-                                            </div>
-                                        </div>
-                                        &nbsp;
-                                        &nbsp;
-                                        &nbsp;
-                                        &nbsp;
-                                        <div class="col-md-3">
-                                            <label class="bmd-label-floating"style="font-size:15px">Subject Id</label>
-                                            <div>
-                                                <b> <%=detail[0]._id%></b>
-                                               
+
                                             </div>
                                         </div>
                                     </div>
-                                    <br>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="bmd-label-floating"style="font-size:15px" >Department</label>
-                                            <div>
-                                                <b> <%=detail[0].department%></b>
-                                               
-                                            </div>
-                                        </div>
-                                        &nbsp;
-                                        &nbsp;
-                                        &nbsp;
-                                        &nbsp;
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                
-                                                <label class="bmd-label-floating" style="font-size:15px">Semester</label>
-                                                
-                                                <div>
-                                                    <b><%=detail[0].semester%></b>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    
-
-
-                                    <div class="clearfix"></div>
-
                                 </div>
+                                <br>
+
+
+
+                                <div class="clearfix"></div>
+
                             </div>
                         </div>
-                       
                     </div>
+
                 </div>
             </div>
         </div>
+    </div>
     </div>
     </div>
     <footer class="footer">
