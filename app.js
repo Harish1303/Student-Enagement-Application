@@ -1185,6 +1185,7 @@ app.post('/admineditUserProfile', function (req, res) {
     console.log(req.body)
     if (req.isAuthenticated()) {
         Admin.findOneAndUpdate({ _id: req.session.uniqueid }, {
+            gender: req.body.gender,
             phonenumber: req.body.phonenumber,
             dob: req.body.dob
         }).then(admin => {
