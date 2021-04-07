@@ -281,7 +281,7 @@ app.get('/student/change_password', function (req, res) {
     res.render('studentChangePassword');
 });
 app.get('/teacher/change_password', function (req, res) {
-    res.render('studentChangePassword');
+    res.render('teacherChangePassword');
 });
 
 app.get('/admin/newStudent', function (req, res) {
