@@ -114,7 +114,7 @@ The above copyright notice and this permission notice shall be included in all c
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile"
+                                <a class="nav-link" href="/admin/userProfile" id="navbarDropdownProfile"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="material-icons">person</i>
                                     <p class="d-lg-none d-md-block">
@@ -167,24 +167,21 @@ The above copyright notice and this permission notice shall be included in all c
                                                         </select>
                                                     </div>
                                                 </div>
-                                            
+                                        
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="bmd-label-floating">Date of Birth</label>
-                                                        <input type="text" class="form-control"  name="dob"
+                                                        <input type="date" class="form-control" name="dob" min="1960-01-01"
+                                                        required
                                                             value="<%=detail.dob%>">
-
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="bmd-label-floating">Phone Number</label>
-                                                        <input type="text" class="form-control" pattern="[789][0-9]{9}"  name="phonenumber"
-                                                       
-                                                            value="<%=detail.phonenumber%>">
-
-                                                    </div>
+                                                <div class="col-md-3"><div class="form-group">
+                                                    <label class="bmd-label-floating">Phone Number</label>
+                                                    <input type="number" class="form-control" name="phonenumber"
+                                                        value="<%=detail.phonenumber%>" pattern="[789][0-9]{9}" minlength="10" maxlength="10" required>
                                                 </div>
+                                            </div>
                                             </div>
                                             
 
