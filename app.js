@@ -277,6 +277,12 @@ app.get('/forgotpassword', function (req, res) {
 app.get('/admin/change_password', function (req, res) {
     res.render('change_password');
 });
+app.get('/student/change_password', function (req, res) {
+    res.render('studentChangePassword');
+});
+app.get('/teacher/change_password', function (req, res) {
+    res.render('studentChangePassword');
+});
 
 app.get('/admin/newStudent', function (req, res) {
     if (req.isAuthenticated()) {
@@ -1166,6 +1172,7 @@ app.post('/studenteditUserProfile', function (req, res) {
     console.log(req.body)
     if (req.isAuthenticated()) {
         Student.findOneAndUpdate({ _id: req.session.uniqueid }, {
+            gender: req.body.gender,
             phonenumber: req.body.phonenumber,
             dob: req.body.dob
         }).then(stud => {
@@ -1190,6 +1197,7 @@ app.post('/teachereditUserProfile', function (req, res) {
     console.log(req.body)
     if (req.isAuthenticated()) {
         Teacher.findOneAndUpdate({ _id: req.session.uniqueid }, {
+            gender: req.body.gender,
             phonenumber: req.body.phonenumber,
             dob: req.body.dob
         }).then(teacher => {
