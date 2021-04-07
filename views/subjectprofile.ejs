@@ -169,6 +169,26 @@ The above copyright notice and this permission notice shall be included in all c
 
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-md-3">
+                                        <td class="td-actions text-right text-center">
+                                            <form action="/viewsubjects/subjectdetial/<%=detail[0]._id%>"
+                                                method="POST">
+                                                <input type="hidden" value="<%=detail[0]._id%>" name="sid">
+                                                <input type="hidden" value="<%=detail[0]._subjectname%>"
+                                                    name="sub_name">
+                                                <button class="btn btn-primary  btn-sm"
+                                                    type="submit"
+                                                    formaction="/admin/teachersassigned/<%=detail[0]._id%>">
+                                                    <i class="material-icons"
+                                                        aria-hidden="true">how_to_reg</i>
+                                                    Teachers Assigned
+                                                </button>
+                                                
+                                            </form>
+        
+        
+                                        </td></div>
                                 </div>
                                 <br>
 
@@ -199,8 +219,28 @@ The above copyright notice and this permission notice shall be included in all c
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <td class="td-actions text-right text-center">
+                                            <form action="/viewsubjects/subjectdetial/<%=detail[0]._id%>"
+                                                method="POST">
+                                                <input type="hidden" value="<%=detail[0]._id%>" name="sid">
+                                                <input type="hidden" value="<%=detail[0]._subjectname%>"
+                                                    name="sub_name">
+                                                <button class="btn btn-primary  btn-sm "
+                                                    type="submit"
+                                                    formaction="/admin/studentsenrolled/<%=detail[0]._id%>">
+                                                    <i class=" material-icons"
+                                                        aria-hidden="true">people</i>
+                                                    Students Enrolled
+                                                </button>
+                                            </form>
+        
+        
+                                        </td></div>
+                                    
                                 </div>
                                 <br>
+                                
 
 
 
