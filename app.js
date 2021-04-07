@@ -281,7 +281,7 @@ app.get('/student/change_password', function (req, res) {
     res.render('studentChangePassword');
 });
 app.get('/teacher/change_password', function (req, res) {
-    res.render('studentChangePassword');
+    res.render('teacherChangePassword');
 });
 
 app.get('/admin/newStudent', function (req, res) {
@@ -1185,6 +1185,7 @@ app.post('/admineditUserProfile', function (req, res) {
     console.log(req.body)
     if (req.isAuthenticated()) {
         Admin.findOneAndUpdate({ _id: req.session.uniqueid }, {
+            gender: req.body.gender,
             phonenumber: req.body.phonenumber,
             dob: req.body.dob
         }).then(admin => {
