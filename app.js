@@ -9,9 +9,6 @@ var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 const nodemailer = require('nodemailer');
-const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
-const e = require('express');
-const { Console } = require('console');
 const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 function generateString(length) {
@@ -1265,9 +1262,10 @@ app.get('/logout', function (req, res) {
 app.get('/teacher/viewPerformance/:sid/:subcode', function (req, res) {
     console.log(req.params.sid)
     console.log(req.params.subcode)
-    Subject.find({ _id: req.params.subcode }, { "assignments": { $elemMatch: { "submissions.studentid": req.params.sid } } }
+    Subject.find({ _id: req.params.subcode }
     ).then(subs => {
-        console.log(subs)
+        console.log("whoho")
+        console.log(subs[0].assignments)
         arr = []
         for (var i = 0; i < subs[0].assignments.length; i++) {
 
@@ -1330,9 +1328,65 @@ app.get('/student/:scode', function (req, res) {
             .exec()
             .then((user) => {
                 if (user.status == 3) {
-                    Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
-                        console.log(asslist)
-                        res.render("viewPerformanceStudent", { assignment: asslist.assignments, subjectid: req.params.scode })
+                    Student.findOne({ _id: req.session.uniqueid }).then(stud => {
+                        studid = stud.studentid
+                        Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
+                            ans = []
+                            console.log(asslist.assignments)
+                            for (var i = 0; i < asslist.assignments.length; i++) {
+                                s = asslist.assignments[i].submissions
+                                var found = 0
+                                for (var j = 0; j < s.length; j++) {
+                                    if (s[j].studentid == studid) {
+                                        found = 1
+                                        break
+                                    }
+                                }
+                                if (found == 0) {
+                                    ans.push(asslist.assignments[i])
+                                }
+                            }
+                            console.log("HHH")
+                            console.log(ans)
+                            res.render("viewPerformanceStudent", { assignment: ans, subjectid: req.params.scode })
+                        })
+                    })
+                }
+            });
+    }
+});
+app.get('/student/:scode/evaluated', function (req, res) {
+    if (req.isAuthenticated()) {
+        User.findOne({ _id: req.session.uniqueid })
+            .exec()
+            .then((user) => {
+                if (user.status == 3) {
+                    Student.findOne({ _id: req.session.uniqueid }).then(stud => {
+                        studid = stud.studentid
+                        Subject.findOne({ _id: req.params.scode }, { assignments: 1 }).then(asslist => {
+                            ans = []
+                            console.log(asslist.assignments)
+                            for (var i = 0; i < asslist.assignments.length; i++) {
+                                s = asslist.assignments[i].submissions
+                                var found = 0
+                                for (var j = 0; j < s.length; j++) {
+                                    if (s[j].studentid == studid) {
+                                        if (s[j].marks) {
+                                            asslist.assignments[i].marksob = s[j].marks
+                                        }
+                                        else {
+                                            asslist.assignments[i].marksob = 'Not Yet Evaluated'
+                                        }
+                                        ans.push(asslist.assignments[i])
+                                        found = 1
+                                        break
+                                    }
+                                }
+                            }
+                            console.log("HHH")
+                            console.log(ans)
+                            res.render("results", { assignment: ans, subjectid: req.params.scode })
+                        })
                     })
                 }
             });
