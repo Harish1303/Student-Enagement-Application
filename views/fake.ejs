@@ -66,11 +66,12 @@ The above copyright notice and this permission notice shall be included in all c
         <div class="content">
             <div class="container-fluid">
                 <a href="/teacher/createassignment/<%=scode%>">
-                    <button>CREATE ASSIGNMENTS</button>
+                    <button type="submit" class="btn btn-success pull-centre">CREATE ASSIGNMENTS</button>
                 </a>
-                <a href="/teacher/studentPerformance/<%=scode%>">
-                    <button>VIEW STUDENT PERFORMANCE</button>
+                &nbsp;                <a href="/teacher/studentPerformance/<%=scode%>">
+                    <button type="submit" class="btn btn-success pull-centre">VIEW STUDENT PERFORMANCE</button>
                 </a>
+                
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h3 class="card-title">Assignments</h3>
@@ -84,7 +85,7 @@ The above copyright notice and this permission notice shall be included in all c
                             <div class="coll-6">
                                 <% assignment.assignments.forEach(function(detail){ %>
                                     <h4 class="card-title">
-                                        <%=detail.assignment_name%>
+                                       <b><%=detail.assignment_name%></b> 
                                     </h4>
                                     <div class="alert alert-success alert-with-icon" data-notify="container">
 
@@ -95,13 +96,13 @@ The above copyright notice and this permission notice shall be included in all c
                                         </span>
                                         <div class="container-login100-form-btn">
                                             <a href="/teacher/<%=scode%>/<%=detail.assignment_file_code%>/0">
-                                                <button class="login100-form-btn">
+                                                <button type="submit" class="btn btn-primary pull-centre">
                                                     View Submissions
                                                 </button>
                                             </a>
 
                                             <a href="/file/<%= detail.assignment_file_code %>" download>
-                                                <button class="login100-form-btn">
+                                                <button type="submit" class="btn btn-primary pull-centre">
                                                     Download Assignment
                                                 </button>
                                             </a>

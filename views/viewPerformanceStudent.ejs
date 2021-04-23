@@ -81,7 +81,7 @@ The above copyright notice and this permission notice shall be included in all c
 
                         <p class="card-category">
                             <a href="/student/<%=subjectid%>/evaluated">
-                                <button>View Submissions</button></a>
+                                <button type="submit" class="btn btn-success pull-left">View Submissions</button></a>
                         </p>
                     </div>
                     <div class="card-body">
@@ -91,7 +91,7 @@ The above copyright notice and this permission notice shall be included in all c
 
                                 <% assignment.forEach(function(detail){ %>
                                     <h4 class="card-title">
-                                        <%=detail.assignment_name%>
+                                        <b><%=detail.assignment_name%></b>
                                     </h4>
 
 
@@ -110,16 +110,16 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="container-login100-form-btn">
                                             <form action="/submitassignment" method="POST"
                                                 enctype="multipart/form-data">
-                                                <input type="file" id="image" name="file" value="" required />
+                                                <input type="file" id="test" accept=".pdf,.doc" name="file" value="" required />
                                                 <input type="text" name="lathcore" value="aa" hidden>
                                                 <input type="text" name="subjectid" value="<%=subjectid%>" hidden>
                                                 <input type="text" name="assignmentcode"
                                                     value="<%=detail.assignment_file_code%>" hidden>
-                                                <button type="submit"> SUBMIT</button>
+                                                <button type="submit" class="btn btn-primary pull-centre"> SUBMIT</button>
                                             </form>
-                                            <%=detail.assignment_file_code%>
+                                            
                                                 <a href="/file/<%= detail.assignment_file_code %>" download>
-                                                    Download Assignment
+                                                    <button type="submit" class="btn btn-primary pull-right">Download Assignment</button>
                                                 </a>
 
                                         </div>

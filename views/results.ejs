@@ -90,27 +90,27 @@ The above copyright notice and this permission notice shall be included in all c
 
                                 <% assignment.forEach(function(detail){ %>
                                     <h4 class="card-title">
-                                        <%=detail.assignment_name%>
+                                       <b><%=detail.assignment_name%></b>
                                     </h4>
 
 
                                     <div class="alert alert-success alert-with-icon" data-notify="container">
                                         <span data-notify="message">
-                                            <p>
+                                            <h4>
                                                 <%=detail.assignment_description%>
-                                            </p>
+                                            </h4>
 
                                         </span>
                                         <div class="container-login100-form-btn">
-                                            <h6>
-                                                <%=detail.marksob%>
-                                            </h6>
+                                            <h5>
+                                              Marks Obtained: <%=detail.marksob%>
+                                            </h5>
                                         </div>
                                         <div class="container-login100-form-btn">
 
 
                                             <a href="/file/<%= detail.assignment_file_code %>" download>
-                                                Download Assignment
+                                                <button type="submit" class="btn btn-primary pull-right">Download Assignment</button>
                                             </a>
 
                                         </div>
