@@ -84,21 +84,22 @@ The above copyright notice and this permission notice shall be included in all c
 
                                 <% assignment.forEach(function(detail){ %>
                                     <h4 class="card-title">
-                                        <%=detail.name%>
+                                       <b><%=detail.name%></b> 
                                     </h4>
 
 
                                     <div class="alert alert-success alert-with-icon" data-notify="container">
                                         <span data-notify="message">
-                                            <p>
+                                            <h4>
                                                 <%=detail.description%>
-                                            </p>
+                                            </h4>
 
                                         </span>
+                                        &nbsp; 
                                         <div class="container-login100-form-btn">
-                                            <h6>
-                                                Marks ObTAINED : <%=detail.marks%>
-                                            </h6>
+                                            <h5>
+                                                Marks Obtained : <%=detail.marks%>
+                                            </h5>
 
                                         </div>
 
