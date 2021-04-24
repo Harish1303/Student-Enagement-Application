@@ -161,7 +161,7 @@ The above copyright notice and this permission notice shall be included in all c
 
                                         <div class="form-group">
                                             <label>Mobile Number</label>
-                                            <input data-validate="Valid mobile number required" class="form-control"
+                                            <input data-validate="Valid mobile number required" class="form-control"pattern="[7-9]{1}[0-9]{9}
                                                 type="number" name="number" placeholder="" minlength="10" maxlength="10"
                                                 required>
                                         </div>
@@ -169,7 +169,7 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>Date of Birth</label>
                                             <input data-validate="Valid date required: dd-mm-yyyy " class="form-control"
-                                                type="date" min="2000-01-01" name="dob" required>
+                                                type="date" min="2000-01-01" max="2021-04-27"name="dob" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>

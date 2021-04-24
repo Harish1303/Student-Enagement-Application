@@ -105,7 +105,7 @@ The above copyright notice and this permission notice shall be included in all c
                                             </td>
                                             <form action="/evaluate" method="POST">
                                                 <td>
-                                                    <input type="text" class="form-control" name="marks">
+                                                    <input type="number" class="form-control" name="marks" required min="0"max="10">
                                                     <input type="text" value="<%=detail.answer_file_code%>"
                                                         name="submissioncode" hidden>
                                                     <input type="text" name="assignmentcode" value="<%=assignmentcode%>"
