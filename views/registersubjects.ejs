@@ -149,7 +149,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                     subject</label>
                                                 <input type="text" class="form-control" id="exampleInputEmail1"
                                                     aria-describedby="emailHelp" placeholder="Eg: 15CSE311"
-                                                    name="scode" required>
+                                                    name="scode" pattern="[0-9]{2}[A-Z]{3}[0-9]{3}" required>
 
                                             </div>
                                         </div>
@@ -163,12 +163,16 @@ The above copyright notice and this permission notice shall be included in all c
 
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Enter the name of the Department the
-                                                    subject is to be taught by</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp"
-                                                    placeholder="Eg: Department of Mathematics" name="dept" required>
-
+                                                <label>Department Name</label>
+                                                <select class="form-control" data-style="btn btn-link" name="dept">
+                                                    <option value="Department of Chemistry">Department of Chemistry</option>
+                                                    <option value="Department of Visual Media and Communication">Department of Visual Media and Communication</option>
+                                                    <option value="Department of Commerce and Management">Department of Commerce and Management</option>
+                                                    <option value="Department of English">Department of English</option>
+                                                    <option value="Department of Computer Science">Department of Computer Science</option>
+                                                    <option value="Department of Mathematics">Department of Mathematics</option>
+                                                    <option value="Department of Physics">Department of Physics</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -176,7 +180,7 @@ The above copyright notice and this permission notice shall be included in all c
                                                 <label for="exampleInputEmail1">Enter the semester the subject is
                                                     offered to</label>
                                                 <input type="number" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp" placeholder="Eg: 6" name="sem" required>
+                                                    aria-describedby="emailHelp" placeholder="Eg: 6" pattern ="[1-8]{1}" title = "enter a sem from 1 to 8" name="sem" required>
                                             </div>
                                         </div>
 
