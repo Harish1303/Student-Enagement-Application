@@ -150,13 +150,13 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>First Name</label>
                                             <input data-validate="Valid first name required: example abc"
-                                                class="form-control" type="text" name="fname" placeholder=""pattern="[a-zA-Z]+"title="Enter a valid first name" required>
+                                                class="form-control" type="text" name="fname" placeholder="" pattern="^([A-Za-z]+[,.]?[ ]?|[A-Za-z]+['-]?)+$" title="Enter a valid first name" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Last Name</label>
                                             <input data-validate="Valid last name required: example abc"
-                                                class="form-control" type="text" name="lname" placeholder="" pattern="[a-zA-Z]+"title="Enter a valid last name" required>
+                                                class="form-control" type="text" name="lname" placeholder="" pattern="^([A-Za-z]+[,.]?[ ]?|[A-Za-z]+['-]?)+$" title="Enter a valid last name" required>
                                         </div>
 
                                         <div class="form-group">
@@ -198,14 +198,20 @@ The above copyright notice and this permission notice shall be included in all c
                                                 class="form-control" type="email" name="email" required>
                                         </div>
                                         <div class="form-group">
-                                            <label>Department</label>
-                                            <input class="form-control"
-                                                data-validate="Valid Department required! (example CSE) " type="text"
-                                                name="dept" required>
-                                        </div>
+                                            <label>Department Name</label>
+                                            <select class="form-control" data-style="btn btn-link" name="dept">
+                                                <option value="Department of Chemistry">Department of Chemistry</option>
+                                                <option value="Department of Visual Media and Communication">Department of Visual Media and Communication</option>
+                                                <option value="Department of Commerce and Management">Department of Commerce and Management</option>
+                                                <option value="Department of English">Department of English</option>
+                                                <option value="Department of Computer Science">Department of Computer Science</option>
+                                                <option value="Department of Mathematics">Department of Mathematics</option>
+                                                <option value="Department of Physics">Department of Physics</option>
+                                            </select>
+                                        </div>  
                                         <div class="form-group">
                                             <label></label>
-                                            <input class="form-control" type="text" value="1" hidden name="semester" required>
+                                            <input class="form-control" type="text" value="1" hidden name="semester" pattern ="[1-8]{1}" title="Enter a sem from 1 to 6" required>
                                         </div>
                                         <div class="form-group">
                                             <input data-validate="Valid status required! (example student)"
