@@ -1130,7 +1130,7 @@ app.get('/admin/editUserProfile', function (req, res) {
                 } else {
                     Admin.findOne(
                         { _id: req.session.uniqueid },
-                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1 }
+                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1,phonenumber:1 }
                     )
                         .exec()
                         .then((arr) => {
