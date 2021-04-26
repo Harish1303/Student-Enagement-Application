@@ -150,13 +150,13 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>First Name</label>
                                             <input data-validate="Valid first name required: example abc"
-                                                class="form-control" type="text" name="fname"  placeholder=""pattern="[a-zA-Z]+"title="Enter a valid first name" minlength="3" maxlength="15" required>
+                                                class="form-control" type="text" name="fname"  placeholder=""pattern="^([A-Za-z]+[,.]?[ ]?|[A-Za-z]+['-]?)+$"title="Enter a valid first name" minlength="3" maxlength="15" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Last Name</label>
                                             <input data-validate="Valid last name required: example abc"
-                                                class="form-control" type="text" name="lname" placeholder=""  pattern="[a-zA-Z]+"title="Enter a valid first name" minlength="3" maxlength="15" required>
+                                                class="form-control" type="text" name="lname" placeholder=""  pattern="^([A-Za-z]+[,.]?[ ]?|[A-Za-z]+['-]?)+$"title="Enter a valid first name" minlength="3" maxlength="15" required>
                                         </div>
 
                                         <div class="form-group">
@@ -208,6 +208,9 @@ The above copyright notice and this permission notice shall be included in all c
                                                 <option value="Department of Computer Science">Department of Computer Science</option>
                                                 <option value="Department of Mathematics">Department of Mathematics</option>
                                                 <option value="Department of Physics">Department of Physics</option>
+                                                <option value="Department of Electronics and Communication">Department of Electronics and Communication</option>
+                                                <option value="Department of Electronics and Electrical">Department of Electronics and Electrical</option>
+                                                <option value="Department of Instrumentation and Electronics">Department of Instrumentation and Electronics</option>
                                             </select>
                                         </div>
 
