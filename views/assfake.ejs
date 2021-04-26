@@ -79,7 +79,7 @@ The above copyright notice and this permission notice shall be included in all c
                                             <label for="exampleInputEmail1">Add Assignment name </label>
                                             <input type="text" class="form-control" id="exampleInputEmail1"
                                                 aria-describedby="emailHelp" required="required" placeholder="Eg: Assignment 1"
-                                                name="assignmentname" pattern="([a-zA-Z0-9]{3,30}\s*)+"
+                                                name="assignmentname" pattern="([a-zA-Z]{3,15}[ ]?){1,5}([0-9]?)+"
                                                 oninvalid="this.setCustomValidity('Enter a valid name')"
                                                 oninput="this.setCustomValidity('')"/>
 
