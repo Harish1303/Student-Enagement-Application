@@ -156,7 +156,7 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Enter the name of the subject</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                                <input type="text" class="form-control" id="exampleInputEmail1" pattern="^([a-z]+[ ]?|[a-z]+)+$" minlength="5" maxlength="30"
                                                     aria-describedby="emailHelp" placeholder="Eg: Physics" name="sname" required>
                                             </div>
                                         </div>
@@ -172,6 +172,10 @@ The above copyright notice and this permission notice shall be included in all c
                                                     <option value="Department of Computer Science">Department of Computer Science</option>
                                                     <option value="Department of Mathematics">Department of Mathematics</option>
                                                     <option value="Department of Physics">Department of Physics</option>
+                                                    <option value="Department of Electronics and Communication">Department of Electronics and Communication</option>
+                                                    <option value="Department of Electronics and Electrical">Department of Electronics and Electrical</option>
+                                                    <option value="Department of Instrumentation and Electronics">Department of Instrumentation and Electronics</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -179,7 +183,7 @@ The above copyright notice and this permission notice shall be included in all c
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Enter the semester the subject is
                                                     offered to</label>
-                                                <input type="number" class="form-control" id="exampleInputEmail1"
+                                                <input type="text" class="form-control" id="exampleInputEmail1"
                                                     aria-describedby="emailHelp" placeholder="Eg: 6" pattern ="[1-8]{1}" title = "enter a sem from 1 to 8" name="sem" required>
                                             </div>
                                         </div>

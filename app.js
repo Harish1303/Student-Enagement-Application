@@ -528,7 +528,7 @@ app.post('/subjectregister', function (req, res) {
                 }
             })
             .catch(function (err) {
-                res.redirect('/register');
+                res.redirect('/admin/addsubject');
             });
     }
 });

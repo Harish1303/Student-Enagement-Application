@@ -161,14 +161,15 @@ The above copyright notice and this permission notice shall be included in all c
 
                                         <div class="form-group">
                                             <label>Mobile Number</label>
-                                            <input class="input100" type="text" name="number" placeholder="Mobile Number"
-                        pattern="[7-9]{1}[0-9]{9}"  title = "enter 10 digit phone number" minlenght="9" maxlength="10" required>
+                                            <input data-validate="Valid mobile number required" class="form-control" pattern="[7-9]{1}[0-9]{9}"
+                                                type="text" name="number" placeholder="" minlength="10" maxlength="10"
+                                                required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Date of Birth</label>
                                             <input data-validate="Valid date required: dd-mm-yyyy " class="form-control"
-                                                type="date" min="2000-01-01" name="dob" required>
+                                                type="date" min="2000-01-01" max="2021-04-27"name="dob" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
@@ -194,7 +195,7 @@ The above copyright notice and this permission notice shall be included in all c
                                         <div class="form-group">
                                             <label>Email</label>
                                             <input data-validate="Valid email is required: ex@abc.xyz "
-                                                class="form-control" type="email" name="email" required>
+                                                class="form-control" type="email" name="email"  minlength = "7" maxlength="31" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
                                         </div>
                                         <div class="form-group">
                                             <label>Department Name</label>
@@ -206,6 +207,9 @@ The above copyright notice and this permission notice shall be included in all c
                                                 <option value="Department of Computer Science">Department of Computer Science</option>
                                                 <option value="Department of Mathematics">Department of Mathematics</option>
                                                 <option value="Department of Physics">Department of Physics</option>
+                                                <option value="Department of Electronics and Communication">Department of Electronics and Communication</option>
+                                                <option value="Department of Electronics and Electrical">Department of Electronics and Electrical</option>
+                                                <option value="Department of Instrumentation and Electronics">Department of Instrumentation and Electronics</option>
                                             </select>
                                         </div>  
                                         <div class="form-group">
