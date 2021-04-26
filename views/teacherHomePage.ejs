@@ -89,47 +89,7 @@ The above copyright notice and this permission notice shall be included in all c
                     </div>
                 </div>
             </div>
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header card-header-primary">
-                            <h3 class="card-title">Notifications</h3>
-                            <p class="card-category">
 
-                            </p>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4 class="card-title">College Notifications</h4>
-                                    <% colNotifs.forEach(function(detail){ %>
-
-                                        <div class="alert alert-info alert-with-icon" data-notify="container">
-                                            <i class="material-icons" data-notify="icon">add_alert</i>
-                                            <span data-notify="message">
-                                                <%=detail.message%>.
-                                            </span>
-                                        </div>
-                                        <% }) %>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <h4 class="card-title">Teacher Notification</h4>
-                                    <% colNotifs.forEach(function(detail){ %>
-
-                                        <div class="alert alert-success alert-with-icon" data-notify="container">
-                                            <i class="material-icons" data-notify="icon">add_alert</i>
-                                            <span data-notify="message">
-                                                <%=detail.message%>.
-                                            </span>
-                                        </div>
-                                        <% }) %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <footer class="footer">
 
             </footer>
