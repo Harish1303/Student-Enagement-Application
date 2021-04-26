@@ -79,9 +79,8 @@ The above copyright notice and this permission notice shall be included in all c
                                             <label for="exampleInputEmail1">Add Assignment name </label>
                                             <input type="text" class="form-control" id="exampleInputEmail1"
                                                 aria-describedby="emailHelp" required="required" placeholder="Eg: Assignment 1"
-                                                name="assignmentname" pattern="[0-1]{2}[A-Za-z]{3}[0-1]{3}" oninvalid="this.setCustomValidity('Enter a valid name')"
-                                                oninput="this.setCustomValidity('')"/>
-
+                                                name="assignmentname" pattern="^([A-Za-z]+[,.]?[ ]?|[A-Za-z]+['-]?)+$"
+                                                title="Enter a valid assignment name" maxlength="100" required/>
                                         </div>
                                     </div>
 
@@ -90,7 +89,7 @@ The above copyright notice and this permission notice shall be included in all c
                                             <label for="exampleInputEmail1">Enter the Description of the assignment to
                                                 be published( 100 words)</label>
                                             <input type="text" class="form-control" required id="exampleInputEmail1"
-                                                name="description">
+                                                name="description" maxlength="2000">
                                         </div>
 
                                     </div>
