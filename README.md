@@ -1,6 +1,6 @@
 # Student-Enagement-Application
 
-A web application that bridges the gap between students, teachers and administrators by providing a platform to manage academics and adminstration.
+Student Engagement Application is a web application that bridges the gap between students, teachers and administrators by providing a platform to manage academics and adminstration.
 
 **Tech Stack:**
 1. **Backend : NodeJS**
