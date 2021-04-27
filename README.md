@@ -1,7 +1,7 @@
 # Student-Enagement-Application
 
 
-** Run the following commands to start the server **
+**Run the following commands to start the server**
 ```
  npm i 
  node app.js
