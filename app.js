@@ -815,6 +815,7 @@ app.get('/admin/addsubject', function (req, res) {
     }
 });
 app.post("/changepassword", function (req, res) {
+    console.log(req.body)
     User.findOne({ _id: req.session.uniqueid }).then(user => {
         user.changePassword(req.body.oldpassword, req.body.newpassword).then(p => {
             if (user.status == 1) {
@@ -1130,7 +1131,7 @@ app.get('/admin/editUserProfile', function (req, res) {
                 } else {
                     Admin.findOne(
                         { _id: req.session.uniqueid },
-                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1,phonenumber:1 }
+                        { firstname: 1, lastname: 1, gender: 1, dob: 1, adminid: 1, phonenumber: 1 }
                     )
                         .exec()
                         .then((arr) => {
