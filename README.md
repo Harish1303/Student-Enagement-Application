@@ -1,4 +1,4 @@
-# Student-Enagement-Application
+# Student-Engagement-Application
 
 Student Engagement Application is a web application that bridges the gap between students, teachers and administrators by providing a platform to manage academics and adminstration.
 
