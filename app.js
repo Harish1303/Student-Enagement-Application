@@ -352,7 +352,7 @@ function sendmail(p1, currmail) {
 app.post('/register', function (req, res) {
     console.log(req.body);
     var newid = new mongoose.mongo.ObjectId();
-    pass = generateString(8);
+    pass = 'Harish1303'    //generateString(8);
     console.log(pass);
     console.log(typeof pass);
     User.register(
@@ -1275,6 +1275,15 @@ app.get('/teacher/viewPerformance/:sid/:subcode', function (req, res) {
                 if (subs[0].assignments[i].submissions[j].studentid == req.params.sid) {
                     subs[0].assignments[i].submissions[j]["name"] = subs[0].assignments[i].assignment_name
                     subs[0].assignments[i].submissions[j]["description"] = subs[0].assignments[i].assignment_description
+                    console.log(subs[0].assignments[i].submissions[j].marks)
+                    if (subs[0].assignments[i].submissions[j].marks) {
+                        console.log(subs[0].assignments[i].submissions[j].marks)
+                    }
+                    else {
+                        console.log("w")
+                        subs[0].assignments[i].submissions[j]["marks"] = 'Not Yet Evaluated'
+                    }
+                    console.log(subs[0].assignments[i].submissions[j])
                     arr.push(subs[0].assignments[i].submissions[j])
                 }
             }
