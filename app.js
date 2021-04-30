@@ -7,6 +7,10 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 var fs = require('fs');
 var path = require('path');
+
+
+
+
 var multer = require('multer');
 const nodemailer = require('nodemailer');
 const characters =
